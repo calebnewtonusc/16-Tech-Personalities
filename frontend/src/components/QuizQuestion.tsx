@@ -3,14 +3,6 @@
 import { QuizQuestionProps } from '@/types';
 import { cn } from '@/lib/utils';
 
-const LIKERT_OPTIONS = [
-  { value: 0, label: 'Strongly Disagree' },
-  { value: 1, label: 'Disagree' },
-  { value: 2, label: 'Neutral' },
-  { value: 3, label: 'Agree' },
-  { value: 4, label: 'Strongly Agree' },
-];
-
 export default function QuizQuestion({
   question,
   currentAnswer,
@@ -18,6 +10,14 @@ export default function QuizQuestion({
   questionNumber,
   totalQuestions,
 }: QuizQuestionProps) {
+  // Get options from question data
+  const options = Array.isArray(question.options)
+    ? question.options.map((opt, index) => ({
+        value: index,
+        label: typeof opt === 'string' ? opt : opt.text
+      }))
+    : [];
+
   return (
     <div className="w-full max-w-3xl mx-auto animate-fade-in">
       {/* Progress indicator */}
@@ -50,7 +50,7 @@ export default function QuizQuestion({
 
       {/* Options */}
       <div className="space-y-3">
-        {LIKERT_OPTIONS.map((option) => (
+        {options.map((option) => (
           <button
             key={option.value}
             onClick={() => onAnswer(option.value)}
