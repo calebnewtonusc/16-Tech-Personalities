@@ -43,3 +43,4 @@ prisma/dev.db-journal
 *.swp
 *.swo
 *~
+frontend/.env.local
