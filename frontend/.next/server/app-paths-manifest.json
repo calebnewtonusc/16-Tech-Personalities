@@ -1,0 +1,12 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/api/quiz/submit/route": "app/api/quiz/submit/route.js",
+  "/auth/login/page": "app/auth/login/page.js",
+  "/auth/signup/page": "app/auth/signup/page.js",
+  "/compare/page": "app/compare/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/page": "app/page.js",
+  "/quiz/page": "app/quiz/page.js",
+  "/results/[id]/page": "app/results/[id]/page.js"
+}
