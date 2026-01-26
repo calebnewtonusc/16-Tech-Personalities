@@ -45,3 +45,4 @@ prisma/dev.db-journal
 *~
 frontend/.env.local
 frontend/.next/
+frontend-nextjs-backup/
