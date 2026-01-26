@@ -125,16 +125,17 @@ export function getRoleColor(roleName) {
   return roleCategoryColors.fullstack; // default
 }
 
-// Convert 5-letter type code to 4-letter display code (removes focus dimension)
-// Used for browsing pages to match 16 Personalities' approach
+// Convert 5-letter type code to 4-letter display code (removes Execution modifier)
+// The 4 letters are: Focus-Interface-Change-Decision
+// The 5th letter (Execution: A/T) is the modifier that gets excluded
 export function getDisplayTypeCode(fullTypeCode) {
   if (!fullTypeCode) return '';
 
   // Split on dashes: ['B', 'U', 'E', 'V', 'A']
   const parts = fullTypeCode.split('-');
 
-  // Skip first part (Focus: B) and return remaining 4: 'U-E-V-A'
-  return parts.slice(1, 5).join('-');
+  // Return first 4 letters (exclude 5th Execution modifier): 'B-U-E-V'
+  return parts.slice(0, 4).join('-');
 }
 
 // Personality categories - groups of 4 types based on Interface × Scope
