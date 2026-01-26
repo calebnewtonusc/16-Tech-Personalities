@@ -19,8 +19,8 @@ export function calculateScores(responses, questions) {
   const spectrumTallies = {
     focus: { total: 0, count: 0 },
     interface: { total: 0, count: 0 },
-    changeStyle: { total: 0, count: 0 },
-    decisionDriver: { total: 0, count: 0 },
+    change: { total: 0, count: 0 },
+    decision: { total: 0, count: 0 },
     execution: { total: 0, count: 0 },
   };
 
@@ -92,13 +92,13 @@ export function calculateScores(responses, questions) {
         : 50
     ),
     change_score: Math.round(
-      spectrumTallies.changeStyle.count > 0
-        ? spectrumTallies.changeStyle.total / spectrumTallies.changeStyle.count
+      spectrumTallies.change.count > 0
+        ? spectrumTallies.change.total / spectrumTallies.change.count
         : 50
     ),
     decision_score: Math.round(
-      spectrumTallies.decisionDriver.count > 0
-        ? spectrumTallies.decisionDriver.total / spectrumTallies.decisionDriver.count
+      spectrumTallies.decision.count > 0
+        ? spectrumTallies.decision.total / spectrumTallies.decision.count
         : 50
     ),
     execution_score: Math.round(
