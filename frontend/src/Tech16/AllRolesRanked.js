@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { supabase } from '../supabase';
 import { getRoleColor } from './theme';
 import { Button, Card, GradientBackground, Container } from './components/SharedComponents';
+import { rankRolesByMatch } from './roleMatching';
 
 const AllRolesContainer = styled.div`
   min-height: 100vh;
@@ -172,43 +173,25 @@ const LoadingMessage = styled.div`
   font-size: 1.125rem;
 `;
 
-const AllRolesRanked = ({ personalityCode, onBack }) => {
+const AllRolesRanked = ({ personalityCode, scores, onBack }) => {
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadAndRankRoles() {
       try {
-        // Load all roles
+        // Load all roles from database
         const { data: rolesData, error: rolesError } = await supabase
           .from('tech_roles')
           .select('*');
 
         if (rolesError) throw rolesError;
 
-        // Load scoring weights for this personality type
-        const { data: weights, error: weightsError } = await supabase
-          .from('role_scoring_weights')
-          .select('*')
-          .eq('personality_type', personalityCode);
+        // Use dynamic trait-based matching instead of pre-defined weights
+        // This adapts automatically when scoring algorithm changes
+        const rankedRoles = rankRolesByMatch(scores, rolesData);
 
-        if (weightsError) throw weightsError;
-
-        // Calculate fit score for each role
-        const weightMap = {};
-        weights.forEach(w => {
-          weightMap[w.role_id] = w.weight;
-        });
-
-        const rolesWithScores = rolesData.map(role => ({
-          ...role,
-          fitScore: weightMap[role.id] || 0,
-          matchPercentage: Math.round((weightMap[role.id] || 0) * 100),
-        }));
-
-        // Sort by fit score (highest first)
-        const sortedRoles = rolesWithScores.sort((a, b) => b.fitScore - a.fitScore);
-        setRoles(sortedRoles);
+        setRoles(rankedRoles);
       } catch (error) {
         console.error('Error loading roles:', error);
       } finally {
@@ -216,10 +199,10 @@ const AllRolesRanked = ({ personalityCode, onBack }) => {
       }
     }
 
-    if (personalityCode) {
+    if (personalityCode && scores) {
       loadAndRankRoles();
     }
-  }, [personalityCode]);
+  }, [personalityCode, scores]);
 
   const getMatchLevel = (percentage) => {
     if (percentage >= 85) return 'excellent';
