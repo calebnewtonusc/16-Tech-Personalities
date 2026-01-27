@@ -431,7 +431,7 @@ const PersonalityTypeDetail = ({ typeCode, onBack, onTakeQuiz, onViewAllTypes })
 
         const rolesWithScores = roles.map(role => {
           const weightEntry = weights?.find(w => w.role_id === role.id);
-          const fitScore = weightEntry ? weightEntry.weight : 0;
+          const fitScore = weightEntry ? weightEntry.weight : 0.15; // Default to 15% minimum instead of 0%
           return { ...role, fitScore };
         });
 
@@ -600,7 +600,7 @@ const PersonalityTypeDetail = ({ typeCode, onBack, onTakeQuiz, onViewAllTypes })
                 return (
                   <RoleCard key={role.id} $roleColor={roleColor}>
                     <RoleTitle>#{idx + 1} {role.name}</RoleTitle>
-                    <FitBadge variant="success">{Math.round(role.fitScore * 100)}% Match</FitBadge>
+                    <FitBadge variant="success">{Math.round((role.fitScore || 0.15) * 100)}% Match</FitBadge>
                     <RoleDescription>{role.description}</RoleDescription>
                   </RoleCard>
                 );
