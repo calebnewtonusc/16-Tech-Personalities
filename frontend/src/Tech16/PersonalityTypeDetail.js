@@ -522,7 +522,7 @@ const PersonalityTypeDetail = ({ typeCode, onBack, onTakeQuiz, onViewAllTypes })
                   <FocusCode $color="#00bcd4">B</FocusCode> Builder Focus
                 </FocusVariantTitle>
                 <FocusVariantDescription>
-                  As a <strong>Builder-focused {personality.name.replace('The ', '')}</strong>, you emphasize rapid execution and tangible results.
+                  As a <strong>Builder-focused {personality.name}</strong>, you emphasize rapid execution and tangible results.
                   You prefer learning by doing and iterating quickly on real implementations.
                 </FocusVariantDescription>
                 <FocusTraitsList>
@@ -538,7 +538,7 @@ const PersonalityTypeDetail = ({ typeCode, onBack, onTakeQuiz, onViewAllTypes })
                   <FocusCode $color="#7b1fa2">A</FocusCode> Analyzer Focus
                 </FocusVariantTitle>
                 <FocusVariantDescription>
-                  As an <strong>Analyzer-focused {personality.name.replace('The ', '')}</strong>, you emphasize thorough understanding and systematic design.
+                  As an <strong>Analyzer-focused {personality.name}</strong>, you emphasize thorough understanding and systematic design.
                   You prefer researching thoroughly before implementation and optimizing for long-term maintainability.
                 </FocusVariantDescription>
                 <FocusTraitsList>
