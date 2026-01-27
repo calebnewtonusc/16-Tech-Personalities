@@ -357,6 +357,11 @@ export function calculateRoleMatch(scores, roleName) {
   matchPercentage += flexibilityBoost * 5;
 
   // Ensure minimum viable match of 15% (everyone has transferable skills)
+  // Handle edge cases: NaN, undefined, null
+  if (isNaN(matchPercentage) || matchPercentage == null) {
+    matchPercentage = 50; // Default to balanced if calculation fails
+  }
+
   matchPercentage = Math.max(15, matchPercentage);
 
   // Clamp to 0-100 range
