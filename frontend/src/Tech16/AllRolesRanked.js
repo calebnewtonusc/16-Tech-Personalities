@@ -255,7 +255,7 @@ const AllRolesRanked = ({ personalityCode, scores, onBack }) => {
                   </RoleInfo>
                   <MatchScore>
                     <MatchPercentage $matchLevel={matchLevel}>
-                      {role.matchPercentage}%
+                      {role.matchPercentage ?? 15}%
                     </MatchPercentage>
                     <MatchLabel>Match</MatchLabel>
                   </MatchScore>
