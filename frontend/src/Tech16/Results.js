@@ -517,8 +517,6 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
   // Load roles and calculate recommendations using dynamic trait-based matching
   useEffect(() => {
     async function loadRoles() {
-      console.log('Loading roles for personality type:', personalityCode);
-      console.log('Using scores:', scores);
       try {
         // Load all roles
         const { data: roles, error: rolesError } = await supabase
@@ -526,13 +524,11 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
           .select('*');
 
         if (rolesError) throw rolesError;
-        console.log('Loaded roles:', roles?.length);
 
         // Use dynamic trait-based matching instead of pre-defined weights
         // This adapts automatically when scoring algorithm changes
         const rankedRoles = rankRolesByMatch(scores, roles);
 
-        console.log('Top 3 roles:', rankedRoles.slice(0, 3).map(r => ({ name: r.name, match: r.matchPercentage })));
         setTopRoles(rankedRoles.slice(0, 3));
       } catch (error) {
         console.error('Error loading roles:', error);

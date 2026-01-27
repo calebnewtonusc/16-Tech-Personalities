@@ -768,7 +768,6 @@ const Tech16 = () => {
     const savedResponses = localStorage.getItem('tech16_quiz_responses');
     if (savedResponses && view === 'landing') {
       // Could prompt user to resume
-      console.log('Found saved quiz progress');
     }
   }, [view]);
 
@@ -853,7 +852,6 @@ const Tech16 = () => {
   );
 
   if (view === 'quiz') {
-    console.log('Rendering Quiz component');
     return (
       <ThemeProvider theme={tech16Theme}>
         <PageWrapper>
@@ -867,7 +865,6 @@ const Tech16 = () => {
   }
 
   if (view === 'results' && quizData) {
-    console.log('Rendering Results component');
     return (
       <ThemeProvider theme={tech16Theme}>
         <PageWrapper>
@@ -884,7 +881,6 @@ const Tech16 = () => {
   }
 
   if (view === 'all-roles' && personalityCode && personalityScores) {
-    console.log('Rendering AllRolesRanked component with scores:', personalityScores);
     return (
       <ThemeProvider theme={tech16Theme}>
         <PageWrapper>
@@ -929,7 +925,6 @@ const Tech16 = () => {
     );
   }
 
-  console.log('Rendering landing page');
 
   // Landing page
   // Show all 5 personality dimensions
@@ -984,7 +979,7 @@ const Tech16 = () => {
       icon: '🎯',
       title: '5 Personality Dimensions',
       description:
-        'Measure your position on 4 core dimensions (Interface, Change Style, Decision Driver, Execution) plus a Focus tendency prefix modifier.',
+        'Measure your position on 4 core dimensions (Interface, Change Style, Decision Driver, Execution) plus a Focus tendency suffix modifier.',
     },
     {
       icon: '💼',
@@ -1097,9 +1092,9 @@ const Tech16 = () => {
           </Section>
 
           <Section>
-            <SectionTitle>The Focus Prefix: Builder vs Analyzer</SectionTitle>
+            <SectionTitle>The Focus Modifier: Builder vs Analyzer</SectionTitle>
             <SectionDescription>
-              In addition to your 4-letter core type, you'll receive a Focus prefix (Builder or Analyzer) shown as the first letter. This prefix reveals your fundamental approach to problem-solving - whether you prefer rapid prototyping and iteration (Builder) or thorough analysis and systematic design (Analyzer).
+              In addition to your 4-letter core type, you'll receive a Focus modifier (Builder or Analyzer) shown as the 5th letter (suffix). This modifier reveals your fundamental approach to problem-solving - whether you prefer rapid prototyping and iteration (Builder) or thorough analysis and systematic design (Analyzer).
             </SectionDescription>
             <Grid columns={1} style={{ maxWidth: '600px', margin: '0 auto' }}>
               <SpectrumCard

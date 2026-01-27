@@ -265,7 +265,6 @@ const Quiz = ({ onComplete }) => {
   // Load questions from Supabase
   useEffect(() => {
     async function loadQuestions() {
-      console.log('Starting to load questions from Supabase...');
       try {
         const { data: quizVersion, error } = await supabase
           .from('quiz_versions')
@@ -275,13 +274,10 @@ const Quiz = ({ onComplete }) => {
           .limit(1)
           .single();
 
-        console.log('Supabase response:', { data: quizVersion, error });
-
         if (error) throw error;
 
         if (quizVersion && quizVersion.questions) {
           const quizQuestions = quizVersion.questions.questions || [];
-          console.log('Loaded questions:', quizQuestions.length);
           setQuestions(quizQuestions);
           setQuizVersionId(quizVersion.id);
         } else {
