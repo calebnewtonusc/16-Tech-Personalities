@@ -772,7 +772,7 @@ ${personality.work_preferences.map((w) => `- ${w}`).join('\n')}
                       <RoleTitle>
                         #{idx + 1} {role.name}
                       </RoleTitle>
-                      <FitBadge variant="success">{Math.round(role.fitScore * 100)}% Fit</FitBadge>
+                      <FitBadge variant="success">{Math.round((role.fitScore ?? 0.15) * 100)}% Fit</FitBadge>
                     </RoleHeader>
 
                   <RoleDescription>{role.description}</RoleDescription>
