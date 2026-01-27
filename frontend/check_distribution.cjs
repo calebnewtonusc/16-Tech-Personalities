@@ -7,11 +7,11 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 async function checkQuestions() {
-  // Fetch quiz version 1
+  // Fetch active quiz version
   const { data, error } = await supabase
     .from('quiz_versions')
-    .select('questions')
-    .eq('version', 1)
+    .select('version, questions')
+    .eq('is_active', true)
     .single();
 
   if (error) {
@@ -19,7 +19,7 @@ async function checkQuestions() {
     return;
   }
 
-  const questions = data.questions;
+  const questions = data.questions.questions; // Nested structure from database
 
   // Count by spectrum and direction
   const distribution = {};
