@@ -224,5 +224,3 @@ export function generateScoresFromType(typeCode) {
 
   return scores;
 }
-
-// Force webpack rebuild - generateScoresFromType exported above
