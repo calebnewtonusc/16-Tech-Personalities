@@ -408,8 +408,11 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
   const personalityCode = generatePersonalityType(scores);
 
   // Get focus tendency as a modifier (like 16 Personalities' A/T)
-  const focusTendency = scores.focus_score < 50 ? 'Builder' : 'Analyzer';
-  const focusPercentage = Math.round(Math.abs(scores.focus_score - 50) * 2);
+  const focusTendency = scores.focus_score <= 50 ? 'Builder' : 'Analyzer';
+  // Use the same percentage as shown in spectrum display
+  const focusPercentage = focusTendency === 'Analyzer'
+    ? Math.round(scores.focus_score)
+    : Math.round(100 - scores.focus_score);
 
   // Get dynamic colors based on personality type
   const personalityColor = getPersonalityColor(personalityCode);
