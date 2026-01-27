@@ -134,7 +134,7 @@ A comprehensive full-stack personality assessment application for tech professio
 ### 1. Clone and Install
 
 ```bash
-cd /Users/joelnewton/Desktop/2026 Code/Projects/Big-Projects/16TechPersonalities/frontend
+cd frontend
 npm install
 ```
 
