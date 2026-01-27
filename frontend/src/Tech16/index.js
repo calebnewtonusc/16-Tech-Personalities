@@ -772,7 +772,7 @@ const Tech16 = () => {
         setRoleCount(count);
       } catch (error) {
         console.error('Error fetching role count:', error);
-        setRoleCount(61); // Fallback if fetch fails
+        setRoleCount(42); // Fallback after role consolidation
       }
     }
     fetchRoleCount();
