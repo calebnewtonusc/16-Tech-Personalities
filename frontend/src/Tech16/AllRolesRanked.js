@@ -239,7 +239,7 @@ const AllRolesRanked = ({ personalityCode, scores, onBack }) => {
               All {roles.length} engineering roles ranked by match with your personality type
             </Subtitle>
             <PersonalityBadge $color={personalityColor}>
-              {personalityCode.split('-').slice(1).join('-')}
+              {personalityCode}
             </PersonalityBadge>
           </Header>
 
