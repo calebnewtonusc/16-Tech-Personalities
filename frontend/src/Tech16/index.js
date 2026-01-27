@@ -618,13 +618,101 @@ const TypeName = styled.div`
 `;
 
 const Footer = styled.div`
-  text-align: center;
   margin-top: 5rem;
-  padding: 2.5rem 2rem;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(155, 89, 182, 0.05));
+  border-top: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px 20px 0 0;
+`;
+
+const FooterContent = styled.div`
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+`;
+
+const FooterMain = styled.div`
+  text-align: center;
   color: #5a6c7d;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   line-height: 1.8;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+`;
+
+const FooterTitle = styled.h3`
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, #9b59b6, #3498db);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+`;
+
+const FooterDescription = styled.p`
+  margin: 0.5rem 0;
+  color: #5a6c7d;
+`;
+
+const BuiltBySection = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50px;
+  border: 2px solid rgba(52, 152, 219, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.15);
+    border-color: rgba(52, 152, 219, 0.4);
+  }
+`;
+
+const CreatorImage = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 30%;
+  box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+  border: 2px solid rgba(52, 152, 219, 0.3);
+`;
+
+const CreatorInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+`;
+
+const BuiltByLabel = styled.span`
+  font-size: 0.75rem;
+  color: #95a5a6;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+`;
+
+const CreatorName = styled.span`
+  font-size: 1rem;
+  color: #2c3e50;
+  font-weight: 700;
+`;
+
+const FooterNote = styled.small`
+  display: block;
+  margin-top: 1rem;
+  opacity: 0.7;
+  font-size: 0.8125rem;
 `;
 
 const Tech16 = () => {
@@ -820,9 +908,9 @@ const Tech16 = () => {
 
   // Landing page
   // Show all 5 personality dimensions
-  // Code format: [Focus]-[Interface]-[Change]-[Decision]-[Execution]
-  // Focus (position 1) is shown separately as a prefix modifier
-  // The 4 core dimensions (positions 2-5) are: Interface, Change, Decision, Execution
+  // Code format: [Interface]-[Change]-[Decision]-[Execution]-[Focus]
+  // Focus (position 5) is shown separately as a suffix modifier
+  // The 4 core dimensions (positions 1-4) are: Interface, Change, Decision, Execution
   const coreSpectrumKeys = ['interface', 'changeStyle', 'decisionDriver', 'execution'];
 
   // Color mapping for each of the 10 letter codes - highly distinct colors
@@ -852,11 +940,13 @@ const Tech16 = () => {
     rightColor: letterColors[spectrums[key].poles.rightCode],
   }));
 
+  // Example types - one from each category to showcase all 4 colors
+  // Format: Interface-Change-Decision-Execution (4-letter base code)
   const exampleTypes = [
-    { code: 'U-E-V-A', name: 'The Innovator', fullCode: 'B-U-E-V' },
-    { code: 'S-O-L-T', name: 'The Site Reliability Engineer', fullCode: 'B-S-O-L' },
-    { code: 'U-O-L-T', name: 'The Frontend Specialist', fullCode: 'B-U-O-L' },
-    { code: 'S-E-V-T', name: 'The Infrastructure Pioneer', fullCode: 'B-S-E-V' },
+    { code: 'U-E-V-A', name: 'The Innovator', fullCode: 'U-E-V-A' }, // Innovators (purple)
+    { code: 'S-O-L-T', name: 'The Site Reliability Engineer', fullCode: 'S-O-L-T' }, // Engineers (orange)
+    { code: 'U-O-L-T', name: 'The Frontend Specialist', fullCode: 'U-O-L-T' }, // Crafters (green)
+    { code: 'S-E-V-T', name: 'The Infrastructure Pioneer', fullCode: 'S-E-V-T' }, // Architects (blue)
   ];
 
   const features = [
@@ -1050,13 +1140,31 @@ const Tech16 = () => {
           </CTASection>
 
           <Footer>
-            <p>
-              Tech 16 Personalities - Discover your developer personality type and ideal engineering role
-              <br />
-              Focused on hands-on technical roles across {roleCount || '95'}+ engineering positions (not management or executive roles)
-              <br />
-              <small style={{ opacity: 0.7 }}>Built with React, styled-components, and Recharts</small>
-            </p>
+            <FooterContent>
+              <BuiltBySection href="https://calebnewton.me" target="_blank" rel="noopener noreferrer">
+                <CreatorImage
+                  src="/caleb-usc.jpg"
+                  alt="Caleb Newton at USC"
+                />
+                <CreatorInfo>
+                  <BuiltByLabel>Built by</BuiltByLabel>
+                  <CreatorName>Caleb Newton</CreatorName>
+                </CreatorInfo>
+              </BuiltBySection>
+
+              <FooterMain>
+                <FooterTitle>Tech 16 Personalities</FooterTitle>
+                <FooterDescription>
+                  Discover your developer personality type and ideal engineering role
+                </FooterDescription>
+                <FooterDescription>
+                  Focused on hands-on technical roles across {roleCount || '95'}+ engineering positions
+                </FooterDescription>
+                <FooterNote>
+                  Built with React, styled-components, and Recharts
+                </FooterNote>
+              </FooterMain>
+            </FooterContent>
           </Footer>
         </Container>
       </LandingContainer>

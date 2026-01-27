@@ -287,6 +287,109 @@ const ButtonGroup = styled.div`
   flex-wrap: wrap;
 `;
 
+const FocusModifierCard = styled(Card)`
+  padding: 2.5rem;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, rgba(0, 188, 212, 0.08), rgba(123, 31, 162, 0.08));
+  border: 2px solid rgba(0, 188, 212, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+  }
+`;
+
+const FocusTitle = styled.h2`
+  font-size: 2rem;
+  font-weight: 700;
+  color: ${({ theme }) => theme.text_primary};
+  margin-bottom: 1rem;
+  text-align: center;
+`;
+
+const FocusDescription = styled.p`
+  font-size: 1.0625rem;
+  color: ${({ theme }) => theme.text_secondary};
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  text-align: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+const FocusGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const FocusVariant = styled.div`
+  padding: 2rem;
+  background: ${({ $color }) => $color ? `${$color}12` : 'rgba(255, 255, 255, 0.5)'};
+  border: 2px solid ${({ $color }) => $color || '#ccc'};
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px ${({ $color }) => $color ? `${$color}30` : 'rgba(0, 0, 0, 0.1)'};
+  }
+`;
+
+const FocusVariantTitle = styled.h3`
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: ${({ $color }) => $color || '#333'};
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const FocusCode = styled.span`
+  font-family: 'Courier New', monospace;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: ${({ $color }) => $color || '#333'};
+  letter-spacing: 0.1em;
+`;
+
+const FocusVariantDescription = styled.p`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.text_primary};
+  line-height: 1.7;
+  margin-bottom: 1rem;
+`;
+
+const FocusTraitsList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0 0;
+`;
+
+const FocusTrait = styled.li`
+  font-size: 0.9375rem;
+  color: ${({ theme }) => theme.text_secondary};
+  line-height: 1.6;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+
+  &::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: ${({ $color }) => $color || '#333'};
+    font-weight: 700;
+  }
+`;
+
 const PersonalityTypeDetail = ({ typeCode, onBack, onTakeQuiz, onViewAllTypes }) => {
   const [personality, setPersonality] = useState(null);
   const [topRoles, setTopRoles] = useState([]);
@@ -404,6 +507,49 @@ const PersonalityTypeDetail = ({ typeCode, onBack, onTakeQuiz, onViewAllTypes })
             )}
             <TypeDescription>{personality.description}</TypeDescription>
           </HeroCard>
+
+          <FocusModifierCard>
+            <FocusTitle>The Focus Modifier: Your Problem-Solving Lens</FocusTitle>
+            <FocusDescription>
+              Your core personality type is represented by the 4-letter code above. When you take the quiz,
+              you'll also receive a <strong>Focus modifier</strong> (Builder or Analyzer) as a 5th dimension.
+              This acts as a lens through which you express your core traits, shaping whether you prefer rapid execution or deep analysis.
+            </FocusDescription>
+
+            <FocusGrid>
+              <FocusVariant $color="#00bcd4">
+                <FocusVariantTitle $color="#00bcd4">
+                  <FocusCode $color="#00bcd4">B</FocusCode> Builder Focus
+                </FocusVariantTitle>
+                <FocusVariantDescription>
+                  As a <strong>Builder-focused {personality.name}</strong>, you emphasize rapid execution and tangible results.
+                  You prefer learning by doing and iterating quickly on real implementations.
+                </FocusVariantDescription>
+                <FocusTraitsList>
+                  <FocusTrait $color="#00bcd4">Ships working code fast, refines iteratively</FocusTrait>
+                  <FocusTrait $color="#00bcd4">Prefers hands-on experimentation over extensive planning</FocusTrait>
+                  <FocusTrait $color="#00bcd4">Motivated by seeing immediate, tangible progress</FocusTrait>
+                  <FocusTrait $color="#00bcd4">Comfortable with "good enough" solutions that can be improved later</FocusTrait>
+                </FocusTraitsList>
+              </FocusVariant>
+
+              <FocusVariant $color="#7b1fa2">
+                <FocusVariantTitle $color="#7b1fa2">
+                  <FocusCode $color="#7b1fa2">A</FocusCode> Analyzer Focus
+                </FocusVariantTitle>
+                <FocusVariantDescription>
+                  As an <strong>Analyzer-focused {personality.name}</strong>, you emphasize thorough understanding and systematic design.
+                  You prefer researching thoroughly before implementation and optimizing for long-term maintainability.
+                </FocusVariantDescription>
+                <FocusTraitsList>
+                  <FocusTrait $color="#7b1fa2">Researches extensively before writing code</FocusTrait>
+                  <FocusTrait $color="#7b1fa2">Prefers understanding system architecture deeply first</FocusTrait>
+                  <FocusTrait $color="#7b1fa2">Motivated by solving complex problems elegantly</FocusTrait>
+                  <FocusTrait $color="#7b1fa2">Focuses on optimal solutions from the start</FocusTrait>
+                </FocusTraitsList>
+              </FocusVariant>
+            </FocusGrid>
+          </FocusModifierCard>
 
           <Section>
             <Grid columns={2}>
