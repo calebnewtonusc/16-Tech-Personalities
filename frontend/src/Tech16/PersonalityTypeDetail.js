@@ -425,9 +425,11 @@ const PersonalityTypeDetail = ({ typeCode, onBack, onTakeQuiz, onViewAllTypes })
 
         // Generate approximate scores for this personality type
         const typeScores = generateScoresFromType(baseTypeCode);
+        console.log('[PersonalityTypeDetail] Generated scores:', typeScores);
 
         // Use dynamic role matching algorithm (same as quiz results)
         const rankedRoles = rankRolesByMatch(typeScores, roles);
+        console.log('[PersonalityTypeDetail] Top 3 roles:', rankedRoles.slice(0, 3).map(r => ({ name: r.name, fitScore: r.fitScore, matchPercentage: r.matchPercentage })));
 
         setTopRoles(rankedRoles.slice(0, 3));
       } catch (error) {
