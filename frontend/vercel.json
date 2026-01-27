@@ -1,11 +1,1 @@
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": "build",
-  "devCommand": "npm start",
-  "installCommand": "npm install",
-  "framework": null,
-  "env": {
-    "REACT_APP_SUPABASE_URL": "https://qpjgeuonakbnhdkmkrhl.supabase.co",
-    "REACT_APP_SUPABASE_ANON_KEY": "sb_publishable_ojj4hci2Q0M5Gcrd8Wt98Q_H5oFdzFR"
-  }
-}
+{"name": "16techpersonalities"}
