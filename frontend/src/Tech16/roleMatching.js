@@ -57,26 +57,26 @@ const ROLE_CATEGORIES = {
   backend: {
     keywords: ['backend', 'api engineer', 'microservices', 'protocol'],
     idealTraits: {
-      interface_score: 80,     // Strongly systems-facing
-      focus_score: 55,         // Slight analyzer lean
-      change_score: 55,        // Slight operational lean
+      interface_score: 78,     // Strongly systems-facing
+      focus_score: 56,         // Slight analyzer lean
+      change_score: 54,        // Slight operational lean
       decision_score: 60,      // Logic-led
       execution_score: 60,     // Structured
     },
-    flexibility: 35,           // Increased from 30 - should dominate S personalities
+    flexibility: 32,           // Reduced from 35 - appearing 4x, make room for variety
   },
 
   // SEARCH & RANKING
   search: {
     keywords: ['search engineer', 'search', 'ranking', 'indexing', 'elasticsearch', 'solr'],
     idealTraits: {
-      interface_score: 75,     // Systems-facing
-      focus_score: 70,         // Analyzer (algorithms, relevance)
-      change_score: 60,        // Moderate operational
-      decision_score: 70,      // Logic-led (metrics, ranking)
-      execution_score: 65,     // Structured
+      interface_score: 76,     // Systems-facing
+      focus_score: 66,         // Analyzer (algorithms, relevance)
+      change_score: 55,        // Exploratory-operational balance
+      decision_score: 72,      // Logic-led (metrics, ranking)
+      execution_score: 68,     // Structured
     },
-    flexibility: 30,
+    flexibility: 38,           // Increased from 30 - should appear for S-E-L and S-O-L
   },
 
   // FULL STACK
@@ -96,52 +96,52 @@ const ROLE_CATEGORIES = {
   product: {
     keywords: ['product engineer'],
     idealTraits: {
-      interface_score: 40,     // Slight user lean
+      interface_score: 42,     // Slight user lean
       focus_score: 50,
-      change_score: 45,        // Slight exploratory
+      change_score: 46,        // Slight exploratory
       decision_score: 50,
-      execution_score: 55,
+      execution_score: 56,
     },
-    flexibility: 35,
+    flexibility: 32,           // Reduced from 35 - appearing 5x, make room for others
   },
 
   // INFRASTRUCTURE & DEVOPS
   infrastructure: {
     keywords: ['devops', 'infrastructure', 'platform engineer', 'sre', 'site reliability', 'kubernetes', 'cloud engineer', 'ci/cd', 'build engineer', 'release engineer'],
     idealTraits: {
-      interface_score: 85,     // Less extreme
+      interface_score: 82,     // Systems-facing
       focus_score: 58,
-      change_score: 65,        // Operational
-      decision_score: 62,
-      execution_score: 70,     // Structured
+      change_score: 68,        // Operational
+      decision_score: 64,
+      execution_score: 72,     // Structured
     },
-    flexibility: 35,           // Increased from 30 - should appear for S-O personalities
+    flexibility: 38,           // Increased from 35 - MUST appear for S-O-V and S-O-L
   },
 
   // SECURITY
   security: {
-    keywords: ['security', 'penetration', 'devsecops', 'appsec'],
+    keywords: ['security', 'penetration', 'devsecops', 'appsec', 'security engineer', 'application security', 'security researcher'],
     idealTraits: {
-      interface_score: 78,     // Systems-facing
-      focus_score: 63,
+      interface_score: 76,     // Systems-facing
+      focus_score: 62,
       change_score: 72,        // Operational
-      decision_score: 75,      // Logic-driven
+      decision_score: 76,      // Logic-driven
       execution_score: 78,     // Very structured
     },
-    flexibility: 40,           // Increased from 35 - MUST appear for S-O-L-T
+    flexibility: 42,           // Increased from 40 - MUST appear, competing with Data/Performance
   },
 
   // DATABASE & DATA INFRASTRUCTURE
   database: {
-    keywords: ['database', 'dba', 'sql', 'nosql', 'data warehouse', 'etl'],
+    keywords: ['database', 'dba', 'sql', 'nosql', 'data warehouse', 'etl', 'database engineer', 'database administrator'],
     idealTraits: {
-      interface_score: 85,     // Less extreme
-      focus_score: 65,
+      interface_score: 80,     // Systems-facing
+      focus_score: 63,
       change_score: 72,        // Operational
-      decision_score: 72,      // Logic-driven
-      execution_score: 78,     // Very structured
+      decision_score: 74,      // Logic-driven
+      execution_score: 77,     // Very structured
     },
-    flexibility: 30,           // Increased from 20 - should appear for S-O-L-T
+    flexibility: 38,           // Increased from 30 - should appear for S-O-L-T
   },
 
   // DATA ENGINEERING
@@ -172,15 +172,15 @@ const ROLE_CATEGORIES = {
 
   // MACHINE LEARNING ENGINEERING
   mlEngineering: {
-    keywords: ['machine learning engineer', 'ml engineer', 'mlops', 'ml platform', 'ai engineer', 'llm engineer', 'generative ai', 'computer vision', 'nlp engineer', 'deep learning'],
+    keywords: ['machine learning engineer', 'ml engineer', 'mlops', 'ml platform', 'ai engineer', 'llm engineer', 'generative ai', 'computer vision', 'nlp engineer', 'deep learning', 'ml research', 'research scientist'],
     idealTraits: {
-      interface_score: 75,
-      focus_score: 65,
-      change_score: 45,        // More exploratory
-      decision_score: 70,
-      execution_score: 65,
+      interface_score: 74,
+      focus_score: 64,
+      change_score: 44,        // Exploratory
+      decision_score: 72,
+      execution_score: 62,
     },
-    flexibility: 40,           // Increased from 35 - should appear for S-E-L
+    flexibility: 42,           // Increased from 40 - better ML specialization coverage
   },
 
   // SYSTEMS & ARCHITECTURE
@@ -213,13 +213,13 @@ const ROLE_CATEGORIES = {
   performance: {
     keywords: ['performance', 'observability', 'reliability engineer', 'monitoring'],
     idealTraits: {
-      interface_score: 85,
-      focus_score: 70,
-      change_score: 70,
-      decision_score: 75,
-      execution_score: 75,
+      interface_score: 80,     // Systems-facing
+      focus_score: 65,
+      change_score: 68,        // Operational
+      decision_score: 70,
+      execution_score: 72,
     },
-    flexibility: 30,
+    flexibility: 38,           // Increased from 30 - should appear for S-O
   },
 
   // DEVELOPER EXPERIENCE & TOOLS
@@ -250,28 +250,28 @@ const ROLE_CATEGORIES = {
 
   // GROWTH & EXPERIMENTATION
   growth: {
-    keywords: ['growth engineer', 'experimentation', 'a/b testing'],
+    keywords: ['growth engineer', 'experimentation', 'a/b testing', 'ab testing engineer'],
     idealTraits: {
-      interface_score: 40,
+      interface_score: 38,     // User-leaning
       focus_score: 50,
-      change_score: 35,
-      decision_score: 65,      // Data-driven
-      execution_score: 55,
+      change_score: 38,        // Exploratory
+      decision_score: 68,      // Data-driven
+      execution_score: 58,
     },
-    flexibility: 40,
+    flexibility: 42,           // Increased from 40 - better A/B Testing coverage
   },
 
   // BLOCKCHAIN & WEB3
   blockchain: {
-    keywords: ['blockchain', 'smart contract', 'web3'],
+    keywords: ['blockchain', 'smart contract', 'web3', 'web3 developer'],
     idealTraits: {
-      interface_score: 70,
-      focus_score: 60,
-      change_score: 45,
-      decision_score: 65,
-      execution_score: 65,
+      interface_score: 68,     // Systems-leaning
+      focus_score: 58,
+      change_score: 48,        // Exploratory-operational balance
+      decision_score: 66,
+      execution_score: 62,
     },
-    flexibility: 35,
+    flexibility: 40,           // Increased from 35 - should appear for balanced S personalities
   },
 
   // GAME DEVELOPMENT
