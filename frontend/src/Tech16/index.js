@@ -54,6 +54,27 @@ const HeaderContainer = styled.div`
 `;
 
 const HeaderLogo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const HeaderLogoImage = styled.img`
+  height: 60px;
+  width: auto;
+
+  @media (max-width: 768px) {
+    height: 50px;
+  }
+`;
+
+const HeaderLogoText = styled.span`
   font-size: 1.5rem;
   font-weight: 700;
   background: linear-gradient(135deg, #9b59b6, #3498db, #3498db, #e67e22);
@@ -62,12 +83,6 @@ const HeaderLogo = styled.div`
   background-clip: text;
   font-family: 'Courier New', monospace;
   letter-spacing: 0.1em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: scale(1.05);
-  }
 
   @media (max-width: 768px) {
     font-size: 1.25rem;
@@ -832,7 +847,10 @@ const Tech16 = () => {
   const Header = () => (
     <HeaderWrapper>
       <HeaderContainer>
-        <HeaderLogo onClick={handleBackToLanding}>TECH 16</HeaderLogo>
+        <HeaderLogo onClick={handleBackToLanding}>
+          <HeaderLogoImage src="/tech16-logo.png" alt="Tech 16 Personalities" />
+          <HeaderLogoText>TECH 16</HeaderLogoText>
+        </HeaderLogo>
         <HeaderNav>
           <NavLink onClick={handleBackToLanding} $active={view === 'landing'}>
             Home
