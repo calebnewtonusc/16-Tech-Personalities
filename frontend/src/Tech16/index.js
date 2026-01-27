@@ -1008,7 +1008,7 @@ const Tech16 = () => {
             <Container maxWidth="1200px">
             <Hero>
               <LogoSection>
-                <LogoImage src="/tech16-hero.jpg" alt="Tech 16 Personalities" />
+                <LogoImage src="/tech16-logo.png" alt="Tech 16 Personalities" />
                 <Logo>TECH 16</Logo>
               </LogoSection>
               <Title>Discover Your Tech Personality</Title>
