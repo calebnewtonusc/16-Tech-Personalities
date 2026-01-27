@@ -460,9 +460,9 @@ const SpectrumMarker = styled.div`
 `;
 
 export const SpectrumDisplay = ({ name, leftPole, rightPole, leftPercent, rightPercent, leftColor, rightColor }) => {
-  const markerPosition = leftPercent;
-  const dominantSide = leftPercent >= 50 ? 'left' : 'right';
-  const markerColor = dominantSide === 'left' ? leftColor : rightColor;
+  const markerPosition = rightPercent; // Position based on right pole percentage (0% = left, 100% = right)
+  const dominantSide = rightPercent >= 50 ? 'right' : 'left';
+  const markerColor = dominantSide === 'right' ? rightColor : leftColor;
 
   return (
     <SpectrumContainer>
