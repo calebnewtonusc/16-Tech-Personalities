@@ -113,20 +113,20 @@ export function calculateScores(responses, questions) {
 
 /**
  * Generate personality type code from spectrum scores
- * Format: [Focus]-[Interface]-[Change]-[Decision]-[Execution]
- * Example: B-U-E-V-A or A-S-O-L-T
- * There are 16 base types (Focus × Interface × Change × Decision)
- * With Execution as the 5th dimension suffix, creating 32 total types
+ * Format: [Interface]-[Change]-[Decision]-[Execution]-[Focus]
+ * Example: U-E-V-A-B or S-O-L-T-A
+ * There are 16 base types (Interface × Change × Decision × Execution)
+ * With Focus as the 5th dimension SUFFIX MODIFIER, creating 32 total types
  */
 export function generatePersonalityType(scores) {
   // Determine each letter based on which side of 50 the score falls
-  const focus = scores.focus_score < 50 ? 'B' : 'A'; // Builder vs Analyzer
   const interface_ = scores.interface_score < 50 ? 'U' : 'S'; // User-Facing vs Systems-Facing
   const change = scores.change_score < 50 ? 'E' : 'O'; // Exploratory vs Operational
   const decision = scores.decision_score < 50 ? 'V' : 'L'; // Vision-Led vs Logic-Led
   const execution = scores.execution_score < 50 ? 'A' : 'T'; // Adaptive vs Structured
+  const focus = scores.focus_score < 50 ? 'B' : 'A'; // Builder vs Analyzer (SUFFIX MODIFIER)
 
-  return `${focus}-${interface_}-${change}-${decision}-${execution}`;
+  return `${interface_}-${change}-${decision}-${execution}-${focus}`;
 }
 
 /**
@@ -189,11 +189,11 @@ export function getStrengthLabel(percentage) {
 
 /**
  * Get base personality type (4-letter code) for profile lookup
- * Removes the Execution suffix to match the 16 base personality profiles in the database
- * Example: B-U-E-V-A -> B-U-E-V
+ * Removes the Focus suffix to match the 16 base personality profiles in the database
+ * Example: U-E-V-A-B -> U-E-V-A
  */
 export function getBasePersonalityType(fullTypeCode) {
   const parts = fullTypeCode.split('-');
-  // Return first 4 parts (Focus-Interface-Change-Decision)
+  // Return first 4 parts (Interface-Change-Decision-Execution), exclude Focus suffix
   return parts.slice(0, 4).join('-');
 }

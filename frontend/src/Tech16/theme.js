@@ -46,8 +46,8 @@ export function getPersonalityColor(typeCode) {
   if (!typeCode) return categoryColorPalettes.innovators;
 
   const parts = typeCode.split('-');
-  const interfaceDimension = parts[1]; // U or S
-  const scopeDimension = parts[2]; // E or O
+  const interfaceDimension = parts[0]; // U or S (Position 1)
+  const scopeDimension = parts[1]; // E or O (Position 2)
 
   // Determine category based on Interface × Scope
   if (interfaceDimension === 'U' && scopeDimension === 'E') {
@@ -176,8 +176,8 @@ export function getPersonalityCategory(typeCode) {
   if (!typeCode) return null;
 
   const parts = typeCode.split('-');
-  const interfaceDimension = parts[1]; // U or S
-  const scopeDimension = parts[2]; // E or O
+  const interfaceDimension = parts[0]; // U or S (Position 1)
+  const scopeDimension = parts[1]; // E or O (Position 2)
 
   // Find matching category
   for (const [key, category] of Object.entries(personalityCategories)) {
@@ -194,34 +194,33 @@ export function getPersonalityCategory(typeCode) {
 
 // Letter colors for the 10 distinct dimension values
 export const letterColors = {
-  // Focus dimension (Position 1)
-  B: '#00bcd4', // Bright Cyan - Builder
-  A_FOCUS: '#7b1fa2', // Deep Purple - Analyzer (Focus)
-  // Interface dimension (Position 2)
+  // Interface dimension (Position 1)
   U: '#2196f3', // Bright Blue - User-Facing
   S: '#37474f', // Dark Slate Gray - Systems-Facing
-  // Change/Scope dimension (Position 3)
+  // Change/Scope dimension (Position 2)
   E: '#4caf50', // Bright Green - Exploratory
   O: '#795548', // Brown - Operational
-  // Decision dimension (Position 4)
+  // Decision dimension (Position 3)
   V: '#e91e63', // Hot Pink/Magenta - Vision-Led
   L: '#c62828', // Deep Red - Logic-Led
-  // Execution dimension (Position 5)
+  // Execution dimension (Position 4)
   A_EXEC: '#ff9800', // Bright Orange - Adaptive (Execution)
   T: '#5d4037', // Dark Brown - Structured
+  // Focus dimension (Position 5 - SUFFIX MODIFIER)
+  B: '#00bcd4', // Bright Cyan - Builder
+  A_FOCUS: '#7b1fa2', // Deep Purple - Analyzer (Focus)
 };
 
 // Get color for a specific letter at a given position in the personality code
-// Position: 0=Focus, 1=Interface, 2=Change, 3=Decision, 4=Execution
+// Position: 0=Interface, 1=Change, 2=Decision, 3=Execution, 4=Focus
 export function getLetterColor(letter, position) {
   if (letter === 'A') {
-    // A can be either Focus (position 0) or Execution (position 4)
-    return position === 0 ? letterColors.A_FOCUS : letterColors.A_EXEC;
+    // A can be either Execution (position 3) or Focus (position 4)
+    return position === 3 ? letterColors.A_EXEC : letterColors.A_FOCUS;
   }
 
   // For all other letters, use the direct mapping
   const colorMap = {
-    B: letterColors.B,
     U: letterColors.U,
     S: letterColors.S,
     E: letterColors.E,
@@ -229,6 +228,7 @@ export function getLetterColor(letter, position) {
     V: letterColors.V,
     L: letterColors.L,
     T: letterColors.T,
+    B: letterColors.B,
   };
 
   return colorMap[letter] || '#333333';
