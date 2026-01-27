@@ -198,3 +198,29 @@ export function getBasePersonalityType(fullTypeCode) {
   // Return first 4 parts (Interface-Change-Decision-Execution), exclude Focus suffix
   return parts.slice(0, 4).join('-');
 }
+
+/**
+ * Generate approximate scores from a personality type code
+ * This reverse-engineers the scoring logic to create representative scores
+ * Used for displaying role matches on personality type detail pages
+ *
+ * @param {string} typeCode - 4-letter base type code (e.g., "U-E-V-A")
+ * @returns {Object} Scores object with all 5 dimensions
+ */
+export function generateScoresFromType(typeCode) {
+  const parts = typeCode.split('-');
+  const [interface_, change, decision, execution] = parts;
+
+  // Generate scores that would produce this type code
+  // Low side (U/E/V/A) → 30 (clearly < 50)
+  // High side (S/O/L/T) → 70 (clearly > 50)
+  const scores = {
+    interface_score: interface_ === 'U' ? 30 : 70,
+    change_score: change === 'E' ? 30 : 70,
+    decision_score: decision === 'V' ? 30 : 70,
+    execution_score: execution === 'A' ? 30 : 70,
+    focus_score: 50, // Neutral for browsing (not from quiz)
+  };
+
+  return scores;
+}
