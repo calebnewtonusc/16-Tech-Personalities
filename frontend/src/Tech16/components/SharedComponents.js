@@ -361,36 +361,55 @@ const ChartContainer = styled.div`
   animation: ${fadeIn} 0.6s ease;
 `;
 
+const RadarLegend = styled.div`
+  text-align: center;
+  margin-top: 1rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: ${({ theme }) => theme.text_secondary};
+  line-height: 1.6;
+
+  strong {
+    color: ${({ theme }) => theme.text_primary};
+    font-weight: 600;
+  }
+`;
+
 export const RadarChartComponent = ({ data, height }) => {
   return (
-    <ChartContainer height={height}>
-      <ResponsiveContainer width="100%" height="100%">
-        <RadarChart data={data}>
-          <PolarGrid stroke="#00000020" />
-          <PolarAngleAxis
-            dataKey="dimension"
-            stroke="#000000"
-            tick={{ fill: '#000000', fontSize: 14, fontWeight: 600 }}
-            tickLine={false}
-          />
-          <PolarRadiusAxis
-            angle={90}
-            domain={[0, 100]}
-            stroke="#00000040"
-            tick={{ fill: '#000000AA', fontSize: 11 }}
-            tickCount={6}
-          />
-          <Radar
-            name="Score"
-            dataKey="value"
-            stroke="#3498db"
-            fill="#3498db"
-            fillOpacity={0.5}
-            strokeWidth={3}
-          />
-        </RadarChart>
-      </ResponsiveContainer>
-    </ChartContainer>
+    <div>
+      <ChartContainer height={height}>
+        <ResponsiveContainer width="100%" height="100%">
+          <RadarChart data={data}>
+            <PolarGrid stroke="#00000020" />
+            <PolarAngleAxis
+              dataKey="dimension"
+              stroke="#000000"
+              tick={{ fill: '#000000', fontSize: 14, fontWeight: 600 }}
+              tickLine={false}
+            />
+            <PolarRadiusAxis
+              angle={90}
+              domain={[0, 100]}
+              tick={false}
+              axisLine={false}
+            />
+            <Radar
+              name="Score"
+              dataKey="value"
+              stroke="#3498db"
+              fill="#3498db"
+              fillOpacity={0.5}
+              strokeWidth={3}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
+      </ChartContainer>
+      <RadarLegend>
+        <strong>Reading the chart:</strong> Points closer to the <strong>center</strong> indicate lower trait strength (0%),
+        while points near the <strong>outer edge</strong> indicate higher trait strength (100%).
+      </RadarLegend>
+    </div>
   );
 };
 
@@ -450,13 +469,14 @@ const SpectrumMarker = styled.div`
   top: 50%;
   left: ${({ position }) => position}%;
   transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   background: ${({ theme, $markerColor }) => $markerColor || theme.primary};
-  border: 3px solid ${({ theme }) => theme.card};
+  border: 2px solid ${({ theme }) => theme.card};
   border-radius: 50%;
-  box-shadow: 0 0 12px ${({ $markerColor, theme }) => ($markerColor ? `${$markerColor}80` : `${theme.primary}80`)};
+  box-shadow: 0 0 16px ${({ $markerColor, theme }) => ($markerColor ? `${$markerColor}CC` : `${theme.primary}CC`)};
   transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
 `;
 
 export const SpectrumDisplay = ({ name, leftPole, rightPole, leftPercent, rightPercent, leftColor, rightColor }) => {
