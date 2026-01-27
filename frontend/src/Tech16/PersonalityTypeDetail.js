@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { supabase } from '../supabase';
-import { getBasePersonalityType } from './scoringSupabase';
+import { getBasePersonalityType, generateScoresFromType } from './scoringSupabase';
 import { getPersonalityColor, getRoleColor, getDisplayTypeCode, getPersonalityCategory } from './theme';
+import { rankRolesByMatch } from './roleMatching';
 import {
   Button,
   Card,
