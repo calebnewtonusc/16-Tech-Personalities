@@ -66,6 +66,19 @@ const ROLE_CATEGORIES = {
     flexibility: 30,
   },
 
+  // SEARCH & RANKING
+  search: {
+    keywords: ['search engineer', 'search', 'ranking', 'indexing', 'elasticsearch', 'solr'],
+    idealTraits: {
+      interface_score: 75,     // Systems-facing
+      focus_score: 70,         // Analyzer (algorithms, relevance)
+      change_score: 60,        // Moderate operational
+      decision_score: 70,      // Logic-led (metrics, ranking)
+      execution_score: 65,     // Structured
+    },
+    flexibility: 30,
+  },
+
   // FULL STACK
   fullstack: {
     keywords: ['full stack', 'fullstack', 'product engineer'],
@@ -159,7 +172,7 @@ const ROLE_CATEGORIES = {
 
   // SYSTEMS & ARCHITECTURE
   systems: {
-    keywords: ['systems engineer', 'systems architect', 'distributed systems', 'real-time systems', 'embedded', 'firmware'],
+    keywords: ['systems engineer', 'systems architect', 'distributed systems', 'real-time systems', 'embedded', 'firmware', 'compiler'],
     idealTraits: {
       interface_score: 85,
       focus_score: 75,
