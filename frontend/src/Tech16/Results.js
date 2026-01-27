@@ -336,14 +336,12 @@ const ModifierExplanation = styled(Card)`
 `;
 
 const ModifierGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  display: flex;
+  justify-content: center;
   margin-top: 1.5rem;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    display: block;
   }
 `;
 
@@ -690,42 +688,27 @@ ${personality.work_preferences.map((w) => `- ${w}`).join('\n')}
               Understanding Your Full Personality Code
             </SectionTitle>
             <SectionDescription style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto 1.5rem' }}>
-              Your complete personality is defined by your 4-letter core type code plus two modifiers that influence how you express your type.
+              Your personality is defined by 4 core dimensions (Interface, Change, Decision, Execution) plus 1 modifier suffix (Focus) that shapes how you express your core type.
             </SectionDescription>
             <ModifierGrid>
-              <ModifierBox $color="#00bcd4">
-                <ModifierTitle $color="#00bcd4">
+              <ModifierBox $color={scores.focus_score < 50 ? '#00bcd4' : '#7b1fa2'}>
+                <ModifierTitle $color={scores.focus_score < 50 ? '#00bcd4' : '#7b1fa2'}>
                   <span style={{ fontSize: '1.5rem', fontFamily: 'Courier New' }}>
                     {scores.focus_score < 50 ? 'B' : 'A'}
                   </span>
-                  Focus Prefix
+                  {' '}Focus Modifier (Position 5)
                 </ModifierTitle>
                 <ModifierDescription>
-                  The Focus dimension ({focusTendency}) appears as a prefix modifier in your full code. It reveals your fundamental approach to problem-solving:
+                  The Focus dimension ({focusTendency}) appears as the 5th position in your full code. It reveals your fundamental approach to problem-solving and acts as a lens through which you express your core personality:
                 </ModifierDescription>
                 <ModifierValue $color={scores.focus_score < 50 ? '#00bcd4' : '#7b1fa2'}>
                   {focusTendency}: {focusPercentage}% tendency
                 </ModifierValue>
                 <ModifierDescription style={{ marginTop: '1rem', fontSize: '0.875rem' }}>
-                  <strong>Builders</strong> prefer rapid prototyping and iteration. <strong>Analyzers</strong> prefer thorough analysis and systematic design.
+                  <strong>Builders (B)</strong> prefer rapid prototyping, hands-on experimentation, and iterating quickly on real implementations. They learn by doing and prioritize tangible progress.
                 </ModifierDescription>
-              </ModifierBox>
-
-              <ModifierBox $color="#ff9800">
-                <ModifierTitle $color="#ff9800">
-                  <span style={{ fontSize: '1.5rem', fontFamily: 'Courier New' }}>
-                    {scores.execution_score < 50 ? 'A' : 'T'}
-                  </span>
-                  Execution Suffix
-                </ModifierTitle>
-                <ModifierDescription>
-                  The Execution dimension appears as the last letter in your code. It shows how you approach planning and structure:
-                </ModifierDescription>
-                <ModifierValue $color={scores.execution_score < 50 ? '#ff9800' : '#5d4037'}>
-                  {scores.execution_score < 50 ? 'Adaptive' : 'Structured'}: {Math.round(Math.abs(scores.execution_score - 50) * 2)}% tendency
-                </ModifierValue>
-                <ModifierDescription style={{ marginTop: '1rem', fontSize: '0.875rem' }}>
-                  <strong>Adaptive</strong> types are flexible and spontaneous. <strong>Structured</strong> types prefer detailed planning and organization.
+                <ModifierDescription style={{ marginTop: '0.5rem', fontSize: '0.875rem' }}>
+                  <strong>Analyzers (A)</strong> prefer thorough research, deep understanding of system architecture, and systematic design before implementation. They prioritize optimal solutions from the start.
                 </ModifierDescription>
               </ModifierBox>
             </ModifierGrid>
@@ -734,7 +717,7 @@ ${personality.work_preferences.map((w) => `- ${w}`).join('\n')}
           <Section>
             <SectionTitle>Your Personality Dimensions</SectionTitle>
             <SectionDescription style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 2rem' }}>
-              Your personality is measured across 5 independent dimensions. Your type code displays the 4 core dimensions, with Focus and Execution acting as modifiers that influence how you express your core type.
+              Your personality is measured across 5 independent dimensions. The first 4 dimensions (Interface, Change, Decision, Execution) form your core type code. Focus acts as a 5th modifier dimension that influences how you express your core traits.
             </SectionDescription>
             <SpectrumSection>
               {spectrumBreakdown.map((spectrum) => (
