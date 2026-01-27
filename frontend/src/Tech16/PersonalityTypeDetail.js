@@ -415,28 +415,20 @@ const PersonalityTypeDetail = ({ typeCode, onBack, onTakeQuiz, onViewAllTypes })
         if (profileError) throw profileError;
         setPersonality(profileData);
 
-        // Load recommended roles
+        // Load recommended roles and calculate matches dynamically
         const { data: roles, error: rolesError } = await supabase
           .from('tech_roles')
           .select('*');
 
         if (rolesError) throw rolesError;
 
-        const { data: weights, error: weightsError } = await supabase
-          .from('role_scoring_weights')
-          .select('*')
-          .eq('personality_type', baseTypeCode);
+        // Generate approximate scores for this personality type
+        const typeScores = generateScoresFromType(baseTypeCode);
 
-        if (weightsError) throw weightsError;
+        // Use dynamic role matching algorithm (same as quiz results)
+        const rankedRoles = rankRolesByMatch(typeScores, roles);
 
-        const rolesWithScores = roles.map(role => {
-          const weightEntry = weights?.find(w => w.role_id === role.id);
-          const fitScore = weightEntry ? weightEntry.weight : 0.15; // Default to 15% minimum instead of 0%
-          return { ...role, fitScore };
-        });
-
-        const sortedRoles = rolesWithScores.sort((a, b) => b.fitScore - a.fitScore);
-        setTopRoles(sortedRoles.slice(0, 3));
+        setTopRoles(rankedRoles.slice(0, 3));
       } catch (error) {
         console.error('Error loading personality data:', error);
       } finally {
