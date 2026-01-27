@@ -5,10 +5,10 @@ import Results from './Results';
 import PersonalityTypesGallery from './PersonalityTypesGallery';
 import PersonalityTypeDetail from './PersonalityTypeDetail';
 import AllRolesRanked from './AllRolesRanked';
-import { spectrums, questions } from './data/questions';
+import { spectrums } from './data/questions';
 import { getAllPersonalityCodes } from './data/personalities';
 import { getPersonalityColor } from './theme';
-import { Button, Card, Badge, GradientBackground, Container, Grid, ColoredPersonalityCode } from './components/SharedComponents';
+import { Button, Card, GradientBackground, Container, Grid, ColoredPersonalityCode } from './components/SharedComponents';
 import { supabase } from '../supabase';
 
 // Tech16-specific theme with blue colors
@@ -772,7 +772,7 @@ const Tech16 = () => {
         setRoleCount(count);
       } catch (error) {
         console.error('Error fetching role count:', error);
-        setRoleCount(95); // Fallback to 95 if fetch fails
+        setRoleCount(61); // Fallback if fetch fails
       }
     }
     fetchRoleCount();
@@ -823,11 +823,6 @@ const Tech16 = () => {
     setQuizData(null);
     localStorage.removeItem('tech16_quiz_responses');
     setView('quiz');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleBackToHome = () => {
-    setView('landing');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

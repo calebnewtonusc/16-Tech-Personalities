@@ -308,7 +308,7 @@ function findRoleCategory(roleName) {
   const lowerName = roleName.toLowerCase();
 
   // Find category with matching keyword
-  for (const [categoryName, category] of Object.entries(ROLE_CATEGORIES)) {
+  for (const category of Object.values(ROLE_CATEGORIES)) {
     for (const keyword of category.keywords) {
       if (lowerName.includes(keyword.toLowerCase())) {
         return category;
