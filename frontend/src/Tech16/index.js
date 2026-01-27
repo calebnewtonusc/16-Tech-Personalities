@@ -179,6 +179,31 @@ const Hero = styled.div`
   }
 `;
 
+const LogoSection = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+`;
+
+const LogoImage = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+  }
+`;
+
 const Logo = styled.div`
   font-size: 3.5rem;
   font-weight: 800;
@@ -187,7 +212,6 @@ const Logo = styled.div`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 1.5rem;
   font-family: 'Courier New', monospace;
   letter-spacing: 0.2em;
   animation: gradientShift 8s ease infinite;
@@ -983,7 +1007,10 @@ const Tech16 = () => {
           <LandingContainer>
             <Container maxWidth="1200px">
             <Hero>
-              <Logo>TECH 16</Logo>
+              <LogoSection>
+                <LogoImage src="/tech16-hero.jpg" alt="Tech 16 Personalities" />
+                <Logo>TECH 16</Logo>
+              </LogoSection>
               <Title>Discover Your Tech Personality</Title>
             <Tagline>
               Take the quiz to find your developer personality type and get personalized engineering role recommendations
