@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { calculateScores, generatePersonalityType, getSpectrumLabel, getSpectrumPercentage, getBasePersonalityType } from './scoringSupabase';
 import { supabase } from '../supabase';
 import { getPersonalityColor, getAccentColor, getRoleColor, getDisplayTypeCode } from './theme';
+import { rankRolesByMatch } from './roleMatching';
 import {
   Button,
   Card,
@@ -510,10 +511,11 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
     }
   }, [personalityCode]);
 
-  // Load roles and calculate recommendations
+  // Load roles and calculate recommendations using dynamic trait-based matching
   useEffect(() => {
     async function loadRoles() {
       console.log('Loading roles for personality type:', personalityCode);
+      console.log('Using scores:', scores);
       try {
         // Load all roles
         const { data: roles, error: rolesError } = await supabase
@@ -523,31 +525,12 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
         if (rolesError) throw rolesError;
         console.log('Loaded roles:', roles?.length);
 
-        // Load scoring weights for this personality type
-        const { data: weights, error: weightsError } = await supabase
-          .from('role_scoring_weights')
-          .select('*')
-          .eq('personality_type', personalityCode);
+        // Use dynamic trait-based matching instead of pre-defined weights
+        // This adapts automatically when scoring algorithm changes
+        const rankedRoles = rankRolesByMatch(scores, roles);
 
-        if (weightsError) throw weightsError;
-        console.log('Loaded weights for', personalityCode, ':', weights?.length);
-
-        // Map roles with their fit scores
-        const rolesWithScores = roles.map(role => {
-          // Find the weight for this role and personality type
-          const weightEntry = weights?.find(w => w.role_id === role.id);
-          const fitScore = weightEntry ? weightEntry.weight : 0;
-
-          return {
-            ...role,
-            fitScore,
-          };
-        });
-
-        // Sort by fit score and take top 3
-        const sortedRoles = rolesWithScores.sort((a, b) => b.fitScore - a.fitScore);
-        console.log('Top 3 roles:', sortedRoles.slice(0, 3).map(r => ({ name: r.name, fit: r.fitScore })));
-        setTopRoles(sortedRoles.slice(0, 3));
+        console.log('Top 3 roles:', rankedRoles.slice(0, 3).map(r => ({ name: r.name, match: r.matchPercentage })));
+        setTopRoles(rankedRoles.slice(0, 3));
       } catch (error) {
         console.error('Error loading roles:', error);
         console.error('Error details:', error.message, error.code);
@@ -556,10 +539,10 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
       }
     }
 
-    if (personalityCode) {
+    if (personalityCode && scores) {
       loadRoles();
     }
-  }, [personalityCode]);
+  }, [personalityCode, scores]);
 
   const handleShare = () => {
     if (!personality) return;
@@ -831,7 +814,7 @@ ${personality.work_preferences.map((w) => `- ${w}`).join('\n')}
             </Grid>
             {onViewAllRoles && (
               <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-                <Button onClick={() => onViewAllRoles(personalityCode)} variant="outline" size="large">
+                <Button onClick={() => onViewAllRoles(personalityCode, scores)} variant="outline" size="large">
                   View All Roles Ranked by Match
                 </Button>
               </div>

@@ -193,14 +193,12 @@ const LogoSection = styled.div`
 `;
 
 const LogoImage = styled.img`
-  width: 80px;
-  height: 80px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 180px;
+  height: 180px;
 
   @media (max-width: 768px) {
-    width: 60px;
-    height: 60px;
+    width: 120px;
+    height: 120px;
   }
 `;
 
@@ -745,6 +743,7 @@ const Tech16 = () => {
   const [selectedTypeCode, setSelectedTypeCode] = useState(null);
   const [roleCount, setRoleCount] = useState(null); // Actual role count from database
   const [personalityCode, setPersonalityCode] = useState(null); // Store for all-roles view
+  const [personalityScores, setPersonalityScores] = useState(null); // Store scores for role matching
 
   // Fetch role count from database on mount
   useEffect(() => {
@@ -818,8 +817,9 @@ const Tech16 = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleViewAllRoles = (personalityCodeParam) => {
+  const handleViewAllRoles = (personalityCodeParam, scoresParam) => {
     setPersonalityCode(personalityCodeParam);
+    setPersonalityScores(scoresParam);
     setView('all-roles');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -883,14 +883,15 @@ const Tech16 = () => {
     );
   }
 
-  if (view === 'all-roles' && personalityCode) {
-    console.log('Rendering AllRolesRanked component');
+  if (view === 'all-roles' && personalityCode && personalityScores) {
+    console.log('Rendering AllRolesRanked component with scores:', personalityScores);
     return (
       <ThemeProvider theme={tech16Theme}>
         <PageWrapper>
           <Header />
           <AllRolesRanked
             personalityCode={personalityCode}
+            scores={personalityScores}
             onBack={handleBackToResults}
           />
         </PageWrapper>
