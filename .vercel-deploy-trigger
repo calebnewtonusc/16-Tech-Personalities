@@ -1,3 +1,4 @@
-Force rebuild - fix 0% role matching display issue
-Timestamp: 2026-01-26T21:00:00Z
-Debug logging added - CACHE BUST #2
+FORCE COMPLETE REBUILD - All fixes deployed in commit 81073aa
+Timestamp: 2026-01-26T23:00:00Z
+Cache Bust: #5
+Fixes: AllRolesRanked shows all 5 letters, Logo in header, 0% matches fixed
