@@ -358,6 +358,8 @@ export const Tooltip = ({ children, text }) => {
 const ChartContainer = styled.div`
   width: 100%;
   height: ${({ height }) => height || '400px'};
+  min-height: 400px;
+  position: relative;
   animation: ${fadeIn} 0.6s ease;
 `;
 
@@ -376,10 +378,17 @@ const RadarLegend = styled.div`
 `;
 
 export const RadarChartComponent = ({ data, height }) => {
+  // If data is empty or invalid, don't render the chart
+  if (!data || data.length === 0) {
+    return null;
+  }
+
+  const chartHeight = parseInt(height) || 500;
+
   return (
     <div>
       <ChartContainer height={height}>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={chartHeight}>
           <RadarChart data={data}>
             <PolarGrid stroke="#00000020" />
             <PolarAngleAxis
