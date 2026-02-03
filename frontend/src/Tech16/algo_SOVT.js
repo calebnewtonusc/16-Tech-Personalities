@@ -1,8 +1,8 @@
-function rankRolesFor_SOV(scores) {
-  // S-O-V: Systems-facing, Operational, Vision-led
+function rankRolesFor_SOVT(scores) {
+  // S-O-V-T: Systems-facing, Operational, Vision-led, Structured execution
   // Focus modifier: Builder vs Analyzer determines the specific expression
 
-  const { focus_score, change_score, decision_score, execution_score } = scores;
+  const { focus_score, change_score, decision_score } = scores;
 
   const operationalStrength = change_score - 50;
   const visionStrength = 50 - decision_score;
@@ -12,20 +12,12 @@ function rankRolesFor_SOV(scores) {
   if (focus_score < 50) {
     // Strong operational = traditional SRE/DevOps
     if (operationalStrength > 25) {
-      if (execution_score > 60) {
-        return ["DevOps / SRE", "Kubernetes Engineer", "CI/CD Engineer"];
-      } else {
-        return ["DevOps / SRE", "Cloud Engineer", "Platform Engineer"];
-      }
+      return ["DevOps / SRE", "Kubernetes Engineer", "CI/CD Engineer"];
     }
 
     // Strong vision = platform innovation
     if (visionStrength > 20) {
-      if (execution_score < 50) {
-        return ["Platform Engineer", "Cloud Engineer", "Kubernetes Engineer"];
-      } else {
-        return ["Platform Engineer", "DevOps / SRE", "Cloud Engineer"];
-      }
+      return ["Platform Engineer", "DevOps / SRE", "Cloud Engineer"];
     }
 
     // Balanced = versatile infrastructure
@@ -39,12 +31,8 @@ function rankRolesFor_SOV(scores) {
 
   // Strong systems + strong operational = pure infrastructure/SRE
   if (interfaceStrength > 30 && changeStrength > 30) {
-    // Execution dimension: Adaptive favors SRE (incident response), Structured favors Architecture
-    if (execution_score < 50) {
-      return ["DevOps / SRE", "Cloud Engineer", "Systems Engineer"];
-    } else {
-      return ["Cloud Architect", "Solutions Architect", "DevOps / SRE"];
-    }
+    // Structured execution favors Architecture
+    return ["Cloud Architect", "Solutions Architect", "DevOps / SRE"];
   }
 
   // Moderate preferences = balanced infrastructure roles
@@ -56,4 +44,4 @@ function rankRolesFor_SOV(scores) {
   return ["Platform Engineer", "Cloud Engineer", "DevOps / SRE"];
 }
 
-export default rankRolesFor_SOV;
+export default rankRolesFor_SOVT;

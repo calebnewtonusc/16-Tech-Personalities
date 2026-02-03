@@ -1,8 +1,8 @@
-function rankRolesFor_SEV(scores) {
-  // S-E-V: Systems-facing, Exploratory, Vision-led
+function rankRolesFor_SEVA(scores) {
+  // S-E-V-A: Systems-facing, Exploratory, Vision-led, Adaptive execution
   // Focus modifier: Builder vs Analyzer determines the specific expression
 
-  const { focus_score, change_score, decision_score, execution_score } = scores;
+  const { focus_score, change_score, decision_score } = scores;
 
   const exploratoryStrength = 50 - change_score;
   const visionStrength = 50 - decision_score;
@@ -12,20 +12,12 @@ function rankRolesFor_SEV(scores) {
   if (focus_score < 50) {
     // Strong exploratory + vision = platform innovation
     if (exploratoryStrength > 25 && visionStrength > 25) {
-      if (execution_score < 50) {
-        return ["Platform Engineer", "Backend Engineer", "Cloud Engineer"];
-      } else {
-        return ["Solutions Architect", "Platform Engineer", "Backend Engineer"];
-      }
+      return ["Platform Engineer", "Backend Engineer", "Cloud Engineer"];
     }
 
     // Strong exploratory = backend innovation
     if (exploratoryStrength > 25) {
-      if (execution_score > 60) {
-        return ["Backend Engineer", "Microservices Engineer", "Solutions Architect"];
-      } else {
-        return ["Backend Engineer", "Platform Engineer", "Microservices Engineer"];
-      }
+      return ["Backend Engineer", "Platform Engineer", "Microservices Engineer"];
     }
 
     // Balanced = versatile systems builder
@@ -39,12 +31,8 @@ function rankRolesFor_SEV(scores) {
 
   // Strong systems + strong exploratory = pure research/architecture
   if (interfaceStrength > 30 && changeStrength > 30) {
-    // Execution dimension: Adaptive favors Research (rapid experimentation), Structured favors Architecture
-    if (execution_score < 50) {
-      return ["Research Scientist", "Solutions Architect", "Platform Engineer"];
-    } else {
-      return ["Solutions Architect", "Platform Engineer", "Research Scientist"];
-    }
+    // Adaptive execution favors Research (rapid experimentation)
+    return ["Research Scientist", "Solutions Architect", "Platform Engineer"];
   }
 
   // Moderate preferences = balanced architectural roles
@@ -56,4 +44,4 @@ function rankRolesFor_SEV(scores) {
   return ["Platform Engineer", "Solutions Architect", "Cloud Architect"];
 }
 
-export default rankRolesFor_SEV;
+export default rankRolesFor_SEVA;

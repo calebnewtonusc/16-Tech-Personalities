@@ -1,16 +1,15 @@
 /**
  * MEGA-ALGORITHM: Perfect Role Matching System
  *
- * This algorithm combines 8 core algorithms based on 3 dimensions:
- * - Interface (U/S), Change (E/O), Decision (V/L)
+ * This algorithm combines 16 core algorithms based on 4 dimensions:
+ * - Interface (U/S), Change (E/O), Decision (V/L), Execution (A/T)
  *
  * Focus (B/A) is the 5th dimension MODIFIER, not a routing factor
- * Execution (A/T) is also a modifier, used within algorithms
  *
  * Approach:
- * 1. Determine personality type from 3 core dimensions (U/S × E/O × V/L)
- * 2. Route to the appropriate algorithm
- * 3. Algorithm checks focus_score and execution_score to determine specific role ordering
+ * 1. Determine personality type from 4 core dimensions (U/S × E/O × V/L × A/T)
+ * 2. Route to the appropriate algorithm (one of 16)
+ * 3. Algorithm checks focus_score to determine Builder vs Analyzer variant
  * 4. Return top 3 roles based on deep manual reasoning
  *
  * @param {Object} scores - { focus_score, interface_score, change_score, decision_score, execution_score }
@@ -18,24 +17,32 @@
  * @returns {Array} Top 3 role objects in ranked order
  */
 
-// Import all 8 core algorithms (Focus is handled within each algorithm as a modifier)
-import rankRolesFor_UEV from './algo_UEV.js';
-import rankRolesFor_UEL from './algo_UEL.js';
-import rankRolesFor_UOV from './algo_UOV.js';
-import rankRolesFor_UOL from './algo_UOL.js';
-import rankRolesFor_SEV from './algo_SEV.js';
-import rankRolesFor_SEL from './algo_SEL.js';
-import rankRolesFor_SOV from './algo_SOV.js';
-import rankRolesFor_SOL from './algo_SOL.js';
+// Import all 16 core algorithms (Focus is handled within each algorithm as a modifier)
+import rankRolesFor_UEVA from './algo_UEVA.js';
+import rankRolesFor_UEVT from './algo_UEVT.js';
+import rankRolesFor_UELA from './algo_UELA.js';
+import rankRolesFor_UELT from './algo_UELT.js';
+import rankRolesFor_UOVA from './algo_UOVA.js';
+import rankRolesFor_UOVT from './algo_UOVT.js';
+import rankRolesFor_UOLA from './algo_UOLA.js';
+import rankRolesFor_UOLT from './algo_UOLT.js';
+import rankRolesFor_SEVA from './algo_SEVA.js';
+import rankRolesFor_SEVT from './algo_SEVT.js';
+import rankRolesFor_SELA from './algo_SELA.js';
+import rankRolesFor_SELT from './algo_SELT.js';
+import rankRolesFor_SOVA from './algo_SOVA.js';
+import rankRolesFor_SOVT from './algo_SOVT.js';
+import rankRolesFor_SOLA from './algo_SOLA.js';
+import rankRolesFor_SOLT from './algo_SOLT.js';
 
 /**
  * Determine personality type from scores
  * Focus (B/A) is a MODIFIER handled within algorithms, not part of routing
  * @param {Object} scores - The 5 personality dimension scores
- * @returns {string} Type code based on 3 core dimensions (e.g., 'UEV', 'SOL')
+ * @returns {string} Type code based on 4 core dimensions (e.g., 'UEVA', 'SOLT')
  */
 function determinePersonalityType(scores) {
-  const { interface_score, change_score, decision_score } = scores;
+  const { interface_score, change_score, decision_score, execution_score } = scores;
 
   // Interface: U (User-facing, <50) or S (Systems-facing, ≥50)
   const interface_ = interface_score < 50 ? 'U' : 'S';
@@ -46,9 +53,12 @@ function determinePersonalityType(scores) {
   // Decision: V (Vision-led, <50) or L (Logic-led, ≥50)
   const decision = decision_score < 50 ? 'V' : 'L';
 
-  // Return 3-letter code: Interface × Change × Decision
-  // Focus and Execution are handled within each algorithm as modifiers
-  return `${interface_}${change}${decision}`;
+  // Execution: A (Adaptive, <50) or T (Structured, ≥50)
+  const execution = execution_score < 50 ? 'A' : 'T';
+
+  // Return 4-letter code: Interface × Change × Decision × Execution
+  // Focus is handled within each algorithm as a modifier
+  return `${interface_}${change}${decision}${execution}`;
 }
 
 /**
@@ -66,17 +76,25 @@ export function rankRolesByMatch(scores, roles) {
   // Determine personality type
   const personalityType = determinePersonalityType(scores);
 
-  // Map type to algorithm function (8 algorithms based on Interface × Change × Decision)
-  // Focus (B/A) and Execution (A/T) are handled within each algorithm as modifiers
+  // Map type to algorithm function (16 algorithms based on Interface × Change × Decision × Execution)
+  // Focus (B/A) is handled within each algorithm as a modifier
   const algorithmMap = {
-    'UEV': rankRolesFor_UEV,
-    'UEL': rankRolesFor_UEL,
-    'UOV': rankRolesFor_UOV,
-    'UOL': rankRolesFor_UOL,
-    'SEV': rankRolesFor_SEV,
-    'SEL': rankRolesFor_SEL,
-    'SOV': rankRolesFor_SOV,
-    'SOL': rankRolesFor_SOL,
+    'UEVA': rankRolesFor_UEVA,
+    'UEVT': rankRolesFor_UEVT,
+    'UELA': rankRolesFor_UELA,
+    'UELT': rankRolesFor_UELT,
+    'UOVA': rankRolesFor_UOVA,
+    'UOVT': rankRolesFor_UOVT,
+    'UOLA': rankRolesFor_UOLA,
+    'UOLT': rankRolesFor_UOLT,
+    'SEVA': rankRolesFor_SEVA,
+    'SEVT': rankRolesFor_SEVT,
+    'SELA': rankRolesFor_SELA,
+    'SELT': rankRolesFor_SELT,
+    'SOVA': rankRolesFor_SOVA,
+    'SOVT': rankRolesFor_SOVT,
+    'SOLA': rankRolesFor_SOLA,
+    'SOLT': rankRolesFor_SOLT,
   };
 
   // Get the appropriate algorithm

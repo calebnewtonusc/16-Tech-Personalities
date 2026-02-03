@@ -1,23 +1,18 @@
-function rankRolesFor_UEV(scores) {
-  // U-E-V: User-facing, Exploratory, Vision-led
+function rankRolesFor_UEVT(scores) {
+  // U-E-V-T: User-facing, Exploratory, Vision-led, Structured
   // Focus modifier: Builder vs Analyzer determines the specific expression
 
-  const { focus_score, interface_score, change_score, execution_score } = scores;
+  const { focus_score, interface_score, change_score } = scores;
 
   // BUILDER VARIANT (focus_score < 50)
-  // "The Innovator" - rapid prototyping, user-facing, creative
+  // "The Design Systems Engineer (Structured)" - creative vision with systematic implementation
   if (focus_score < 50) {
     const interfaceStrength = Math.abs(interface_score - 50);
     const changeStrength = Math.abs(change_score - 50);
 
-    // Strong user-facing + strong exploratory = pure frontend innovation
+    // Strong user-facing + strong exploratory = design systems focus
     if (interfaceStrength > 30 && changeStrength > 30) {
-      // Execution dimension: Adaptive favors Mobile (rapid iteration), Structured favors Design Systems
-      if (execution_score < 50) {
-        return ["Mobile Engineer", "Frontend Engineer", "Product Designer"];
-      } else {
-        return ["Frontend Engineer", "Design Systems Engineer", "Product Designer"];
-      }
+      return ["Frontend Engineer", "Design Systems Engineer", "Product Designer"];
     }
 
     // Moderate preferences = more flexible roles
@@ -30,17 +25,13 @@ function rankRolesFor_UEV(scores) {
   }
 
   // ANALYZER VARIANT (focus_score >= 50)
-  // "The Design Technologist" - research-driven design innovation
+  // "The Design Technologist (Structured)" - research-driven design with systematic approach
   const exploratoryStrength = 50 - change_score;
   const visionStrength = 50 - scores.decision_score;
 
-  // Strong exploratory + vision = design research
+  // Strong exploratory + vision = design research with structure
   if (exploratoryStrength > 25 && visionStrength > 25) {
-    if (execution_score < 50) {
-      return ["UX Researcher", "Product Designer", "Product Manager"];
-    } else {
-      return ["Product Designer", "Design Systems Engineer", "UX Researcher"];
-    }
+    return ["Product Designer", "Design Systems Engineer", "UX Researcher"];
   }
 
   // Strong exploratory = innovation focus
@@ -52,4 +43,4 @@ function rankRolesFor_UEV(scores) {
   return ["Product Designer", "UX Researcher", "Product Manager"];
 }
 
-export default rankRolesFor_UEV;
+export default rankRolesFor_UEVT;

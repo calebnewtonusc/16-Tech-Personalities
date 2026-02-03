@@ -1,8 +1,8 @@
-function rankRolesFor_UOL(scores) {
-  // U-O-L: User-facing, Operational, Logic-led
+function rankRolesFor_UOLA(scores) {
+  // U-O-L-A: User-facing, Operational, Logic-led, Adaptive execution
   // Focus modifier: Builder vs Analyzer determines the specific expression
 
-  const { focus_score, interface_score, change_score, decision_score, execution_score } = scores;
+  const { focus_score, interface_score, change_score, decision_score } = scores;
 
   // BUILDER VARIANT (focus_score < 50)
   // "The Frontend Specialist" - operational frontend, quality-focused
@@ -13,12 +13,8 @@ function rankRolesFor_UOL(scores) {
 
     // Strong user-facing + strong operational = dedicated frontend/QA
     if (interfaceStrength > 30 && changeStrength > 30) {
-      // Execution dimension: Adaptive favors Mobile (rapid delivery), Structured favors QA (systematic testing)
-      if (execution_score < 50) {
-        return ["Frontend Engineer", "Mobile Engineer", "QA / Test Engineer"];
-      } else {
-        return ["QA / Test Engineer", "Frontend Engineer", "Mobile Engineer"];
-      }
+      // Adaptive execution favors Mobile (rapid delivery)
+      return ["Frontend Engineer", "Mobile Engineer", "QA / Test Engineer"];
     }
 
     // Moderate preferences with strong logic = quality focus
@@ -37,11 +33,7 @@ function rankRolesFor_UOL(scores) {
 
   // Strong operational + logic = pure QA/testing
   if (operationalStrength > 25 && logicStrength > 25) {
-    if (execution_score > 65) {
-      return ["QA / Test Engineer", "Test Automation Engineer", "Mobile QA Engineer"];
-    } else {
-      return ["Test Automation Engineer", "QA / Test Engineer", "Mobile QA Engineer"];
-    }
+    return ["Test Automation Engineer", "QA / Test Engineer", "Mobile QA Engineer"];
   }
 
   // Strong operational = testing focus
@@ -51,15 +43,11 @@ function rankRolesFor_UOL(scores) {
 
   // Strong logic = automation/data focus
   if (logicStrength > 25) {
-    if (execution_score > 60) {
-      return ["Test Automation Engineer", "QA / Test Engineer", "Data Scientist"];
-    } else {
-      return ["QA / Test Engineer", "Growth Engineer", "Test Automation Engineer"];
-    }
+    return ["QA / Test Engineer", "Growth Engineer", "Test Automation Engineer"];
   }
 
   // Balanced
   return ["QA / Test Engineer", "Test Automation Engineer", "Mobile QA Engineer"];
 }
 
-export default rankRolesFor_UOL;
+export default rankRolesFor_UOLA;
