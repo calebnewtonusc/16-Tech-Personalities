@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { supabase } from '../supabase';
 import { getPersonalityColor, getDisplayTypeCode, getPersonalityCategory, personalityCategories } from './theme';
 import { Button, Card, GradientBackground, Container, SectionTitle, Grid, ColoredPersonalityCode } from './components/SharedComponents';
+import { getAllPersonalities } from './data/personalities';
 
 const GalleryContainer = styled.div`
   min-height: 100vh;
@@ -149,10 +150,19 @@ const PersonalityTypesGallery = ({ onNavigateToType, onNavigateToQuiz }) => {
           .select('*')
           .order('type_code');
 
-        if (error) throw error;
-        setPersonalities(data || []);
+        // If database is empty or unavailable, use local data
+        if (!data || data.length === 0 || error) {
+          console.log('Using local personalities data (Supabase not configured)');
+          const localPersonalities = getAllPersonalities();
+          setPersonalities(localPersonalities);
+        } else {
+          setPersonalities(data);
+        }
       } catch (error) {
         console.error('Error loading personalities:', error);
+        // Fallback to local data on error
+        const localPersonalities = getAllPersonalities();
+        setPersonalities(localPersonalities);
       } finally {
         setLoading(false);
       }

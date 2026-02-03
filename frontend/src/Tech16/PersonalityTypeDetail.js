@@ -4,6 +4,8 @@ import { supabase } from '../supabase';
 import { getBasePersonalityType, generateScoresFromType } from './scoringSupabase';
 import { getPersonalityColor, getRoleColor, getDisplayTypeCode, getPersonalityCategory } from './theme';
 import { rankRolesByMatch } from './roleMatching';
+import { personalities } from './data/personalities';
+import { getAllRoles } from './data/roles';
 import {
   Button,
   Card,
@@ -413,15 +415,36 @@ const PersonalityTypeDetail = ({ typeCode, onBack, onTakeQuiz, onViewAllTypes })
           .eq('type_code', baseTypeCode)
           .single();
 
-        if (profileError) throw profileError;
-        setPersonality(profileData);
+        let personality = profileData;
+
+        // If database is empty or unavailable, use local data
+        if (!personality || profileError) {
+          console.log('Using local personality data (Supabase not configured)');
+          personality = {
+            type_code: baseTypeCode,
+            ...personalities[baseTypeCode]
+          };
+        }
+        setPersonality(personality);
 
         // Load recommended roles and calculate matches dynamically
-        const { data: roles, error: rolesError } = await supabase
+        const { data: rolesData, error: rolesError } = await supabase
           .from('tech_roles')
           .select('*');
 
-        if (rolesError) throw rolesError;
+        let roles = rolesData;
+
+        // If database is empty or unavailable, use local data
+        if (!roles || roles.length === 0 || rolesError) {
+          console.log('Using local roles data (Supabase not configured)');
+          const localRoles = getAllRoles();
+          roles = localRoles.map((role, index) => ({
+            id: index + 1,
+            name: role.title,
+            category: role.title.includes('Engineer') ? 'Engineering' : 'Technical',
+            ...role
+          }));
+        }
 
         // Generate approximate scores for this personality type
         const typeScores = generateScoresFromType(baseTypeCode);
