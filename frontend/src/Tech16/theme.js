@@ -131,16 +131,16 @@ export function getRoleColor(roleName) {
   return roleCategoryColors.fullstack; // default
 }
 
-// Convert 5-letter type code to 4-letter display code (removes Execution modifier)
-// The 4 letters are: Focus-Interface-Change-Decision
-// The 5th letter (Execution: A/T) is the modifier that gets excluded
+// Convert 5-letter type code to 4-letter display code (removes Focus modifier)
+// The 4 letters are: Interface-Change-Decision-Execution
+// The 5th letter (Focus: B/A) is the modifier that gets excluded
 export function getDisplayTypeCode(fullTypeCode) {
   if (!fullTypeCode) return '';
 
-  // Split on dashes: ['B', 'U', 'E', 'V', 'A']
+  // Split on dashes: ['U', 'E', 'V', 'A', 'B']
   const parts = fullTypeCode.split('-');
 
-  // Return first 4 letters (exclude 5th Execution modifier): 'B-U-E-V'
+  // Return first 4 letters (exclude 5th Focus modifier): 'U-E-V-A'
   return parts.slice(0, 4).join('-');
 }
 
