@@ -485,3 +485,10 @@ export const getPersonalityByCode = (code) => {
 export const getAllPersonalityCodes = () => {
   return Object.keys(personalities);
 };
+
+export const getAllPersonalities = () => {
+  return Object.entries(personalities).map(([code, data]) => ({
+    type_code: code,
+    ...data,
+  }));
+};
