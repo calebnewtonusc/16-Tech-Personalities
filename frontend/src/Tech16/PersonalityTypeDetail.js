@@ -616,7 +616,7 @@ const PersonalityTypeDetail = ({ typeCode, onBack, onTakeQuiz, onViewAllTypes })
                 return (
                   <RoleCard key={role.id} $roleColor={roleColor}>
                     <RoleTitle>#{idx + 1} {role.name}</RoleTitle>
-                    <FitBadge variant="success">{Math.round((role.fitScore || 0.15) * 100)}% Match</FitBadge>
+                    <FitBadge variant="success">{role.matchPercentage ?? 15}% Match</FitBadge>
                     <RoleDescription>{role.description}</RoleDescription>
                   </RoleCard>
                 );
