@@ -21,14 +21,44 @@ if (supabaseAnonKey && supabaseAnonKey.length >= 100) {
   console.log('Supabase client initialized successfully');
 } else {
   console.warn('Supabase credentials not configured - running in client-side only mode (localStorage)');
-  // Create a mock client that returns empty results
+
+  // Create a mock client that supports method chaining
+  // Returns empty data for all queries so fallback logic triggers
+  const mockQueryBuilder = {
+    select: function() { return this; },
+    insert: function() { return this; },
+    update: function() { return this; },
+    upsert: function() { return this; },
+    delete: function() { return this; },
+    eq: function() { return this; },
+    neq: function() { return this; },
+    gt: function() { return this; },
+    lt: function() { return this; },
+    gte: function() { return this; },
+    lte: function() { return this; },
+    like: function() { return this; },
+    ilike: function() { return this; },
+    is: function() { return this; },
+    in: function() { return this; },
+    contains: function() { return this; },
+    containedBy: function() { return this; },
+    range: function() { return this; },
+    match: function() { return this; },
+    not: function() { return this; },
+    or: function() { return this; },
+    filter: function() { return this; },
+    order: function() { return this; },
+    limit: function() { return this; },
+    offset: function() { return this; },
+    single: function() { return Promise.resolve({ data: null, error: { message: 'No Supabase credentials' } }); },
+    maybeSingle: function() { return Promise.resolve({ data: null, error: null }); },
+    then: function(resolve) {
+      return Promise.resolve({ data: [], error: null }).then(resolve);
+    },
+  };
+
   supabase = {
-    from: () => ({
-      select: () => Promise.resolve({ data: [], error: null }),
-      insert: () => Promise.resolve({ data: null, error: null }),
-      update: () => Promise.resolve({ data: null, error: null }),
-      upsert: () => Promise.resolve({ data: null, error: null }),
-    }),
+    from: () => ({ ...mockQueryBuilder }),
   };
 }
 
