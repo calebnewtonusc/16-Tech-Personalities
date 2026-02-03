@@ -197,12 +197,16 @@ export function getStrengthLabel(percentage) {
 
 /**
  * Get base personality type (4-letter code) for profile lookup
- * Removes the Focus suffix to match the 16 base personality profiles in the database
- * Example: U-E-V-A-B -> U-E-V-A
+ * Removes the Execution suffix to match the 16 base personality profiles
+ * The execution dimension (Adaptive/Structured) is a modifier, not a base type
+ *
+ * Format: Focus-Interface-Change-Decision(-Execution)
+ * Example: B-U-E-V-A -> B-U-E-V
+ * Example: B-U-E-V -> B-U-E-V (already base code)
  */
 export function getBasePersonalityType(fullTypeCode) {
   const parts = fullTypeCode.split('-');
-  // Return first 4 parts (Interface-Change-Decision-Execution), exclude Focus suffix
+  // Return first 4 parts (Focus-Interface-Change-Decision), exclude Execution suffix if present
   return parts.slice(0, 4).join('-');
 }
 
@@ -216,17 +220,19 @@ export function getBasePersonalityType(fullTypeCode) {
  */
 export function generateScoresFromType(typeCode) {
   const parts = typeCode.split('-');
-  const [interface_, change, decision, execution] = parts;
+  // Format: Focus-Interface-Change-Decision(-Execution optional)
+  // B-U-E-V or B-U-E-V-A
+  const [focus, interface_, change, decision, execution] = parts;
 
   // Generate scores that would produce this type code
-  // Low side (U/E/V/A) → 30 (clearly < 50)
-  // High side (S/O/L/T) → 70 (clearly > 50)
+  // Low side (B/U/E/V/A) → 30 (clearly < 50)
+  // High side (A/S/O/L/T) → 70 (clearly > 50)
   const scores = {
-    interface_score: interface_ === 'U' ? 30 : 70,
-    change_score: change === 'E' ? 30 : 70,
-    decision_score: decision === 'V' ? 30 : 70,
-    execution_score: execution === 'A' ? 30 : 70,
-    focus_score: 50, // Neutral for browsing (not from quiz)
+    focus_score: focus === 'B' ? 30 : 70,           // B (Builder) vs A (Analyzer)
+    interface_score: interface_ === 'U' ? 30 : 70,  // U (User-facing) vs S (Systems)
+    change_score: change === 'E' ? 30 : 70,         // E (Exploratory) vs O (Operational)
+    decision_score: decision === 'V' ? 30 : 70,     // V (Vision-led) vs L (Logic-led)
+    execution_score: execution === 'A' ? 30 : execution === 'T' ? 70 : 50, // A (Adaptive) vs T (Structured), default neutral if missing
   };
 
   return scores;
