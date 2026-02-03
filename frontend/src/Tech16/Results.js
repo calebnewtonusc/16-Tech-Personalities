@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { calculateScores, generatePersonalityType, getBasePersonalityType } from './scoringSupabase';
 import { supabase } from '../supabase';
-import { getPersonalityColor, getDisplayTypeCode } from './theme';
+import { getPersonalityColor, getAccentColor, getRoleColor, getDisplayTypeCode } from './theme';
 import { rankRolesByMatch } from './roleMatching';
 import { getAllRoles } from './data/roles';
 import { personalities } from './data/personalities';
