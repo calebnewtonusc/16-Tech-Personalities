@@ -1,0 +1,88 @@
+16 BASE PERSONALITY TYPES (I-C-D-E Format)
+==========================================
+
+Focus (B/A) is the 5th modifier dimension - defaults to 50 (neutral) on static pages
+The 4 core dimensions define the base personality:
+- Interface: U (User-facing) or S (Systems-facing)
+- Change: E (Exploratory) or O (Operational)
+- Decision: V (Vision-led) or L (Logic-led)
+- Execution: A (Adaptive) or T (Structured)
+
+USER-FACING EXPLORATORY (U-E):
+-------------------------------
+U-E-V-A: The Innovator (Adaptive)
+  - Rapid prototyping, creative vision, flexible iteration
+  - Example roles: Mobile Engineer, Frontend Engineer, Product Designer
+
+U-E-V-T: The Design Systems Engineer (Structured)
+  - Creative vision with systematic implementation
+  - Example roles: Design Systems Engineer, Frontend Engineer, Product Designer
+
+U-E-L-A: The Growth Engineer (Adaptive)
+  - Data-driven experimentation, flexible testing
+  - Example roles: Growth Engineer, Frontend Engineer, Full-Stack Engineer
+
+U-E-L-T: The Product Engineer (Structured)
+  - Data-driven product development with discipline
+  - Example roles: Frontend Engineer, Product Engineer, Full-Stack Engineer
+
+USER-FACING OPERATIONAL (U-O):
+-------------------------------
+U-O-V-A: The Product Designer (Adaptive)
+  - User-centric design with creative flexibility
+  - Example roles: Product Designer, UX Researcher, Product Manager
+
+U-O-V-T: The User Advocate (Structured)
+  - Production-focused, user-centric with systematic approach
+  - Example roles: Product Manager, Design Systems Engineer, Technical PM
+
+U-O-L-A: The Frontend Engineer (Adaptive)
+  - Operational frontend with flexible implementation
+  - Example roles: Frontend Engineer, Mobile Engineer, Full-Stack Engineer
+
+U-O-L-T: The Quality Engineer (Structured)
+  - Quality-focused with systematic testing
+  - Example roles: QA / Test Engineer, Test Automation Engineer, Frontend Engineer
+
+SYSTEMS-FACING EXPLORATORY (S-E):
+----------------------------------
+S-E-V-A: The Infrastructure Pioneer (Adaptive)
+  - Infrastructure innovation with flexible exploration
+  - Example roles: Platform Engineer, Backend Engineer, Cloud Engineer
+
+S-E-V-T: The Solutions Architect (Structured)
+  - Architectural vision with systematic planning
+  - Example roles: Solutions Architect, Platform Engineer, Backend Engineer
+
+S-E-L-A: The Research Scientist (Adaptive)
+  - Data-driven research with flexible experimentation
+  - Example roles: Research Scientist, Data Scientist, ML Engineer
+
+S-E-L-T: The ML Engineer (Structured)
+  - ML/data engineering with disciplined pipelines
+  - Example roles: ML Engineer, Data Scientist, MLOps Engineer
+
+SYSTEMS-FACING OPERATIONAL (S-O):
+----------------------------------
+S-O-V-A: The DevOps Engineer (Adaptive)
+  - Infrastructure operations with flexible response
+  - Example roles: DevOps / SRE, Cloud Engineer, Platform Engineer
+
+S-O-V-T: The Platform Builder (Structured)
+  - Platform stability with systematic discipline
+  - Example roles: Platform Engineer, DevOps / SRE, Kubernetes Engineer
+
+S-O-L-A: The Database Engineer (Adaptive)
+  - Data operations with flexible optimization
+  - Example roles: Database Engineer, Data Engineer, Database Administrator
+
+S-O-L-T: The Site Reliability Engineer (Structured)
+  - SRE with systematic reliability practices
+  - Example roles: DevOps / SRE, Database Administrator, Security Engineer
+
+MODIFIER DIMENSION (not part of base type code):
+-------------------------------------------------
+Focus: B (Builder) or A (Analyzer)
+- Defaults to 50 (neutral) on static personality pages
+- Determined by quiz and shown in results
+- Adds nuance to how the 4 core dimensions are expressed

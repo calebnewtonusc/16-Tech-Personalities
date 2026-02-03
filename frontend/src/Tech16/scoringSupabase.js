@@ -122,19 +122,19 @@ export function generatePersonalityType(scores) {
   // Determine each letter based on which side of 50 the score falls
   // If exactly 50, we need to pick one side - use < 50 to favor low side for true neutrals
 
-  // Core 4-letter type code: Focus-Interface-Change-Decision
-  const focus = scores.focus_score < 50 ? 'B' : 'A'; // Builder vs Analyzer
+  // Core 4-letter type code: Interface-Change-Decision-Execution
   const interface_ = scores.interface_score < 50 ? 'U' : 'S'; // User-Facing vs Systems-Facing
   const change = scores.change_score < 50 ? 'E' : 'O'; // Exploratory vs Operational
   const decision = scores.decision_score < 50 ? 'V' : 'L'; // Vision-Led vs Logic-Led
-
-  // Execution style suffix (like A/T in 16 Personalities)
   const execution = scores.execution_score < 50 ? 'A' : 'T'; // Adaptive vs Structured
 
-  // Format: B/A-U/S-E/O-V/L-A/T (e.g., "B-U-E-V-A")
+  // Focus modifier (5th dimension)
+  const focus = scores.focus_score < 50 ? 'B' : 'A'; // Builder vs Analyzer
+
+  // Format: U/S-E/O-V/L-A/T-B/A (e.g., "U-E-V-A-B")
   // The first 4 letters determine the personality type (16 types)
-  // The 5th letter (execution) is a modifier that adds nuance
-  return `${focus}-${interface_}-${change}-${decision}-${execution}`;
+  // The 5th letter (focus) is a modifier that adds nuance
+  return `${interface_}-${change}-${decision}-${execution}-${focus}`;
 }
 
 /**
@@ -215,24 +215,24 @@ export function getBasePersonalityType(fullTypeCode) {
  * This reverse-engineers the scoring logic to create representative scores
  * Used for displaying role matches on personality type detail pages
  *
- * @param {string} typeCode - 4-letter base type code (e.g., "B-U-E-V")
+ * @param {string} typeCode - 4-letter base type code (e.g., "U-E-V-A") or 5-letter with focus (e.g., "U-E-V-A-B")
  * @returns {Object} Scores object with all 5 dimensions
  */
 export function generateScoresFromType(typeCode) {
   const parts = typeCode.split('-');
-  // Format: Focus-Interface-Change-Decision(-Execution optional)
-  // B-U-E-V or B-U-E-V-A
-  const [focus, interface_, change, decision, execution] = parts;
+  // Format: Interface-Change-Decision-Execution(-Focus optional)
+  // U-E-V-A or U-E-V-A-B
+  const [interface_, change, decision, execution, focus] = parts;
 
   // Generate scores that would produce this type code
-  // Low side (B/U/E/V/A) → 30 (clearly < 50)
-  // High side (A/S/O/L/T) → 70 (clearly > 50)
+  // Low side (U/E/V/A/B) → 30 (clearly < 50)
+  // High side (S/O/L/T/A) → 70 (clearly > 50)
   const scores = {
-    focus_score: focus === 'B' ? 30 : 70,           // B (Builder) vs A (Analyzer)
     interface_score: interface_ === 'U' ? 30 : 70,  // U (User-facing) vs S (Systems)
     change_score: change === 'E' ? 30 : 70,         // E (Exploratory) vs O (Operational)
     decision_score: decision === 'V' ? 30 : 70,     // V (Vision-led) vs L (Logic-led)
-    execution_score: execution === 'A' ? 30 : execution === 'T' ? 70 : 50, // A (Adaptive) vs T (Structured), default neutral if missing
+    execution_score: execution === 'A' ? 30 : 70,   // A (Adaptive) vs T (Structured)
+    focus_score: focus === 'B' ? 30 : focus === 'A' ? 70 : 50, // B (Builder) vs A (Analyzer), default neutral (50) if missing
   };
 
   return scores;

@@ -974,12 +974,12 @@ const Tech16 = () => {
   }));
 
   // Example types - one from each category to showcase all 4 colors
-  // Format: Focus-Interface-Change-Decision (4-letter base code)
+  // Format: Interface-Change-Decision-Execution (4 core dimensions, Focus is the 5th modifier)
   const exampleTypes = [
-    { code: 'B-U-E-V', name: 'The Innovator', fullCode: 'B-U-E-V' }, // Innovators (purple)
-    { code: 'B-S-O-L', name: 'The Site Reliability Engineer', fullCode: 'B-S-O-L' }, // Engineers (orange)
-    { code: 'B-U-O-L', name: 'The Frontend Specialist', fullCode: 'B-U-O-L' }, // Crafters (green)
-    { code: 'B-S-E-V', name: 'The Infrastructure Pioneer', fullCode: 'B-S-E-V' }, // Architects (blue)
+    { code: 'U-E-V-A', name: 'The Innovator', fullCode: 'U-E-V-A' }, // Innovators (purple)
+    { code: 'S-O-L-T', name: 'The Site Reliability Engineer', fullCode: 'S-O-L-T' }, // Engineers (orange)
+    { code: 'U-O-V-A', name: 'The Product Designer', fullCode: 'U-O-V-A' }, // Crafters (green)
+    { code: 'S-E-V-A', name: 'The Infrastructure Pioneer', fullCode: 'S-E-V-A' }, // Architects (blue)
   ];
 
   const features = [
