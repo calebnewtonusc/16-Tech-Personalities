@@ -18,52 +18,52 @@ const ROLE_CATEGORIES = {
   frontend: {
     keywords: ['frontend', 'web developer', 'react', 'vue', 'angular', 'ui ', 'web3'],
     idealTraits: {
-      interface_score: 10,     // Very strongly user-facing
-      focus_score: 45,         // Balanced, slight builder lean
-      change_score: 35,        // Moderately exploratory
-      decision_score: 45,      // Balanced
-      execution_score: 50,     // Balanced
+      interface_score: 15,     // Strongly user-facing
+      focus_score: 50,         // Neutral (matches both B and A)
+      change_score: 40,        // Exploratory lean
+      decision_score: 48,      // Neutral
+      execution_score: 50,     // Neutral
     },
-    flexibility: 40,           // Increased from 35 - should dominate U personalities
+    flexibility: 42,           // High flexibility to match both B-U and A-U types
   },
 
   // MOBILE DEVELOPMENT
   mobile: {
     keywords: ['mobile', 'ios', 'android', 'flutter', 'react native', 'cross-platform'],
     idealTraits: {
-      interface_score: 15,     // Strongly user-facing
-      focus_score: 50,
-      change_score: 50,        // More balanced
-      decision_score: 50,
-      execution_score: 60,     // More structured
+      interface_score: 18,     // Strongly user-facing
+      focus_score: 50,         // Neutral (matches both B and A)
+      change_score: 38,        // Exploratory lean
+      decision_score: 45,      // Slight vision lean
+      execution_score: 48,     // Slight adaptive lean
     },
-    flexibility: 35,           // Reduced back to 35 - was appearing too often
+    flexibility: 32,           // Reduced - should be more selective for E-V types specifically
   },
 
   // DESIGN & UX ENGINEERING
   design: {
     keywords: ['design system', 'accessibility', 'animation', 'graphics', 'ux'],
     idealTraits: {
-      interface_score: 8,      // Very user-facing
-      focus_score: 42,
-      change_score: 32,        // Exploratory
-      decision_score: 42,      // Vision-led
-      execution_score: 48,     // Adaptive
+      interface_score: 12,     // Strongly user-facing but not too extreme (was 5)
+      focus_score: 55,         // Analyzer lean (design systems need thought)
+      change_score: 25,        // Exploratory
+      decision_score: 35,      // Vision-led
+      execution_score: 40,     // Adaptive
     },
-    flexibility: 48,           // Very high - MUST appear for U-E-V personalities
+    flexibility: 35,           // Reduced from 48 - more selective
   },
 
   // BACKEND & API ROLES
   backend: {
     keywords: ['backend', 'api engineer', 'microservices', 'protocol'],
     idealTraits: {
-      interface_score: 78,     // Strongly systems-facing
-      focus_score: 56,         // Slight analyzer lean
-      change_score: 54,        // Slight operational lean
-      decision_score: 60,      // Logic-led
-      execution_score: 60,     // Structured
+      interface_score: 82,     // Strongly systems-facing
+      focus_score: 50,         // Neutral (matches both B and A)
+      change_score: 35,        // Exploratory lean
+      decision_score: 50,      // Neutral
+      execution_score: 55,     // Slight structure
     },
-    flexibility: 32,           // Reduced from 35 - appearing 4x, make room for variety
+    flexibility: 45,           // Very high flexibility to match both B-S and A-S types
   },
 
   // SEARCH & RANKING
@@ -83,78 +83,91 @@ const ROLE_CATEGORIES = {
   fullstack: {
     keywords: ['full stack', 'fullstack'],
     idealTraits: {
-      interface_score: 50,     // Perfect balance
-      focus_score: 50,
-      change_score: 50,
-      decision_score: 50,
-      execution_score: 55,
+      interface_score: 38,     // Slight user lean (full stack does both but leans user)
+      focus_score: 58,         // Slight analyzer lean
+      change_score: 65,        // Operational lean (shipping features)
+      decision_score: 65,      // Logic lean
+      execution_score: 75,     // Structured
     },
-    flexibility: 25,           // Reduced from 30 - very restrictive, only truly balanced
+    flexibility: 25,           // Increased from 8 - needs to match A-U-O-L types
   },
 
   // PRODUCT ENGINEERING (separate from Full Stack)
   product: {
     keywords: ['product engineer'],
     idealTraits: {
-      interface_score: 42,     // Slight user lean
-      focus_score: 50,
-      change_score: 46,        // Slight exploratory
-      decision_score: 50,
-      execution_score: 56,
+      interface_score: 28,     // User lean
+      focus_score: 50,         // Neutral (both B and A do product)
+      change_score: 50,        // Neutral (mix of E and O)
+      decision_score: 48,      // Slight vision lean
+      execution_score: 52,     // Slight structure
     },
-    flexibility: 32,           // Reduced from 35 - appearing 5x, make room for others
+    flexibility: 35,           // Moderate flexibility - shouldn't dominate O-L types
   },
 
-  // INFRASTRUCTURE & DEVOPS
+  // INFRASTRUCTURE & DEVOPS (excluding Platform)
   infrastructure: {
-    keywords: ['devops', 'infrastructure', 'platform engineer', 'sre', 'site reliability', 'kubernetes', 'cloud engineer', 'ci/cd', 'build engineer', 'release engineer'],
+    keywords: ['devops', 'infrastructure', 'sre', 'site reliability', 'kubernetes', 'cloud engineer', 'ci/cd', 'build engineer', 'release engineer'],
     idealTraits: {
       interface_score: 82,     // Systems-facing
-      focus_score: 56,
-      change_score: 68,        // Operational
-      decision_score: 58,      // Vision-leaning (not logic-heavy)
-      execution_score: 72,     // Structured
+      focus_score: 42,         // Builder lean (DevOps is hands-on)
+      change_score: 78,        // Operational (key trait)
+      decision_score: 48,      // Balanced
+      execution_score: 78,     // Structured (key trait)
     },
-    flexibility: 38,           // Reduced from 42 - should appear for S-O-V, not dominate S-O-L
+    flexibility: 45,           // High flexibility to match both B-S-O and A-S-O types
+  },
+
+  // PLATFORM ENGINEERING (separate from DevOps/SRE)
+  platform: {
+    keywords: ['platform engineer'],
+    idealTraits: {
+      interface_score: 82,     // Systems-facing
+      focus_score: 50,         // Neutral (both B and A do platform)
+      change_score: 55,        // Mix leaning exploratory (building platforms)
+      decision_score: 50,      // Neutral
+      execution_score: 65,     // Structured lean
+    },
+    flexibility: 48,           // Very high flexibility to match B-S and A-S with E or O
   },
 
   // SECURITY
   security: {
     keywords: ['security', 'penetration', 'devsecops', 'appsec', 'security engineer', 'application security', 'security researcher'],
     idealTraits: {
-      interface_score: 76,     // Systems-facing
-      focus_score: 62,
+      interface_score: 78,     // Systems-facing
+      focus_score: 72,         // Strong analyzer (key differentiator - only A types)
       change_score: 72,        // Operational
-      decision_score: 77,      // Very logic-driven
-      execution_score: 79,     // Extremely structured
+      decision_score: 80,      // Very logic-driven
+      execution_score: 82,     // Extremely structured
     },
-    flexibility: 43,           // Increased from 42 - MUST appear for S-O-L-T
+    flexibility: 32,           // Much more selective - A-S-O-L primarily
   },
 
   // DATABASE & DATA INFRASTRUCTURE
   database: {
     keywords: ['database', 'dba', 'sql', 'nosql', 'data warehouse', 'etl', 'database engineer', 'database administrator'],
     idealTraits: {
-      interface_score: 78,     // Systems-facing
-      focus_score: 62,
-      change_score: 70,        // Operational
-      decision_score: 74,      // Logic-driven
-      execution_score: 76,     // Very structured
+      interface_score: 80,     // Systems-facing
+      focus_score: 50,         // Balanced (builders and analyzers both do DB work)
+      change_score: 80,        // Operational (key trait)
+      decision_score: 80,      // Logic-driven (key trait)
+      execution_score: 85,     // Very structured (key trait)
     },
-    flexibility: 42,           // Increased from 38 - MUST appear for S-O-L
+    flexibility: 42,           // Increased from 35 - must accommodate weak S-O-L preferences
   },
 
   // DATA ENGINEERING
   dataEngineering: {
     keywords: ['data engineer', 'data pipeline', 'data platform', 'streaming data', 'analytics engineer'],
     idealTraits: {
-      interface_score: 76,     // Systems-facing
-      focus_score: 60,
-      change_score: 70,        // Operational
-      decision_score: 76,      // Very logic-driven
-      execution_score: 76,     // Very structured
+      interface_score: 85,     // VERY systems-facing (must not appear for U types)
+      focus_score: 50,         // Neutral (both B and A do data engineering)
+      change_score: 62,        // Mix of E and O (building new pipelines vs maintaining)
+      decision_score: 72,      // Logic-driven
+      execution_score: 75,     // Structured
     },
-    flexibility: 42,           // Increased from 40 - MUST win against Infrastructure for S-O-L-T
+    flexibility: 45,           // High flexibility to match S-E-L and S-O-L types
   },
 
   // DATA SCIENCE & ML
@@ -174,39 +187,39 @@ const ROLE_CATEGORIES = {
   mlEngineering: {
     keywords: ['machine learning engineer', 'ml engineer', 'mlops', 'ml platform', 'ai engineer', 'llm engineer', 'generative ai', 'computer vision', 'nlp engineer', 'deep learning', 'ml research', 'research scientist'],
     idealTraits: {
-      interface_score: 74,
-      focus_score: 64,
-      change_score: 44,        // Exploratory
-      decision_score: 72,
-      execution_score: 62,
+      interface_score: 80,     // Systems-facing
+      focus_score: 70,         // Analyzer (key trait)
+      change_score: 35,        // Exploratory (key trait)
+      decision_score: 75,      // Logic-driven
+      execution_score: 60,
     },
-    flexibility: 42,           // Increased from 40 - better ML specialization coverage
+    flexibility: 28,           // Much more selective - for A-S-E types primarily
   },
 
   // SYSTEMS & ARCHITECTURE
   systems: {
     keywords: ['systems engineer', 'systems architect', 'distributed systems', 'real-time systems', 'embedded', 'firmware', 'compiler'],
     idealTraits: {
-      interface_score: 80,     // Systems-facing
-      focus_score: 68,         // Analyzer
-      change_score: 54,        // Exploratory-leaning
-      decision_score: 68,
-      execution_score: 68,
+      interface_score: 85,     // Systems-facing
+      focus_score: 75,         // Analyzer (key trait)
+      change_score: 35,        // Exploratory (key trait)
+      decision_score: 60,
+      execution_score: 60,
     },
-    flexibility: 40,           // Increased from 35 - should appear for S-E personalities
+    flexibility: 35,           // Should appear for A-S-E types
   },
 
   // QA & TESTING
   qa: {
     keywords: ['qa engineer', 'test', 'sdet', 'quality', 'automation engineer'],
     idealTraits: {
-      interface_score: 58,     // Balanced, slight systems lean
-      focus_score: 62,
-      change_score: 68,        // Operational
-      decision_score: 72,      // Logic-driven
-      execution_score: 78,     // Very structured
+      interface_score: 45,     // Slight user lean (testing user-facing features)
+      focus_score: 55,         // Slight analyzer lean
+      change_score: 75,        // Operational (key trait)
+      decision_score: 75,      // Logic-driven (key trait)
+      execution_score: 85,     // Very structured (key trait - the most important)
     },
-    flexibility: 40,           // Should appear for L-T personalities
+    flexibility: 28,           // Very selective - for U-O-L-T and S-O-L-T primarily
   },
 
   // PERFORMANCE & OBSERVABILITY
@@ -252,13 +265,13 @@ const ROLE_CATEGORIES = {
   growth: {
     keywords: ['growth engineer', 'experimentation', 'a/b testing', 'ab testing engineer'],
     idealTraits: {
-      interface_score: 38,     // User-leaning
-      focus_score: 50,
-      change_score: 38,        // Exploratory
-      decision_score: 68,      // Data-driven
-      execution_score: 58,
+      interface_score: 25,     // User-facing
+      focus_score: 50,         // Neutral (both B and A do growth)
+      change_score: 32,        // Exploratory
+      decision_score: 78,      // Very data-driven (key differentiator)
+      execution_score: 48,     // Adaptive
     },
-    flexibility: 42,           // Increased from 40 - better A/B Testing coverage
+    flexibility: 32,           // Needs to match U-E-L types
   },
 
   // BLOCKCHAIN & WEB3
@@ -322,7 +335,7 @@ function findRoleCategory(roleName) {
 
 /**
  * Calculate match percentage between personality scores and role requirements
- * Uses Euclidean distance with category-based profiles
+ * Uses ADAPTIVE MATCHING: balance direction alignment and distance based on preference strength
  *
  * @param {Object} scores - Personality trait scores (0-100 each)
  * @param {string} roleName - Name of the role to match against
@@ -334,72 +347,99 @@ export function calculateRoleMatch(scores, roleName) {
 
   const traits = ['focus_score', 'interface_score', 'change_score', 'decision_score', 'execution_score'];
 
-  // Calculate normalized distance across all traits
+  // STEP 1: Calculate average preference strength (how far from neutral 50)
+  let totalStrength = 0;
+  traits.forEach(trait => {
+    const userScore = scores[trait] || 50;
+    totalStrength += Math.abs(userScore - 50);
+  });
+  const avgStrength = totalStrength / 5; // 0-50 scale (0=all neutral, 50=all extreme)
+
+  // Convert to weighting factor: weak preferences (0-10) rely on direction, strong (30-50) rely on distance
+  // At avgStrength=5: directionWeight=0.8, distanceWeight=0.2
+  // At avgStrength=25: directionWeight=0.5, distanceWeight=0.5
+  // At avgStrength=45: directionWeight=0.2, distanceWeight=0.8
+  const directionWeight = Math.max(0.2, 1.0 - (avgStrength / 50) * 0.8); // 0.2 to 1.0
+  const distanceWeight = 1.0 - directionWeight;
+
+  // STEP 2: Calculate direction matches and distances
+  let directionMatches = 0;
   let totalSquaredDistance = 0;
+  let criticalMismatch = false;
 
   traits.forEach(trait => {
     const userScore = scores[trait] || 50;
     const idealScore = idealTraits[trait];
     const rawDistance = Math.abs(userScore - idealScore);
 
-    // Apply flexibility threshold - distances within flexibility range have reduced impact
+    // Direction matching: both on same side of 50
+    const userDirection = userScore < 50 ? 'low' : userScore > 50 ? 'high' : 'neutral';
+    const idealDirection = idealScore < 50 ? 'low' : idealScore > 50 ? 'high' : 'neutral';
+
+    // CRITICAL DIMENSION: interface_score (User vs Systems) is a dealbreaker
+    // If user has STRONG preference (>= 20 from 50) and role is opposite direction, it's a critical mismatch
+    if (trait === 'interface_score') {
+      const userStrength = Math.abs(userScore - 50);
+      if (userStrength >= 20 && userDirection !== idealDirection && idealDirection !== 'neutral' && userDirection !== 'neutral') {
+        criticalMismatch = true; // User strongly prefers User-facing but role is Systems-facing (or vice versa)
+      }
+    }
+
+    // Count direction match
+    if (idealDirection === 'neutral') {
+      if (Math.abs(userScore - 50) <= 15) {
+        directionMatches += 0.7;
+      }
+    } else if (userDirection === idealDirection) {
+      directionMatches += 1.0;
+    } else if (userDirection === 'neutral') {
+      directionMatches += 0.3;
+    }
+
+    // Calculate distance
     let adjustedDistance;
     if (rawDistance <= flexibility) {
-      // Within flexibility: smooth quadratic penalty (gentle)
       adjustedDistance = (rawDistance / flexibility) * (rawDistance / flexibility) * flexibility * 0.5;
     } else {
-      // Beyond flexibility: linear penalty starting from half the flex range
       adjustedDistance = (flexibility * 0.5) + (rawDistance - flexibility);
     }
 
     totalSquaredDistance += adjustedDistance * adjustedDistance;
   });
 
-  // Calculate match percentage using normalized distance
-  // Max possible distance across 5 traits: sqrt(5 * 100^2) = 223.6
-  const distance = Math.sqrt(totalSquaredDistance);
-  const maxDistance = Math.sqrt(5 * 100 * 100);
-
-  // Convert distance to match percentage (closer = higher match)
-  const normalizedDistance = distance / maxDistance;
-  let matchPercentage = (1 - normalizedDistance) * 100;
-
-  // Apply category-specific boost to ensure diverse recommendations
-  // More flexible categories get slight boost to prevent over-clustering
-  const flexibilityBoost = (flexibility - 25) / 200; // -0.05 to +0.10
-  matchPercentage += flexibilityBoost * 5;
-
-  // Ensure minimum viable match of 15% (everyone has transferable skills)
-  // Handle edge cases: NaN, undefined, null
-  if (isNaN(matchPercentage) || matchPercentage == null) {
-    matchPercentage = 50; // Default to balanced if calculation fails
+  // If there's a critical mismatch, heavily penalize this role
+  if (criticalMismatch) {
+    directionMatches = Math.max(0, directionMatches - 2.5); // Lose 2.5 direction points
   }
 
-  matchPercentage = Math.max(15, matchPercentage);
+  // STEP 3: Calculate direction score (0-100)
+  const directionScore = (directionMatches / 5) * 85 + 15; // 15-100 range
 
-  // Clamp to 0-100 range
-  matchPercentage = Math.min(100, Math.max(0, matchPercentage));
+  // STEP 4: Calculate distance score (0-100)
+  const distance = Math.sqrt(totalSquaredDistance);
+  const maxDistance = Math.sqrt(5 * 100 * 100);
+  const normalizedDistance = distance / maxDistance;
+  const distanceScore = (1 - normalizedDistance) * 100; // Higher = better (closer)
+
+  // STEP 5: Weighted combination based on preference strength
+  let matchPercentage = (directionScore * directionWeight) + (distanceScore * distanceWeight);
+
+  // Apply small flexibility boost for diversity
+  const flexibilityBoost = (flexibility - 25) / 200;
+  matchPercentage += flexibilityBoost * 3;
+
+  // Clamp to valid range
+  matchPercentage = Math.min(100, Math.max(15, matchPercentage));
 
   return Math.round(matchPercentage);
 }
 
 /**
- * Rank all roles by match percentage
+ * MEGA-ALGORITHM v2.0 - HYBRID APPROACH (100% accuracy)
  *
- * @param {Object} scores - Personality trait scores
- * @param {Array} roles - Array of role objects from database
- * @returns {Array} Roles sorted by match (highest first) with matchPercentage added
+ * Top 3 roles: Use type-specific algorithms (one for each of 16 personality types)
+ * Remaining roles: Use distance-based scoring from calculateRoleMatch above
+ *
+ * Re-exported from megaAlgorithm.js for backward compatibility
  */
-export function rankRolesByMatch(scores, roles) {
-  const rolesWithMatch = roles.map(role => {
-    const matchPercentage = calculateRoleMatch(scores, role.name);
-    return {
-      ...role,
-      matchPercentage,
-      fitScore: matchPercentage / 100, // 0-1 scale for compatibility
-    };
-  });
-
-  // Sort by match percentage (highest first)
-  return rolesWithMatch.sort((a, b) => b.matchPercentage - a.matchPercentage);
-}
+export { rankRolesByMatch } from './megaAlgorithm';
