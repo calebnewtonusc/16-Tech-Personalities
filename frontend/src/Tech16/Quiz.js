@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { getQuizProgress } from './scoringSupabase';
 import { Button, Card, ProgressBar, GradientBackground, Container } from './components/SharedComponents';
 import { supabase } from '../supabase';
+import { questions as localQuestions } from './data/questions';
 
 const PageWrapper = styled.div`
   margin: -8px -8px 0 -8px;
@@ -274,22 +275,39 @@ const Quiz = ({ onComplete }) => {
           .limit(1)
           .single();
 
-        if (error) throw error;
-
-        if (quizVersion && quizVersion.questions) {
+        if (error || !quizVersion || !quizVersion.questions) {
+          // Use local questions as fallback
+          console.log('Using local questions data (Supabase not configured)');
+          const questionsWithOptions = localQuestions.map(q => ({
+            ...q,
+            options: [
+              'Strongly Disagree',
+              'Disagree',
+              'Neutral',
+              'Agree',
+              'Strongly Agree'
+            ]
+          }));
+          setQuestions(questionsWithOptions);
+        } else {
           const quizQuestions = quizVersion.questions.questions || [];
           setQuestions(quizQuestions);
           setQuizVersionId(quizVersion.id);
-        } else {
-          console.warn('No quiz version found or invalid format');
         }
       } catch (error) {
         console.error('Error loading questions:', error);
-        console.error('Error details:', {
-          message: error.message,
-          code: error.code,
-          details: error.details,
-        });
+        // Fallback to local questions on error
+        const questionsWithOptions = localQuestions.map(q => ({
+          ...q,
+          options: [
+            'Strongly Disagree',
+            'Disagree',
+            'Neutral',
+            'Agree',
+            'Strongly Agree'
+          ]
+        }));
+        setQuestions(questionsWithOptions);
       } finally {
         setLoading(false);
       }

@@ -4,6 +4,7 @@ import { supabase } from '../supabase';
 import { getRoleColor } from './theme';
 import { Button, Card, GradientBackground, Container } from './components/SharedComponents';
 import { rankRolesByMatch } from './roleMatching';
+import { getAllRoles } from './data/roles';
 
 const AllRolesContainer = styled.div`
   min-height: 100vh;
@@ -180,16 +181,29 @@ const AllRolesRanked = ({ personalityCode, scores, onBack }) => {
   useEffect(() => {
     async function loadAndRankRoles() {
       try {
-        // Load all roles from database
+        // Try to load roles from database
         const { data: rolesData, error: rolesError } = await supabase
           .from('tech_roles')
           .select('*');
 
-        if (rolesError) throw rolesError;
+        let roles = rolesData;
+
+        // If database is empty or unavailable, use local data
+        if (!roles || roles.length === 0 || rolesError) {
+          console.log('Using local roles data (Supabase not configured)');
+          const localRoles = getAllRoles();
+          // Map local data format to match database format
+          roles = localRoles.map((role, index) => ({
+            id: index + 1,
+            name: role.title,
+            category: role.title.includes('Engineer') ? 'Engineering' : 'Technical',
+            ...role
+          }));
+        }
 
         // Use dynamic trait-based matching instead of pre-defined weights
         // This adapts automatically when scoring algorithm changes
-        const rankedRoles = rankRolesByMatch(scores, rolesData);
+        const rankedRoles = rankRolesByMatch(scores, roles);
 
         setRoles(rankedRoles);
       } catch (error) {
