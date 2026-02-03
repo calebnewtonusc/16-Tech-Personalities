@@ -769,7 +769,7 @@ const Tech16 = () => {
           .select('*', { count: 'exact', head: true });
 
         if (error) throw error;
-        setRoleCount(count);
+        setRoleCount(count || 42); // Use 42 if count is undefined
       } catch (error) {
         console.error('Error fetching role count:', error);
         setRoleCount(42); // Fallback after role consolidation
@@ -998,7 +998,7 @@ const Tech16 = () => {
       icon: '💼',
       title: 'Engineering Role Recommendations',
       description:
-        `Discover your best-fit engineering roles from ${roleCount || '95'}+ hands-on positions across frontend, backend, mobile, data, ML, security, and more.`,
+        `Discover your best-fit engineering roles from ${roleCount || '42'}+ hands-on positions across frontend, backend, mobile, data, ML, security, and more.`,
     },
     {
       icon: '🗺️',
@@ -1054,7 +1054,7 @@ const Tech16 = () => {
               <StatLabel>Core Dimensions</StatLabel>
             </StatCard>
             <StatCard $color="#3498db">
-              <StatNumber $color="#3498db">{roleCount !== null ? `${roleCount}+` : '...'}</StatNumber>
+              <StatNumber $color="#3498db">{roleCount ? `${roleCount}+` : '42+'}</StatNumber>
               <StatLabel>Tech Roles</StatLabel>
             </StatCard>
           </StatsSection>
@@ -1194,7 +1194,7 @@ const Tech16 = () => {
                   Discover your developer personality type and ideal engineering role
                 </FooterDescription>
                 <FooterDescription>
-                  Focused on hands-on technical roles across {roleCount || '95'}+ engineering positions
+                  Focused on hands-on technical roles across {roleCount || '42'}+ engineering positions
                 </FooterDescription>
                 <FooterNote>
                   Built with React, styled-components, and Recharts
