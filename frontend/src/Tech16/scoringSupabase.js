@@ -215,7 +215,7 @@ export function getBasePersonalityType(fullTypeCode) {
  * This reverse-engineers the scoring logic to create representative scores
  * Used for displaying role matches on personality type detail pages
  *
- * @param {string} typeCode - 4-letter base type code (e.g., "U-E-V-A")
+ * @param {string} typeCode - 4-letter base type code (e.g., "B-U-E-V")
  * @returns {Object} Scores object with all 5 dimensions
  */
 export function generateScoresFromType(typeCode) {
