@@ -1,8 +1,8 @@
-function rankRolesFor_SOL(scores) {
-  // S-O-L: Systems-facing, Operational, Logic-led
+function rankRolesFor_SOLA(scores) {
+  // S-O-L-A: Systems-facing, Operational, Logic-led, Adaptive execution
   // Focus modifier: Builder vs Analyzer determines the specific expression
 
-  const { focus_score, change_score, decision_score, execution_score } = scores;
+  const { focus_score, change_score, decision_score } = scores;
 
   const operationalStrength = change_score - 50;
   const logicStrength = decision_score - 50;
@@ -12,20 +12,12 @@ function rankRolesFor_SOL(scores) {
   if (focus_score < 50) {
     // Strong operational + logic = SRE/Database focus
     if (operationalStrength > 25 && logicStrength > 25) {
-      if (execution_score > 65) {
-        return ["DevOps / SRE", "Database Administrator", "Database Engineer"];
-      } else {
-        return ["DevOps / SRE", "Cloud Engineer", "Database Engineer"];
-      }
+      return ["DevOps / SRE", "Cloud Engineer", "Database Engineer"];
     }
 
     // Strong operational = pure SRE/DevOps
     if (operationalStrength > 25) {
-      if (execution_score > 60) {
-        return ["DevOps / SRE", "Kubernetes Engineer", "Database Administrator"];
-      } else {
-        return ["DevOps / SRE", "Platform Engineer", "Cloud Engineer"];
-      }
+      return ["DevOps / SRE", "Platform Engineer", "Cloud Engineer"];
     }
 
     // Strong logic = database focus
@@ -44,12 +36,8 @@ function rankRolesFor_SOL(scores) {
 
   // Strong systems + strong operational = pure data/security engineering
   if (interfaceStrength > 30 && changeStrength > 30) {
-    // Execution dimension: Adaptive favors Security (threat response), Structured favors Data Engineering
-    if (execution_score < 50) {
-      return ["Security Engineer", "Data Engineer", "Database Administrator"];
-    } else {
-      return ["Data Engineer", "Database Administrator", "Security Engineer"];
-    }
+    // Adaptive execution favors Security (threat response)
+    return ["Security Engineer", "Data Engineer", "Database Administrator"];
   }
 
   // Moderate preferences = balanced backend roles
@@ -61,4 +49,4 @@ function rankRolesFor_SOL(scores) {
   return ["Data Engineer", "Data Scientist", "Database Administrator"];
 }
 
-export default rankRolesFor_SOL;
+export default rankRolesFor_SOLA;

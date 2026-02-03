@@ -1,8 +1,8 @@
-function rankRolesFor_UEL(scores) {
-  // U-E-L: User-facing, Exploratory, Logic-led
+function rankRolesFor_UELA(scores) {
+  // U-E-L-A: User-facing, Exploratory, Logic-led, Adaptive execution
   // Focus modifier: Builder vs Analyzer determines the specific expression
 
-  const { focus_score, change_score, decision_score, execution_score } = scores;
+  const { focus_score, change_score, decision_score } = scores;
 
   const exploratoryStrength = 50 - change_score;
   const logicStrength = decision_score - 50;
@@ -12,11 +12,7 @@ function rankRolesFor_UEL(scores) {
   if (focus_score < 50) {
     // Strong logic + exploratory = growth engineering (data-driven experimentation)
     if (logicStrength > 25 && exploratoryStrength > 20) {
-      if (execution_score < 50) {
-        return ["Growth Engineer", "Frontend Engineer", "Full-Stack Engineer"];
-      } else {
-        return ["Growth Engineer", "Full-Stack Engineer", "Frontend Engineer"];
-      }
+      return ["Growth Engineer", "Frontend Engineer", "Full-Stack Engineer"];
     }
 
     // Strong exploratory = more product/frontend focused
@@ -32,11 +28,7 @@ function rankRolesFor_UEL(scores) {
   // "The UX Researcher" - data-driven user research
   // Strong logic + exploratory = growth/analytics focus
   if (logicStrength > 25 && exploratoryStrength > 25) {
-    if (execution_score < 50) {
-      return ["Growth Engineer", "UX Researcher", "Technical PM"];
-    } else {
-      return ["Technical PM", "Growth Engineer", "Data Scientist"];
-    }
+    return ["Growth Engineer", "UX Researcher", "Technical PM"];
   }
 
   // Strong exploratory = research/innovation
@@ -53,4 +45,4 @@ function rankRolesFor_UEL(scores) {
   return ["Growth Engineer", "Technical PM", "Data Scientist"];
 }
 
-export default rankRolesFor_UEL;
+export default rankRolesFor_UELA;
