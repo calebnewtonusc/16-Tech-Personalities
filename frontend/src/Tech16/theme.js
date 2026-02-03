@@ -46,8 +46,13 @@ export function getPersonalityColor(typeCode) {
   if (!typeCode) return categoryColorPalettes.innovators;
 
   const parts = typeCode.split('-');
-  const interfaceDimension = parts[0]; // U or S (Position 1)
-  const scopeDimension = parts[1]; // E or O (Position 2)
+  // Format: Focus-Interface-Change-Decision (B/A-U/S-E/O-V/L)
+  // Position 0: Focus (B/A)
+  // Position 1: Interface (U/S)
+  // Position 2: Change/Scope (E/O)
+  // Position 3: Decision (V/L)
+  const interfaceDimension = parts[1]; // U or S
+  const scopeDimension = parts[2]; // E or O
 
   // Determine category based on Interface × Scope
   if (interfaceDimension === 'U' && scopeDimension === 'E') {
