@@ -145,6 +145,7 @@ const PersonalityTypesGallery = ({ onNavigateToType, onNavigateToQuiz }) => {
   useEffect(() => {
     async function loadPersonalities() {
       try {
+        console.log('PersonalityTypesGallery: Loading personalities...');
         const { data, error } = await supabase
           .from('personality_profiles')
           .select('*')
@@ -154,16 +155,21 @@ const PersonalityTypesGallery = ({ onNavigateToType, onNavigateToQuiz }) => {
         if (!data || data.length === 0 || error) {
           console.log('Using local personalities data (Supabase not configured)');
           const localPersonalities = getAllPersonalities();
+          console.log('Local personalities loaded:', localPersonalities.length);
+          console.log('Sample personality:', localPersonalities[0]);
           setPersonalities(localPersonalities);
         } else {
+          console.log('Database personalities loaded:', data.length);
           setPersonalities(data);
         }
       } catch (error) {
         console.error('Error loading personalities:', error);
         // Fallback to local data on error
         const localPersonalities = getAllPersonalities();
+        console.log('Fallback to local personalities:', localPersonalities.length);
         setPersonalities(localPersonalities);
       } finally {
+        console.log('PersonalityTypesGallery: Loading complete');
         setLoading(false);
       }
     }
@@ -177,12 +183,15 @@ const PersonalityTypesGallery = ({ onNavigateToType, onNavigateToQuiz }) => {
     categorizedPersonalities[categoryKey] = [];
   });
 
+  console.log('Categorizing personalities:', personalities.length);
   personalities.forEach(personality => {
     const category = getPersonalityCategory(personality.type_code);
+    console.log('Personality:', personality.type_code, 'Category:', category?.key);
     if (category && categorizedPersonalities[category.key]) {
       categorizedPersonalities[category.key].push(personality);
     }
   });
+  console.log('Categorized personalities:', categorizedPersonalities);
 
   if (loading) {
     return (
