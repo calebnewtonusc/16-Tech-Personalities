@@ -4,6 +4,7 @@ import { calculateScores, generatePersonalityType, getSpectrumLabel, getSpectrum
 import { supabase } from '../supabase';
 import { getPersonalityColor, getAccentColor, getRoleColor, getDisplayTypeCode } from './theme';
 import { rankRolesByMatch } from './roleMatching';
+import { getAllRoles } from './data/roles';
 import {
   Button,
   Card,
@@ -518,12 +519,25 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
   useEffect(() => {
     async function loadRoles() {
       try {
-        // Load all roles
-        const { data: roles, error: rolesError } = await supabase
+        // Try to load roles from database
+        const { data: rolesData, error: rolesError } = await supabase
           .from('tech_roles')
           .select('*');
 
-        if (rolesError) throw rolesError;
+        let roles = rolesData;
+
+        // If database is empty or unavailable, use local data
+        if (!roles || roles.length === 0 || rolesError) {
+          console.log('Using local roles data (Supabase not configured)');
+          const localRoles = getAllRoles();
+          // Map local data format to match database format
+          roles = localRoles.map((role, index) => ({
+            id: index + 1,
+            name: role.title,
+            category: role.title.includes('Engineer') ? 'Engineering' : 'Technical',
+            ...role
+          }));
+        }
 
         // Use dynamic trait-based matching instead of pre-defined weights
         // This adapts automatically when scoring algorithm changes
