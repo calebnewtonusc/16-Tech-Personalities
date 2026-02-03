@@ -15,13 +15,13 @@ Personality assessment application for tech professionals. Take a 40-question qu
   - Decision Driver (Vision-Led vs Logic-Led)
   - Execution (Adaptive vs Structured)
 - **16 Unique Personality Types**: 4-letter codes with -A/-T suffix
-- **42+ Tech Roles**: Personalized career recommendations with detailed roadmaps
+- **42+ Tech Roles**: Career recommendations based on personality fit
 
 ### User Experience
 - **Anonymous Quiz**: No signup required
 - **Results Dashboard**: Interactive profile with radar chart visualization
 - **Detailed Insights**: Strengths, challenges, and work preferences
-- **Top 3 Recommendations**: Best-fit roles with 4-phase learning roadmaps
+- **Top 3 Recommendations**: Best-fit roles based on personality match
 - **Share Results**: Web Share API integration
 - **Download Results**: Export as formatted text file
 
@@ -101,7 +101,7 @@ Result: B-U-E-V-A (The Innovator)
 1. **Euclidean Distance**: Calculate distance between personality spectrum scores and ideal role profiles
 2. **Trait Weights**: Each role has predefined fit weights for each spectrum
 3. **Ranking**: Roles sorted by distance (lower = better fit)
-4. **Top 3**: Display best-fit roles with learning roadmaps
+4. **Top 3**: Display best-fit roles
 
 ## License
 
