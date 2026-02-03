@@ -197,16 +197,16 @@ export function getStrengthLabel(percentage) {
 
 /**
  * Get base personality type (4-letter code) for profile lookup
- * Removes the Execution suffix to match the 16 base personality profiles
- * The execution dimension (Adaptive/Structured) is a modifier, not a base type
+ * Removes the Focus suffix to match the 16 base personality profiles
+ * The focus dimension (Builder/Analyzer) is a modifier, not a base type
  *
- * Format: Focus-Interface-Change-Decision(-Execution)
- * Example: B-U-E-V-A -> B-U-E-V
- * Example: B-U-E-V -> B-U-E-V (already base code)
+ * Format: Interface-Change-Decision-Execution(-Focus)
+ * Example: U-E-V-A-B -> U-E-V-A
+ * Example: U-E-V-A -> U-E-V-A (already base code)
  */
 export function getBasePersonalityType(fullTypeCode) {
   const parts = fullTypeCode.split('-');
-  // Return first 4 parts (Focus-Interface-Change-Decision), exclude Execution suffix if present
+  // Return first 4 parts (Interface-Change-Decision-Execution), exclude Focus suffix if present
   return parts.slice(0, 4).join('-');
 }
 

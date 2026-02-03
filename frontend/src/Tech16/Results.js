@@ -405,24 +405,29 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
   const [topRoles, setTopRoles] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Calculate scores and personality type
-  const scores = calculateScores(responses, questions);
-  const personalityCode = generatePersonalityType(scores);
-  console.log('Results - Calculated personality:', personalityCode, 'Scores:', scores);
+  // Calculate scores and personality type (with safe defaults if data is missing)
+  const scores = responses && questions ? calculateScores(responses, questions) : null;
+  const personalityCode = scores ? generatePersonalityType(scores) : null;
+
+  if (scores && personalityCode) {
+    console.log('Results - Calculated personality:', personalityCode, 'Scores:', scores);
+  } else {
+    console.error('Results - Missing responses or questions:', { responses, questions });
+  }
 
   // Get focus tendency as a modifier (like 16 Personalities' A/T)
-  const focusTendency = scores.focus_score <= 50 ? 'Builder' : 'Analyzer';
+  const focusTendency = scores ? (scores.focus_score <= 50 ? 'Builder' : 'Analyzer') : 'Builder';
   // Use the same percentage as shown in spectrum display
-  const focusPercentage = focusTendency === 'Analyzer'
+  const focusPercentage = scores && focusTendency === 'Analyzer'
     ? Math.round(scores.focus_score)
-    : Math.round(100 - scores.focus_score);
+    : scores ? Math.round(100 - scores.focus_score) : 50;
 
   // Get dynamic colors based on personality type
-  const personalityColor = getPersonalityColor(personalityCode);
-  const accentColor = getAccentColor(personalityCode);
+  const personalityColor = personalityCode ? getPersonalityColor(personalityCode) : null;
+  const accentColor = personalityCode ? getAccentColor(personalityCode) : null;
 
   // Build spectrum breakdown for display
-  const spectrumBreakdown = [
+  const spectrumBreakdown = scores ? [
     {
       spectrum: 'focus',
       name: 'Technical Focus',
@@ -483,7 +488,7 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
       leftColor: DIMENSION_COLORS.adaptive,
       rightColor: DIMENSION_COLORS.structured,
     },
-  ];
+  ] : [];
 
   // Prepare data for radar chart
   const radarData = spectrumBreakdown.map((spectrum) => ({
@@ -496,7 +501,7 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
     async function loadPersonality() {
       try {
         // Convert 5-letter code to 4-letter base code for database lookup
-        // e.g., "B-U-E-V-A" -> "B-U-E-V"
+        // New format: I-C-D-E-F -> I-C-D-E (e.g., "U-E-V-A-B" -> "U-E-V-A")
         const baseTypeCode = getBasePersonalityType(personalityCode);
         console.log('Results - Loading personality for base type:', baseTypeCode);
 
@@ -515,6 +520,8 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
           if (!localData) {
             console.error('Results - Personality not found in local data:', baseTypeCode);
             console.log('Results - Available personalities:', Object.keys(personalities));
+            // Set loading to false even on error so page doesn't hang
+            setLoading(false);
             return;
           }
           personality = {
@@ -528,16 +535,25 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
         console.error('Error loading personality:', error);
         // Fallback to local data on error
         const baseTypeCode = getBasePersonalityType(personalityCode);
-        const personality = {
-          type_code: baseTypeCode,
-          ...personalities[baseTypeCode]
-        };
-        setPersonality(personality);
+        const localData = personalities[baseTypeCode];
+        if (localData) {
+          const personality = {
+            type_code: baseTypeCode,
+            ...localData
+          };
+          setPersonality(personality);
+        } else {
+          // Set loading to false if we can't recover
+          setLoading(false);
+        }
       }
     }
 
     if (personalityCode) {
       loadPersonality();
+    } else {
+      console.error('Results - No personality code generated');
+      setLoading(false);
     }
   }, [personalityCode]);
 
@@ -657,6 +673,25 @@ ${(personality.work_preferences || personality.workPreferences || []).map((w) =>
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
+
+  // Check for missing data AFTER all hooks have been called
+  if (!responses || !questions || !scores || !personalityCode) {
+    return (
+      <GradientBackground>
+        <ResultsContainer>
+          <Container>
+            <Header>
+              <Title>Error Loading Results</Title>
+              <Subtitle>Missing quiz data. Please retake the quiz.</Subtitle>
+            </Header>
+            <div style={{ textAlign: 'center' }}>
+              <Button onClick={onRetake}>Retake Quiz</Button>
+            </div>
+          </Container>
+        </ResultsContainer>
+      </GradientBackground>
+    );
+  }
 
   if (loading) {
     return (
