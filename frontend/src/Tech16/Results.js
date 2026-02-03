@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-import { calculateScores, generatePersonalityType, getSpectrumLabel, getSpectrumPercentage, getBasePersonalityType } from './scoringSupabase';
+import { calculateScores, generatePersonalityType, getBasePersonalityType } from './scoringSupabase';
 import { supabase } from '../supabase';
-import { getPersonalityColor, getAccentColor, getRoleColor, getDisplayTypeCode } from './theme';
+import { getPersonalityColor, getDisplayTypeCode } from './theme';
 import { rankRolesByMatch } from './roleMatching';
 import { getAllRoles } from './data/roles';
 import { personalities } from './data/personalities';
@@ -85,6 +85,7 @@ const PersonalityCard = styled(Card)`
   }
 `;
 
+// eslint-disable-next-line no-unused-vars
 const PersonalityCode = styled.div`
   font-size: 3.5rem;
   font-weight: 700;
@@ -181,6 +182,7 @@ const ChartSection = styled.div`
   border: 1px solid ${({ theme }) => theme.text_primary + '12'};
 `;
 
+// eslint-disable-next-line no-unused-vars
 const ListSection = styled.div`
   margin-bottom: 2rem;
 `;
@@ -296,6 +298,7 @@ const PhaseTitle = styled.div`
   font-size: 0.875rem;
 `;
 
+// eslint-disable-next-line no-unused-vars
 const PhaseDuration = styled.div`
   font-size: 0.75rem;
   color: ${({ theme }) => theme.text_secondary};
@@ -440,6 +443,7 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
     return personalityCode ? getPersonalityColor(personalityCode) : null;
   }, [personalityCode]);
 
+  // eslint-disable-next-line no-unused-vars
   const accentColor = useMemo(() => {
     return personalityCode ? getAccentColor(personalityCode) : null;
   }, [personalityCode]);
