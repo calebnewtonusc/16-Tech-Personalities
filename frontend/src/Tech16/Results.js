@@ -5,6 +5,7 @@ import { supabase } from '../supabase';
 import { getPersonalityColor, getAccentColor, getRoleColor, getDisplayTypeCode } from './theme';
 import { rankRolesByMatch } from './roleMatching';
 import { getAllRoles } from './data/roles';
+import { personalities } from './data/personalities';
 import {
   Button,
   Card,
@@ -503,10 +504,26 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
           .eq('type_code', baseTypeCode)
           .single();
 
-        if (error) throw error;
-        setPersonality(data);
+        let personality = data;
+
+        // If database is empty or unavailable, use local data
+        if (!personality || error) {
+          console.log('Using local personality data (Supabase not configured)');
+          personality = {
+            type_code: baseTypeCode,
+            ...personalities[baseTypeCode]
+          };
+        }
+        setPersonality(personality);
       } catch (error) {
         console.error('Error loading personality:', error);
+        // Fallback to local data on error
+        const baseTypeCode = getBasePersonalityType(personalityCode);
+        const personality = {
+          type_code: baseTypeCode,
+          ...personalities[baseTypeCode]
+        };
+        setPersonality(personality);
       }
     }
 
