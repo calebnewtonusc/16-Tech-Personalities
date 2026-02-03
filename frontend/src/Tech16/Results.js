@@ -572,7 +572,13 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
         const rankedRoles = rankRolesByMatch(scores, roles);
         console.log('Results - Top 3 roles:', rankedRoles.slice(0, 3).map(r => ({ name: r.name, match: r.matchPercentage })));
 
-        setTopRoles(rankedRoles.slice(0, 3));
+        // Convert matchPercentage (0-100) to fitScore (0-1) for display compatibility
+        const top3 = rankedRoles.slice(0, 3).map(role => ({
+          ...role,
+          fitScore: (role.matchPercentage || 15) / 100, // Convert percentage to decimal
+        }));
+
+        setTopRoles(top3);
       } catch (error) {
         console.error('Results - Error loading roles:', error);
         console.error('Results - Error details:', error.message, error.stack);
@@ -638,7 +644,7 @@ Challenges:
 ${personality.challenges.map((c) => `- ${c}`).join('\n')}
 
 Work Preferences:
-${personality.work_preferences.map((w) => `- ${w}`).join('\n')}
+${(personality.work_preferences || personality.workPreferences || []).map((w) => `- ${w}`).join('\n')}
     `;
 
     const blob = new Blob([content], { type: 'text/plain' });
@@ -798,7 +804,7 @@ ${personality.work_preferences.map((w) => `- ${w}`).join('\n')}
                 Work Preferences
               </SectionTitle>
               <List>
-                {personality.work_preferences?.map((pref, idx) => (
+                {(personality.work_preferences || personality.workPreferences || []).map((pref, idx) => (
                   <ListItem key={idx}>{pref}</ListItem>
                 ))}
               </List>

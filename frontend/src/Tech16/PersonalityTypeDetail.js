@@ -599,7 +599,7 @@ const PersonalityTypeDetail = ({ typeCode, onBack, onTakeQuiz, onViewAllTypes })
                 Work Preferences
               </SectionTitle>
               <List>
-                {personality.work_preferences?.map((pref, idx) => (
+                {(personality.work_preferences || personality.workPreferences || []).map((pref, idx) => (
                   <ListItem key={idx} $color="#e67e22">{pref}</ListItem>
                 ))}
               </List>
