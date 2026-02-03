@@ -1,6 +1,9 @@
 // Enhanced role matching algorithm with comprehensive coverage
 // Maps personality trait scores to engineering role fit percentages
 
+// Import the mega-algorithm for backward compatibility
+import { rankRolesByMatch as megaAlgorithmRankRoles } from './megaAlgorithm';
+
 /**
  * Role categories with ideal trait profiles
  * Each category covers multiple related roles from the database
@@ -442,5 +445,4 @@ export function calculateRoleMatch(scores, roleName) {
  *
  * Re-exported from megaAlgorithm.js for backward compatibility
  */
-import { rankRolesByMatch as megaAlgorithmRankRoles } from './megaAlgorithm';
 export { megaAlgorithmRankRoles as rankRolesByMatch };
