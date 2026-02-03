@@ -12,8 +12,24 @@ console.log('Supabase Config:', {
   keyPreview: supabaseAnonKey ? `${supabaseAnonKey.substring(0, 20)}...` : 'MISSING',
 });
 
-if (!supabaseAnonKey || supabaseAnonKey.length < 100) {
-  console.error('ERROR: Invalid or missing Supabase anonymous key! Please add REACT_APP_SUPABASE_ANON_KEY to .env.local');
+// Create Supabase client only if credentials are provided
+// Otherwise, app will work in client-side only mode with localStorage
+let supabase = null;
+
+if (supabaseAnonKey && supabaseAnonKey.length >= 100) {
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
+  console.log('Supabase client initialized successfully');
+} else {
+  console.warn('Supabase credentials not configured - running in client-side only mode (localStorage)');
+  // Create a mock client that returns empty results
+  supabase = {
+    from: () => ({
+      select: () => Promise.resolve({ data: [], error: null }),
+      insert: () => Promise.resolve({ data: null, error: null }),
+      update: () => Promise.resolve({ data: null, error: null }),
+      upsert: () => Promise.resolve({ data: null, error: null }),
+    }),
+  };
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export { supabase };
