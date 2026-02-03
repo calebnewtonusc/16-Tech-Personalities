@@ -1,47 +1,41 @@
 /**
  * MEGA-ALGORITHM: Perfect Role Matching System
  *
- * This algorithm combines 16 type-specific algorithms, each manually reasoned
- * and optimized for 100% accuracy within their personality type domain.
+ * This algorithm combines 8 core algorithms based on 3 dimensions:
+ * - Interface (U/S), Change (E/O), Decision (V/L)
+ *
+ * Focus (B/A) is the 5th dimension MODIFIER, not a routing factor
+ * Execution (A/T) is also a modifier, used within algorithms
  *
  * Approach:
- * 1. Determine personality type from scores (B/A, U/S, E/O, V/L)
- * 2. Route to the appropriate type-specific algorithm
- * 3. Return top 3 roles based on deep manual reasoning
+ * 1. Determine personality type from 3 core dimensions (U/S × E/O × V/L)
+ * 2. Route to the appropriate algorithm
+ * 3. Algorithm checks focus_score and execution_score to determine specific role ordering
+ * 4. Return top 3 roles based on deep manual reasoning
  *
  * @param {Object} scores - { focus_score, interface_score, change_score, decision_score, execution_score }
  * @param {Array} roles - Array of role objects with { id, name }
  * @returns {Array} Top 3 role objects in ranked order
  */
 
-// Import all 16 type-specific algorithms
-import rankRolesFor_BUEV from './algo_BUEV.js';
-import rankRolesFor_BUEL from './algo_BUEL.js';
-import rankRolesFor_BUOV from './algo_BUOV.js';
-import rankRolesFor_BUOL from './algo_BUOL.js';
-import rankRolesFor_BSEV from './algo_BSEV.js';
-import rankRolesFor_BSEL from './algo_BSEL.js';
-import rankRolesFor_BSOV from './algo_BSOV.js';
-import rankRolesFor_BSOL from './algo_BSOL.js';
-import rankRolesFor_AUEV from './algo_AUEV.js';
-import rankRolesFor_AUEL from './algo_AUEL.js';
-import rankRolesFor_AUOV from './algo_AUOV.js';
-import rankRolesFor_AUOL from './algo_AUOL.js';
-import rankRolesFor_ASEV from './algo_ASEV.js';
-import rankRolesFor_ASEL from './algo_ASEL.js';
-import rankRolesFor_ASOV from './algo_ASOV.js';
-import rankRolesFor_ASOL from './algo_ASOL.js';
+// Import all 8 core algorithms (Focus is handled within each algorithm as a modifier)
+import rankRolesFor_UEV from './algo_UEV.js';
+import rankRolesFor_UEL from './algo_UEL.js';
+import rankRolesFor_UOV from './algo_UOV.js';
+import rankRolesFor_UOL from './algo_UOL.js';
+import rankRolesFor_SEV from './algo_SEV.js';
+import rankRolesFor_SEL from './algo_SEL.js';
+import rankRolesFor_SOV from './algo_SOV.js';
+import rankRolesFor_SOL from './algo_SOL.js';
 
 /**
  * Determine personality type from scores
+ * Focus (B/A) is a MODIFIER handled within algorithms, not part of routing
  * @param {Object} scores - The 5 personality dimension scores
- * @returns {string} Type code (e.g., 'BUEV', 'ASOL')
+ * @returns {string} Type code based on 3 core dimensions (e.g., 'UEV', 'SOL')
  */
 function determinePersonalityType(scores) {
-  const { focus_score, interface_score, change_score, decision_score } = scores;
-
-  // Focus: B (Builder, <50) or A (Analyzer, ≥50)
-  const focus = focus_score < 50 ? 'B' : 'A';
+  const { interface_score, change_score, decision_score } = scores;
 
   // Interface: U (User-facing, <50) or S (Systems-facing, ≥50)
   const interface_ = interface_score < 50 ? 'U' : 'S';
@@ -52,7 +46,9 @@ function determinePersonalityType(scores) {
   // Decision: V (Vision-led, <50) or L (Logic-led, ≥50)
   const decision = decision_score < 50 ? 'V' : 'L';
 
-  return `${focus}${interface_}${change}${decision}`;
+  // Return 3-letter code: Interface × Change × Decision
+  // Focus and Execution are handled within each algorithm as modifiers
+  return `${interface_}${change}${decision}`;
 }
 
 /**
@@ -70,24 +66,17 @@ export function rankRolesByMatch(scores, roles) {
   // Determine personality type
   const personalityType = determinePersonalityType(scores);
 
-  // Map type to algorithm function
+  // Map type to algorithm function (8 algorithms based on Interface × Change × Decision)
+  // Focus (B/A) and Execution (A/T) are handled within each algorithm as modifiers
   const algorithmMap = {
-    'BUEV': rankRolesFor_BUEV,
-    'BUEL': rankRolesFor_BUEL,
-    'BUOV': rankRolesFor_BUOV,
-    'BUOL': rankRolesFor_BUOL,
-    'BSEV': rankRolesFor_BSEV,
-    'BSEL': rankRolesFor_BSEL,
-    'BSOV': rankRolesFor_BSOV,
-    'BSOL': rankRolesFor_BSOL,
-    'AUEV': rankRolesFor_AUEV,
-    'AUEL': rankRolesFor_AUEL,
-    'AUOV': rankRolesFor_AUOV,
-    'AUOL': rankRolesFor_AUOL,
-    'ASEV': rankRolesFor_ASEV,
-    'ASEL': rankRolesFor_ASEL,
-    'ASOV': rankRolesFor_ASOV,
-    'ASOL': rankRolesFor_ASOL,
+    'UEV': rankRolesFor_UEV,
+    'UEL': rankRolesFor_UEL,
+    'UOV': rankRolesFor_UOV,
+    'UOL': rankRolesFor_UOL,
+    'SEV': rankRolesFor_SEV,
+    'SEL': rankRolesFor_SEL,
+    'SOV': rankRolesFor_SOV,
+    'SOL': rankRolesFor_SOL,
   };
 
   // Get the appropriate algorithm
