@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { calculateScores, generatePersonalityType, getSpectrumLabel, getSpectrumPercentage, getBasePersonalityType } from './scoringSupabase';
 import { supabase } from '../supabase';
@@ -405,29 +405,47 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
   const [topRoles, setTopRoles] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Calculate scores and personality type (with safe defaults if data is missing)
-  const scores = responses && questions ? calculateScores(responses, questions) : null;
-  const personalityCode = scores ? generatePersonalityType(scores) : null;
+  // Memoize scores calculation to prevent infinite re-renders
+  const scores = useMemo(() => {
+    return responses && questions ? calculateScores(responses, questions) : null;
+  }, [responses, questions]);
 
-  if (scores && personalityCode) {
-    console.log('Results - Calculated personality:', personalityCode, 'Scores:', scores);
-  } else {
-    console.error('Results - Missing responses or questions:', { responses, questions });
-  }
+  // Memoize personality code generation
+  const personalityCode = useMemo(() => {
+    return scores ? generatePersonalityType(scores) : null;
+  }, [scores]);
 
-  // Get focus tendency as a modifier (like 16 Personalities' A/T)
-  const focusTendency = scores ? (scores.focus_score <= 50 ? 'Builder' : 'Analyzer') : 'Builder';
-  // Use the same percentage as shown in spectrum display
-  const focusPercentage = scores && focusTendency === 'Analyzer'
-    ? Math.round(scores.focus_score)
-    : scores ? Math.round(100 - scores.focus_score) : 50;
+  useEffect(() => {
+    if (scores && personalityCode) {
+      console.log('Results - Calculated personality:', personalityCode, 'Scores:', scores);
+    } else if (!responses || !questions) {
+      console.error('Results - Missing responses or questions:', { responses, questions });
+    }
+  }, [scores, personalityCode, responses, questions]);
 
-  // Get dynamic colors based on personality type
-  const personalityColor = personalityCode ? getPersonalityColor(personalityCode) : null;
-  const accentColor = personalityCode ? getAccentColor(personalityCode) : null;
+  // Memoize focus tendency calculation
+  const focusTendency = useMemo(() => {
+    return scores ? (scores.focus_score <= 50 ? 'Builder' : 'Analyzer') : 'Builder';
+  }, [scores]);
 
-  // Build spectrum breakdown for display
-  const spectrumBreakdown = scores ? [
+  const focusPercentage = useMemo(() => {
+    if (!scores) return 50;
+    return focusTendency === 'Analyzer'
+      ? Math.round(scores.focus_score)
+      : Math.round(100 - scores.focus_score);
+  }, [scores, focusTendency]);
+
+  // Memoize colors
+  const personalityColor = useMemo(() => {
+    return personalityCode ? getPersonalityColor(personalityCode) : null;
+  }, [personalityCode]);
+
+  const accentColor = useMemo(() => {
+    return personalityCode ? getAccentColor(personalityCode) : null;
+  }, [personalityCode]);
+
+  // Memoize spectrum breakdown to prevent infinite re-renders
+  const spectrumBreakdown = useMemo(() => scores ? [
     {
       spectrum: 'focus',
       name: 'Technical Focus',
@@ -488,13 +506,15 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
       leftColor: DIMENSION_COLORS.adaptive,
       rightColor: DIMENSION_COLORS.structured,
     },
-  ] : [];
+  ] : [], [scores]);
 
-  // Prepare data for radar chart
-  const radarData = spectrumBreakdown.map((spectrum) => ({
-    dimension: spectrum.name,
-    value: spectrum.score,
-  }));
+  // Memoize radar chart data
+  const radarData = useMemo(() => {
+    return spectrumBreakdown.map((spectrum) => ({
+      dimension: spectrum.name,
+      value: spectrum.score,
+    }));
+  }, [spectrumBreakdown]);
 
   // Load personality profile from Supabase
   useEffect(() => {
