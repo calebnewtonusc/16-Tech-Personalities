@@ -442,4 +442,5 @@ export function calculateRoleMatch(scores, roleName) {
  *
  * Re-exported from megaAlgorithm.js for backward compatibility
  */
-export { rankRolesByMatch } from './megaAlgorithm';
+import { rankRolesByMatch as megaAlgorithmRankRoles } from './megaAlgorithm';
+export { megaAlgorithmRankRoles as rankRolesByMatch };
