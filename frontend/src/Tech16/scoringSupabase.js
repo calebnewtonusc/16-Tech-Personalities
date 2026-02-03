@@ -120,14 +120,16 @@ export function calculateScores(responses, questions) {
  */
 export function generatePersonalityType(scores) {
   // Determine each letter based on which side of 50 the score falls
-  // If exactly 50, we need to pick one side - use <= 50 to favor low side for true neutrals
-  const interface_ = scores.interface_score <= 50 ? 'U' : 'S'; // User-Facing vs Systems-Facing
-  const change = scores.change_score <= 50 ? 'E' : 'O'; // Exploratory vs Operational
-  const decision = scores.decision_score <= 50 ? 'V' : 'L'; // Vision-Led vs Logic-Led
-  const execution = scores.execution_score <= 50 ? 'A' : 'T'; // Adaptive vs Structured
-  const focus = scores.focus_score <= 50 ? 'B' : 'A'; // Builder vs Analyzer (SUFFIX MODIFIER)
+  // If exactly 50, we need to pick one side - use < 50 to favor low side for true neutrals
 
-  return `${interface_}-${change}-${decision}-${execution}-${focus}`;
+  // Correct order: Focus-Interface-Change-Decision (4-letter base code)
+  const focus = scores.focus_score < 50 ? 'B' : 'A'; // Builder vs Analyzer
+  const interface_ = scores.interface_score < 50 ? 'U' : 'S'; // User-Facing vs Systems-Facing
+  const change = scores.change_score < 50 ? 'E' : 'O'; // Exploratory vs Operational
+  const decision = scores.decision_score < 50 ? 'V' : 'L'; // Vision-Led vs Logic-Led
+
+  // Format: B/A-U/S-E/O-V/L (e.g., "B-U-E-V")
+  return `${focus}-${interface_}-${change}-${decision}`;
 }
 
 /**
