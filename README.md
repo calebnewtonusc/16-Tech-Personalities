@@ -75,35 +75,6 @@ Personality assessment application for tech professionals. Take a 40-question qu
 4. **tech_roles**: Career role information and roadmaps
 5. **role_scoring_weights**: Personality-to-role fit mappings
 
-## Setup
-
-### Prerequisites
-- Node.js 18+ and npm
-- (Optional) Supabase account for data persistence
-
-### Quick Start
-
-```bash
-cd frontend
-npm install
-npm start  # Visit http://localhost:3000
-```
-
-### (Optional) Supabase Setup
-
-If you want data persistence:
-
-1. Create Supabase project at [supabase.com](https://supabase.com)
-2. Get project URL and anon key from Settings > API
-3. Create `.env.local`:
-```env
-REACT_APP_SUPABASE_URL=your_project_url
-REACT_APP_SUPABASE_ANON_KEY=your_anon_key
-```
-4. Run migrations in Supabase SQL editor:
-   - `database/migrations/001_initial_schema.sql`
-   - `database/seed.sql`
-
 ## Scoring Algorithm
 
 1. **Question Responses**: Each question maps to one of 5 spectrums
@@ -131,25 +102,6 @@ Result: B-U-E-V-A (The Innovator)
 2. **Trait Weights**: Each role has predefined fit weights for each spectrum
 3. **Ranking**: Roles sorted by distance (lower = better fit)
 4. **Top 3**: Display best-fit roles with learning roadmaps
-
-## Deployment
-
-### Deploy to Vercel
-
-1. Push code to GitHub
-2. Import project in Vercel
-3. (Optional) Add environment variables if using Supabase:
-   - `REACT_APP_SUPABASE_URL`
-   - `REACT_APP_SUPABASE_ANON_KEY`
-4. Deploy
-
-## Available Scripts
-
-```bash
-npm start      # Start development server
-npm run build  # Build for production
-npm test       # Run tests
-```
 
 ## License
 
