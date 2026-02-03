@@ -405,50 +405,10 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
   const [topRoles, setTopRoles] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Guard against missing data
-  if (!responses || !questions || questions.length === 0) {
-    console.error('Results: Missing required data', { responses, questions });
-    return (
-      <GradientBackground>
-        <ResultsContainer>
-          <Container>
-            <Header>
-              <Title>Error Loading Results</Title>
-              <Subtitle>Missing quiz data. Please retake the quiz.</Subtitle>
-            </Header>
-            <div style={{ textAlign: 'center' }}>
-              <Button onClick={onRetake}>Retake Quiz</Button>
-            </div>
-          </Container>
-        </ResultsContainer>
-      </GradientBackground>
-    );
-  }
-
   // Calculate scores and personality type
-  let scores, personalityCode;
-  try {
-    scores = calculateScores(responses, questions);
-    personalityCode = generatePersonalityType(scores);
-    console.log('Calculated personality:', personalityCode, 'Scores:', scores);
-  } catch (error) {
-    console.error('Error calculating scores:', error);
-    return (
-      <GradientBackground>
-        <ResultsContainer>
-          <Container>
-            <Header>
-              <Title>Error Calculating Results</Title>
-              <Subtitle>There was an error processing your quiz responses.</Subtitle>
-            </Header>
-            <div style={{ textAlign: 'center' }}>
-              <Button onClick={onRetake}>Retake Quiz</Button>
-            </div>
-          </Container>
-        </ResultsContainer>
-      </GradientBackground>
-    );
-  }
+  const scores = calculateScores(responses, questions);
+  const personalityCode = generatePersonalityType(scores);
+  console.log('Results - Calculated personality:', personalityCode, 'Scores:', scores);
 
   // Get focus tendency as a modifier (like 16 Personalities' A/T)
   const focusTendency = scores.focus_score <= 50 ? 'Builder' : 'Analyzer';
@@ -538,7 +498,7 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
         // Convert 5-letter code to 4-letter base code for database lookup
         // e.g., "B-U-E-V-A" -> "B-U-E-V"
         const baseTypeCode = getBasePersonalityType(personalityCode);
-        console.log('Loading personality for:', baseTypeCode);
+        console.log('Results - Loading personality for base type:', baseTypeCode);
 
         const { data, error } = await supabase
           .from('personality_profiles')
@@ -550,11 +510,11 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
 
         // If database is empty or unavailable, use local data
         if (!personality || error) {
-          console.log('Using local personality data (Supabase not configured)');
+          console.log('Results - Using local personality data (Supabase not configured)');
           const localData = personalities[baseTypeCode];
           if (!localData) {
-            console.error('Personality not found in local data:', baseTypeCode);
-            console.log('Available personalities:', Object.keys(personalities));
+            console.error('Results - Personality not found in local data:', baseTypeCode);
+            console.log('Results - Available personalities:', Object.keys(personalities));
             return;
           }
           personality = {
@@ -562,23 +522,17 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
             ...localData
           };
         }
-        console.log('Loaded personality:', personality);
+        console.log('Results - Loaded personality:', personality.name, personality.type_code);
         setPersonality(personality);
       } catch (error) {
         console.error('Error loading personality:', error);
         // Fallback to local data on error
         const baseTypeCode = getBasePersonalityType(personalityCode);
-        const localData = personalities[baseTypeCode];
-        if (localData) {
-          const personality = {
-            type_code: baseTypeCode,
-            ...localData
-          };
-          console.log('Using fallback personality:', personality);
-          setPersonality(personality);
-        } else {
-          console.error('Could not find personality in local data:', baseTypeCode);
-        }
+        const personality = {
+          type_code: baseTypeCode,
+          ...personalities[baseTypeCode]
+        };
+        setPersonality(personality);
       }
     }
 
@@ -591,7 +545,7 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
   useEffect(() => {
     async function loadRoles() {
       try {
-        console.log('Loading roles with scores:', scores);
+        console.log('Results - Loading roles with personality:', personalityCode);
         // Try to load roles from database
         const { data: rolesData, error: rolesError } = await supabase
           .from('tech_roles')
@@ -601,9 +555,9 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
 
         // If database is empty or unavailable, use local data
         if (!roles || roles.length === 0 || rolesError) {
-          console.log('Using local roles data (Supabase not configured)');
+          console.log('Results - Using local roles data (Supabase not configured)');
           const localRoles = getAllRoles();
-          console.log('Local roles count:', localRoles.length);
+          console.log('Results - Local roles count:', localRoles.length);
           // Map local data format to match database format
           roles = localRoles.map((role, index) => ({
             name: role.title,
@@ -612,26 +566,24 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
           }));
         }
 
-        console.log('Ranking roles for personality:', personalityCode);
+        console.log('Results - Ranking roles for personality:', personalityCode);
         // Use dynamic trait-based matching instead of pre-defined weights
         // This adapts automatically when scoring algorithm changes
         const rankedRoles = rankRolesByMatch(scores, roles);
-        console.log('Top 3 roles:', rankedRoles.slice(0, 3).map(r => ({ name: r.name, match: r.matchPercentage })));
+        console.log('Results - Top 3 roles:', rankedRoles.slice(0, 3).map(r => ({ name: r.name, match: r.matchPercentage })));
 
         setTopRoles(rankedRoles.slice(0, 3));
       } catch (error) {
-        console.error('Error loading roles:', error);
-        console.error('Error details:', error.message, error.stack);
+        console.error('Results - Error loading roles:', error);
+        console.error('Results - Error details:', error.message, error.stack);
       } finally {
-        console.log('Roles loading complete, setting loading to false');
+        console.log('Results - Roles loading complete');
         setLoading(false);
       }
     }
 
     if (personalityCode && scores) {
       loadRoles();
-    } else {
-      console.warn('Missing personalityCode or scores:', { personalityCode, scores });
     }
   }, [personalityCode, scores]);
 
