@@ -2,7 +2,7 @@
 
 A comprehensive personality assessment application for tech professionals. Take a 40-question quiz to discover your unique tech personality type and get personalized career recommendations.
 
-**🌐 Live Site:** [https://16techpersonalities.vercel.app](https://16techpersonalities.vercel.app)
+**🌐 Live Site:** [https://16techpersonalities.com](https://16techpersonalities.com)
 
 ## Features
 
