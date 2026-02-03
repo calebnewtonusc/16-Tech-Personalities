@@ -47,3 +47,20 @@ frontend/.env.local
 frontend/.next/
 frontend-nextjs-backup/
 package.json.nextjs-unused
+
+# Deployment docs and triggers
+DEPLOYMENT*.md
+QA*.md
+QUICK*.md
+*_REPORT.md
+*_SUMMARY.md
+SETUP*.md
+SYSTEM*.md
+TEST*.md
+.vercel-deploy-trigger
+.vercel-force-rebuild
+
+# Large assets
+*.pdf
+*.png
+*.jpg
