@@ -4,14 +4,14 @@ function rankRolesFor_BUOL(scores) {
   const interfaceStrength = Math.abs(interface_score - 50);
   const changeStrength = Math.abs(change_score - 50);
   const decisionStrength = Math.abs(decision_score - 50);
-  
-  // B-U-O-L: Frontend Developer, Mobile Developer, QA Engineer
+
+  // B-U-O-L: Builder, User-facing, Operational, Logic-led
   if (changeStrength > 30 && decisionStrength > 30) {
-    return ["QA Engineer / SDET", "Frontend Developer", "Mobile Developer (iOS/Android)"];
+    return ["QA / Test Engineer", "Frontend Engineer", "Mobile Engineer"];
   }
   if (changeStrength > 20 || decisionStrength > 20) {
-    return ["Frontend Developer", "QA Engineer / SDET", "Mobile Developer (iOS/Android)"];
+    return ["Frontend Engineer", "QA / Test Engineer", "Mobile Engineer"];
   }
-  return ["Frontend Developer", "Mobile Developer (iOS/Android)", "QA Engineer / SDET"];
+  return ["Frontend Engineer", "Mobile Engineer", "QA / Test Engineer"];
 }
 export default rankRolesFor_BUOL;

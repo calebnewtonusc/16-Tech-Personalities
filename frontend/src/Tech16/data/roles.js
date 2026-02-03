@@ -1286,6 +1286,882 @@ export const roles = {
       "A-S-O-L": 0.75,
     },
   },
+
+  // INFRASTRUCTURE & PLATFORM ROLES
+
+  platformEngineer: {
+    id: "platformEngineer",
+    title: "Platform Engineer",
+    description:
+      "Build and maintain internal platforms and tools that enable engineering teams to ship faster. Focus on developer experience and infrastructure automation.",
+    skills: [
+      "Kubernetes / Docker",
+      "Infrastructure as Code (Terraform)",
+      "CI/CD pipelines",
+      "Service mesh",
+      "Monitoring & observability",
+      "Cloud platforms (AWS/GCP/Azure)",
+      "Python/Go for tooling",
+      "Platform APIs",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Learn Docker and containerization", "Basic Kubernetes", "CI/CD fundamentals", "Cloud platform basics"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Advanced Kubernetes", "Infrastructure as Code", "Service mesh (Istio)", "Build internal tools"] },
+      { phase: "Advanced", duration: "4-6 months", items: ["Multi-cluster management", "Platform API design", "Developer portals", "Cost optimization"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Platform strategy", "Self-service platforms", "Multi-cloud architecture", "Platform teams leadership"] },
+    ],
+    resources: [
+      { name: "Platform Engineering", url: "https://platformengineering.org", type: "resource" },
+      { name: "CNCF Landscape", url: "https://landscape.cncf.io", type: "reference" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.50, "B-U-E-L": 0.48, "B-U-O-V": 0.45, "B-U-O-L": 0.42,
+      "A-U-E-V": 0.48, "A-U-E-L": 0.45, "A-U-O-V": 0.42, "A-U-O-L": 0.40,
+      "B-S-E-V": 0.92, "B-S-E-L": 0.90, "B-S-O-V": 0.85, "B-S-O-L": 0.82,
+      "A-S-E-V": 0.88, "A-S-E-L": 0.95, "A-S-O-V": 0.82, "A-S-O-L": 0.85,
+    },
+  },
+
+  systemsEngineer: {
+    id: "systemsEngineer",
+    title: "Systems Engineer",
+    description:
+      "Design and optimize complex distributed systems. Focus on performance, reliability, and system-level architecture.",
+    skills: [
+      "Linux/Unix systems",
+      "Network protocols",
+      "Distributed systems",
+      "Performance tuning",
+      "System architecture",
+      "C/C++/Rust",
+      "Debugging tools",
+      "Hardware understanding",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "3-4 months", items: ["Master Linux fundamentals", "Network basics", "C programming", "System calls"] },
+      { phase: "Intermediate", duration: "4-6 months", items: ["Distributed systems concepts", "Performance profiling", "System design patterns", "Build monitoring systems"] },
+      { phase: "Advanced", duration: "6-12 months", items: ["Kernel development basics", "Advanced networking", "Database internals", "Large-scale systems"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Architecture design", "System optimization", "Team leadership", "Technical strategy"] },
+    ],
+    resources: [
+      { name: "Systems Performance", url: "https://www.brendangregg.com/systems-performance-2nd-edition-book.html", type: "book" },
+      { name: "Linux Performance", url: "https://www.brendangregg.com/linuxperf.html", type: "resource" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.35, "B-U-E-L": 0.38, "B-U-O-V": 0.32, "B-U-O-L": 0.35,
+      "A-U-E-V": 0.42, "A-U-E-L": 0.48, "A-U-O-V": 0.45, "A-U-O-L": 0.50,
+      "B-S-E-V": 0.85, "B-S-E-L": 0.82, "B-S-O-V": 0.92, "B-S-O-L": 0.88,
+      "A-S-E-V": 0.90, "A-S-E-L": 0.95, "A-S-O-V": 0.92, "A-S-O-L": 0.95,
+    },
+  },
+
+  cloudEngineer: {
+    id: "cloudEngineer",
+    title: "Cloud Engineer",
+    description:
+      "Design, deploy, and manage cloud infrastructure and services. Focus on scalability, cost optimization, and cloud-native architectures.",
+    skills: [
+      "AWS/GCP/Azure",
+      "Infrastructure as Code",
+      "Serverless architecture",
+      "Cloud networking",
+      "Security & compliance",
+      "Cost optimization",
+      "Multi-cloud strategies",
+      "Migration planning",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Choose cloud platform (AWS/Azure/GCP)", "Core services overview", "Basic networking", "Get cloud certification"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Advanced services", "Infrastructure as Code", "Cloud security", "Cost management"] },
+      { phase: "Advanced", duration: "4-6 months", items: ["Multi-region deployments", "Disaster recovery", "Compliance frameworks", "Cloud migrations"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Cloud architecture", "Multi-cloud strategy", "FinOps practices", "Enterprise solutions"] },
+    ],
+    resources: [
+      { name: "AWS Well-Architected", url: "https://aws.amazon.com/architecture/well-architected", type: "docs" },
+      { name: "Cloud Academy", url: "https://cloudacademy.com", type: "platform" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.40, "B-U-E-L": 0.42, "B-U-O-V": 0.38, "B-U-O-L": 0.40,
+      "A-U-E-V": 0.45, "A-U-E-L": 0.48, "A-U-O-V": 0.42, "A-U-O-L": 0.45,
+      "B-S-E-V": 0.85, "B-S-E-L": 0.95, "B-S-O-V": 0.82, "B-S-O-L": 0.88,
+      "A-S-E-V": 0.88, "A-S-E-L": 0.98, "A-S-O-V": 0.85, "A-S-O-L": 0.92,
+    },
+  },
+
+  kubernetesEngineer: {
+    id: "kubernetesEngineer",
+    title: "Kubernetes Engineer",
+    description:
+      "Specialize in Kubernetes orchestration and cloud-native applications. Manage container platforms at scale.",
+    skills: [
+      "Kubernetes architecture",
+      "Helm charts",
+      "Service mesh (Istio/Linkerd)",
+      "Container runtime",
+      "YAML/manifests",
+      "kubectl & APIs",
+      "Security & RBAC",
+      "Troubleshooting",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Kubernetes basics", "Pods and deployments", "Services and ingress", "ConfigMaps and secrets"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["StatefulSets and DaemonSets", "Persistent volumes", "Network policies", "Get CKA certification"] },
+      { phase: "Advanced", duration: "3-4 months", items: ["Custom controllers", "Operators", "Service mesh", "Multi-cluster management"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Platform engineering", "GitOps workflows", "Security hardening", "Enterprise Kubernetes"] },
+    ],
+    resources: [
+      { name: "Kubernetes Docs", url: "https://kubernetes.io/docs", type: "docs" },
+      { name: "CNCF Training", url: "https://training.linuxfoundation.org/training/kubernetes", type: "course" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.42, "B-U-E-L": 0.40, "B-U-O-V": 0.38, "B-U-O-L": 0.40,
+      "A-U-E-V": 0.45, "A-U-E-L": 0.42, "A-U-O-V": 0.40, "A-U-O-L": 0.42,
+      "B-S-E-V": 0.90, "B-S-E-L": 0.88, "B-S-O-V": 0.85, "B-S-O-L": 0.82,
+      "A-S-E-V": 0.92, "A-S-E-L": 0.95, "A-S-O-V": 0.88, "A-S-O-L": 0.90,
+    },
+  },
+
+  cicdEngineer: {
+    id: "cicdEngineer",
+    title: "CI/CD Engineer",
+    description:
+      "Build and optimize continuous integration and deployment pipelines. Focus on automation and developer velocity.",
+    skills: [
+      "Jenkins/GitLab CI/GitHub Actions",
+      "Pipeline as code",
+      "Build automation",
+      "Testing automation",
+      "Artifact management",
+      "Deployment strategies",
+      "Release management",
+      "Monitoring pipelines",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["CI/CD concepts", "Version control (Git)", "Basic pipeline setup", "Build tools"] },
+      { phase: "Intermediate", duration: "2-3 months", items: ["Advanced pipelines", "Testing integration", "Artifact repos", "Security scanning"] },
+      { phase: "Advanced", duration: "3-4 months", items: ["Multi-stage deployments", "Blue-green/canary", "Pipeline optimization", "Self-service CI/CD"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Pipeline architecture", "Developer experience", "Cost optimization", "Enterprise CI/CD"] },
+    ],
+    resources: [
+      { name: "GitHub Actions Docs", url: "https://docs.github.com/actions", type: "docs" },
+      { name: "CI/CD Pipeline Best Practices", url: "https://www.jenkins.io/doc/book", type: "docs" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.48, "B-U-E-L": 0.45, "B-U-O-V": 0.42, "B-U-O-L": 0.45,
+      "A-U-E-V": 0.50, "A-U-E-L": 0.48, "A-U-O-V": 0.45, "A-U-O-L": 0.48,
+      "B-S-E-V": 0.82, "B-S-E-L": 0.78, "B-S-O-V": 0.92, "B-S-O-L": 0.88,
+      "A-S-E-V": 0.80, "A-S-E-L": 0.82, "A-S-O-V": 0.90, "A-S-O-L": 0.95,
+    },
+  },
+
+  // DATABASE ROLES
+
+  databaseEngineer: {
+    id: "databaseEngineer",
+    title: "Database Engineer",
+    description:
+      "Design, optimize, and maintain database systems. Focus on performance, scalability, and data integrity.",
+    skills: [
+      "SQL optimization",
+      "Database design",
+      "Indexing strategies",
+      "Query tuning",
+      "Replication",
+      "Sharding",
+      "NoSQL databases",
+      "Data modeling",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["SQL mastery", "Database normalization", "Basic indexing", "Query optimization basics"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Advanced indexing", "Query execution plans", "Replication setup", "Backup strategies"] },
+      { phase: "Advanced", duration: "4-6 months", items: ["Sharding and partitioning", "High availability", "Performance tuning", "Multi-datacenter"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Database architecture", "Capacity planning", "Disaster recovery", "Team leadership"] },
+    ],
+    resources: [
+      { name: "Use The Index Luke", url: "https://use-the-index-luke.com", type: "resource" },
+      { name: "PostgreSQL Docs", url: "https://postgresql.org/docs", type: "docs" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.35, "B-U-E-L": 0.38, "B-U-O-V": 0.32, "B-U-O-L": 0.35,
+      "A-U-E-V": 0.40, "A-U-E-L": 0.45, "A-U-O-V": 0.38, "A-U-O-L": 0.42,
+      "B-S-E-V": 0.78, "B-S-E-L": 0.82, "B-S-O-V": 0.85, "B-S-O-L": 0.95,
+      "A-S-E-V": 0.80, "A-S-E-L": 0.88, "A-S-O-V": 0.88, "A-S-O-L": 0.98,
+    },
+  },
+
+  databaseAdministrator: {
+    id: "databaseAdministrator",
+    title: "Database Administrator",
+    description:
+      "Manage and maintain production database systems. Ensure uptime, security, and performance of critical data infrastructure.",
+    skills: [
+      "Database administration",
+      "Backup and recovery",
+      "Security and compliance",
+      "Performance monitoring",
+      "Capacity planning",
+      "Automation scripts",
+      "Disaster recovery",
+      "High availability",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Database basics", "Installation and configuration", "User management", "Basic backup/restore"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Performance monitoring", "Security hardening", "Automation scripts", "Incident response"] },
+      { phase: "Advanced", duration: "4-6 months", items: ["High availability setup", "Disaster recovery", "Compliance (SOC2, HIPAA)", "Multi-region databases"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Database strategy", "Team leadership", "Vendor management", "Enterprise architecture"] },
+    ],
+    resources: [
+      { name: "Oracle DBA", url: "https://oracle.com/database", type: "docs" },
+      { name: "SQL Server Central", url: "https://sqlservercentral.com", type: "community" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.30, "B-U-E-L": 0.32, "B-U-O-V": 0.28, "B-U-O-L": 0.30,
+      "A-U-E-V": 0.35, "A-U-E-L": 0.38, "A-U-O-V": 0.32, "A-U-O-L": 0.35,
+      "B-S-E-V": 0.75, "B-S-E-L": 0.78, "B-S-O-V": 0.88, "B-S-O-L": 0.92,
+      "A-S-E-V": 0.78, "A-S-E-L": 0.82, "A-S-O-V": 0.92, "A-S-O-L": 0.98,
+    },
+  },
+
+  // MACHINE LEARNING ROLES
+
+  mlopsEngineer: {
+    id: "mlopsEngineer",
+    title: "MLOps Engineer",
+    description:
+      "Build infrastructure and pipelines for machine learning workflows. Bridge ML research and production deployment.",
+    skills: [
+      "ML model deployment",
+      "Feature stores",
+      "Model monitoring",
+      "Docker/Kubernetes",
+      "CI/CD for ML",
+      "Data versioning",
+      "Python/PyTorch/TensorFlow",
+      "Cloud ML platforms",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["ML basics", "Python for ML", "Docker basics", "Model training pipelines"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Model serving", "Feature engineering", "ML monitoring", "A/B testing models"] },
+      { phase: "Advanced", duration: "4-6 months", items: ["Feature stores", "Model versioning", "Automated retraining", "Multi-model serving"] },
+      { phase: "Expert", duration: "Ongoing", items: ["ML platform design", "Cost optimization", "Team enablement", "Enterprise MLOps"] },
+    ],
+    resources: [
+      { name: "Made With ML", url: "https://madewithml.com", type: "resource" },
+      { name: "MLOps Zoomcamp", url: "https://github.com/DataTalksClub/mlops-zoomcamp", type: "course" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.48, "B-U-E-L": 0.45, "B-U-O-V": 0.42, "B-U-O-L": 0.45,
+      "A-U-E-V": 0.50, "A-U-E-L": 0.52, "A-U-O-V": 0.48, "A-U-O-L": 0.50,
+      "B-S-E-V": 0.88, "B-S-E-L": 0.85, "B-S-O-V": 0.90, "B-S-O-L": 0.88,
+      "A-S-E-V": 0.92, "A-S-E-L": 0.90, "A-S-O-V": 0.95, "A-S-O-L": 0.92,
+    },
+  },
+
+  computerVisionEngineer: {
+    id: "computerVisionEngineer",
+    title: "Computer Vision Engineer",
+    description:
+      "Develop ML systems that understand and process visual information. Work on image recognition, object detection, and visual AI.",
+    skills: [
+      "Deep learning (CNNs)",
+      "OpenCV",
+      "PyTorch/TensorFlow",
+      "Image processing",
+      "Object detection",
+      "Segmentation",
+      "3D vision",
+      "Model optimization",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "3-4 months", items: ["Python and NumPy", "Image processing basics", "Classical CV algorithms", "Neural networks fundamentals"] },
+      { phase: "Intermediate", duration: "4-6 months", items: ["CNNs and architectures", "Transfer learning", "Object detection (YOLO, R-CNN)", "Data augmentation"] },
+      { phase: "Advanced", duration: "6-12 months", items: ["Advanced architectures", "Video processing", "3D vision", "Real-time inference"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Research and papers", "Novel architectures", "Production systems", "Team leadership"] },
+    ],
+    resources: [
+      { name: "PyImageSearch", url: "https://pyimagesearch.com", type: "blog" },
+      { name: "CS231n Stanford", url: "http://cs231n.stanford.edu", type: "course" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.58, "B-U-E-L": 0.52, "B-U-O-V": 0.55, "B-U-O-L": 0.50,
+      "A-U-E-V": 0.68, "A-U-E-L": 0.65, "A-U-O-V": 0.62, "A-U-O-L": 0.58,
+      "B-S-E-V": 0.85, "B-S-E-L": 0.95, "B-S-O-V": 0.82, "B-S-O-L": 0.88,
+      "A-S-E-V": 0.90, "A-S-E-L": 0.98, "A-S-O-V": 0.88, "A-S-O-L": 0.92,
+    },
+  },
+
+  nlpEngineer: {
+    id: "nlpEngineer",
+    title: "NLP Engineer",
+    description:
+      "Build systems that understand and generate human language. Work on text analysis, chatbots, and language models.",
+    skills: [
+      "Transformers",
+      "BERT/GPT architectures",
+      "NLP libraries (spaCy, NLTK)",
+      "Text processing",
+      "Fine-tuning LLMs",
+      "Prompt engineering",
+      "Named entity recognition",
+      "Sentiment analysis",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "3-4 months", items: ["NLP basics", "Text preprocessing", "Classical NLP", "Word embeddings"] },
+      { phase: "Intermediate", duration: "4-6 months", items: ["Transformers", "BERT and variants", "Fine-tuning models", "Build NLP pipelines"] },
+      { phase: "Advanced", duration: "6-12 months", items: ["LLM fine-tuning", "Prompt engineering", "RAG systems", "Production NLP"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Novel architectures", "Research", "Domain-specific LLMs", "Team leadership"] },
+    ],
+    resources: [
+      { name: "Hugging Face", url: "https://huggingface.co/learn", type: "platform" },
+      { name: "NLP Course", url: "https://huggingface.co/course", type: "course" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.55, "B-U-E-L": 0.52, "B-U-O-V": 0.50, "B-U-O-L": 0.48,
+      "A-U-E-V": 0.65, "A-U-E-L": 0.68, "A-U-O-V": 0.60, "A-U-O-L": 0.58,
+      "B-S-E-V": 0.88, "B-S-E-L": 0.92, "B-S-O-V": 0.85, "B-S-O-L": 0.88,
+      "A-S-E-V": 0.92, "A-S-E-L": 0.98, "A-S-O-V": 0.90, "A-S-O-L": 0.92,
+    },
+  },
+
+  llmEngineer: {
+    id: "llmEngineer",
+    title: "LLM Engineer",
+    description:
+      "Specialize in large language models and generative AI. Build applications powered by GPT, Claude, and custom LLMs.",
+    skills: [
+      "LLM APIs (OpenAI, Anthropic)",
+      "Prompt engineering",
+      "RAG (Retrieval-Augmented Generation)",
+      "Vector databases",
+      "Fine-tuning LLMs",
+      "LangChain/LlamaIndex",
+      "Evaluation metrics",
+      "Safety and alignment",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["LLM fundamentals", "API integration", "Prompt engineering basics", "Vector databases"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["RAG systems", "Fine-tuning", "LangChain", "Evaluation methods"] },
+      { phase: "Advanced", duration: "4-6 months", items: ["Custom LLM training", "Multi-agent systems", "Production LLM apps", "Cost optimization"] },
+      { phase: "Expert", duration: "Ongoing", items: ["LLM architecture", "Safety research", "Novel applications", "Team leadership"] },
+    ],
+    resources: [
+      { name: "OpenAI Cookbook", url: "https://github.com/openai/openai-cookbook", type: "repo" },
+      { name: "Anthropic Docs", url: "https://docs.anthropic.com", type: "docs" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.75, "B-U-E-L": 0.68, "B-U-O-V": 0.65, "B-U-O-L": 0.60,
+      "A-U-E-V": 0.80, "A-U-E-L": 0.78, "A-U-O-V": 0.72, "A-U-O-L": 0.68,
+      "B-S-E-V": 0.92, "B-S-E-L": 0.90, "B-S-O-V": 0.85, "B-S-O-L": 0.82,
+      "A-S-E-V": 0.95, "A-S-E-L": 0.98, "A-S-O-V": 0.90, "A-S-O-L": 0.88,
+    },
+  },
+
+  // SECURITY ROLES
+
+  applicationSecurityEngineer: {
+    id: "applicationSecurityEngineer",
+    title: "Application Security Engineer",
+    description:
+      "Secure applications from design through deployment. Find and fix vulnerabilities, build security tooling.",
+    skills: [
+      "OWASP Top 10",
+      "Security testing (SAST/DAST)",
+      "Threat modeling",
+      "Code review for security",
+      "Penetration testing",
+      "Secure coding",
+      "Security automation",
+      "Incident response",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Security fundamentals", "OWASP Top 10", "Basic pentesting", "Secure coding principles"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["SAST/DAST tools", "Threat modeling", "Security code review", "Build security tests"] },
+      { phase: "Advanced", duration: "4-6 months", items: ["Advanced vulnerabilities", "Security architecture", "Security champions program", "Incident response"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Security strategy", "AppSec program", "Team leadership", "Security research"] },
+    ],
+    resources: [
+      { name: "OWASP", url: "https://owasp.org", type: "resource" },
+      { name: "PortSwigger Academy", url: "https://portswigger.net/web-security", type: "course" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.52, "B-U-E-L": 0.58, "B-U-O-V": 0.48, "B-U-O-L": 0.55,
+      "A-U-E-V": 0.60, "A-U-E-L": 0.68, "A-U-O-V": 0.58, "A-U-O-L": 0.88,
+      "B-S-E-V": 0.75, "B-S-E-L": 0.82, "B-S-O-V": 0.78, "B-S-O-L": 0.90,
+      "A-S-E-V": 0.80, "A-S-E-L": 0.88, "A-S-O-V": 0.85, "A-S-O-L": 0.95,
+    },
+  },
+
+  devsecopsEngineer: {
+    id: "devsecopsEngineer",
+    title: "DevSecOps Engineer",
+    description:
+      "Integrate security into DevOps pipelines. Automate security testing and ensure secure deployments.",
+    skills: [
+      "CI/CD security",
+      "Container security",
+      "Secret management",
+      "Security scanning",
+      "Compliance automation",
+      "Infrastructure security",
+      "Security as code",
+      "Cloud security",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["DevOps basics", "Security fundamentals", "Container security", "CI/CD pipelines"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Security scanning tools", "Secret management", "Policy as code", "Compliance automation"] },
+      { phase: "Advanced", duration: "4-6 months", items: ["Security pipelines", "Runtime security", "Zero trust", "Threat detection"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Security architecture", "DevSecOps culture", "Team leadership", "Enterprise security"] },
+    ],
+    resources: [
+      { name: "DevSecOps", url: "https://devsecops.org", type: "resource" },
+      { name: "OWASP DevSecOps", url: "https://owasp.org/www-project-devsecops-guideline", type: "docs" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.48, "B-U-E-L": 0.50, "B-U-O-V": 0.45, "B-U-O-L": 0.48,
+      "A-U-E-V": 0.52, "A-U-E-L": 0.55, "A-U-O-V": 0.50, "A-U-O-L": 0.52,
+      "B-S-E-V": 0.82, "B-S-E-L": 0.85, "B-S-O-V": 0.90, "B-S-O-L": 0.92,
+      "A-S-E-V": 0.85, "A-S-E-L": 0.88, "A-S-O-V": 0.92, "A-S-O-L": 0.95,
+    },
+  },
+
+  penetrationTester: {
+    id: "penetrationTester",
+    title: "Penetration Tester",
+    description:
+      "Ethically hack systems to find vulnerabilities before attackers do. Perform security assessments and red team exercises.",
+    skills: [
+      "Penetration testing",
+      "Burp Suite / Metasploit",
+      "Web application hacking",
+      "Network security",
+      "Social engineering",
+      "Report writing",
+      "Red team tactics",
+      "Security certifications",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "3-4 months", items: ["Networking basics", "Linux fundamentals", "Web technologies", "Basic pentesting"] },
+      { phase: "Intermediate", duration: "4-6 months", items: ["Web app pentesting", "Burp Suite mastery", "Network pentesting", "Get OSCP certification"] },
+      { phase: "Advanced", duration: "6-12 months", items: ["Advanced exploitation", "Red team operations", "Mobile/IoT testing", "Cloud pentesting"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Zero-day research", "Tool development", "Team leadership", "Security consulting"] },
+    ],
+    resources: [
+      { name: "HackTheBox", url: "https://hackthebox.com", type: "platform" },
+      { name: "Offensive Security", url: "https://offensive-security.com", type: "training" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.68, "B-U-E-L": 0.65, "B-U-O-V": 0.62, "B-U-O-L": 0.60,
+      "A-U-E-V": 0.75, "A-U-E-L": 0.78, "A-U-O-V": 0.70, "A-U-O-L": 0.72,
+      "B-S-E-V": 0.88, "B-S-E-L": 0.92, "B-S-O-V": 0.82, "B-S-O-L": 0.85,
+      "A-S-E-V": 0.92, "A-S-E-L": 0.98, "A-S-O-V": 0.88, "A-S-O-L": 0.90,
+    },
+  },
+
+  securityResearcher: {
+    id: "securityResearcher",
+    title: "Security Researcher",
+    description:
+      "Discover new vulnerabilities and develop novel security techniques. Publish research and advance the security field.",
+    skills: [
+      "Vulnerability research",
+      "Reverse engineering",
+      "Exploit development",
+      "Binary analysis",
+      "Fuzzing",
+      "Malware analysis",
+      "Academic writing",
+      "Tool development",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "4-6 months", items: ["Assembly and C", "Operating systems", "Networking", "Basic exploitation"] },
+      { phase: "Intermediate", duration: "6-12 months", items: ["Reverse engineering", "Fuzzing techniques", "Exploit writing", "Publish CVEs"] },
+      { phase: "Advanced", duration: "12+ months", items: ["Advanced exploitation", "Novel research", "Conference talks", "Tool development"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Original research", "CVE discoveries", "Security leadership", "Industry impact"] },
+    ],
+    resources: [
+      { name: "Black Hat", url: "https://blackhat.com", type: "conference" },
+      { name: "Project Zero", url: "https://googleprojectzero.blogspot.com", type: "blog" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.62, "B-U-E-L": 0.60, "B-U-O-V": 0.58, "B-U-O-L": 0.55,
+      "A-U-E-V": 0.72, "A-U-E-L": 0.75, "A-U-O-V": 0.68, "A-U-O-L": 0.65,
+      "B-S-E-V": 0.90, "B-S-E-L": 0.95, "B-S-O-V": 0.85, "B-S-O-L": 0.88,
+      "A-S-E-V": 0.95, "A-S-E-L": 1.00, "A-S-O-V": 0.92, "A-S-O-L": 0.90,
+    },
+  },
+
+  // QA/TESTING ROLES
+
+  testAutomationEngineer: {
+    id: "testAutomationEngineer",
+    title: "Test Automation Engineer",
+    description:
+      "Build and maintain automated testing frameworks. Ensure software quality through comprehensive test coverage.",
+    skills: [
+      "Test automation",
+      "Selenium/Cypress/Playwright",
+      "Test frameworks (Jest, PyTest)",
+      "CI/CD integration",
+      "API testing",
+      "Performance testing",
+      "Test strategy",
+      "Programming (Python/JS)",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Testing fundamentals", "Learn Selenium or Cypress", "Basic programming", "Write simple tests"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Advanced test frameworks", "API testing", "CI/CD integration", "Page Object Model"] },
+      { phase: "Advanced", duration: "3-4 months", items: ["Test architecture", "Performance testing", "Visual regression", "Test infrastructure"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Testing strategy", "Framework design", "Team enablement", "Quality leadership"] },
+    ],
+    resources: [
+      { name: "Test Automation University", url: "https://testautomationu.applitools.com", type: "course" },
+      { name: "Cypress Docs", url: "https://docs.cypress.io", type: "docs" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.60, "B-U-E-L": 0.68, "B-U-O-V": 0.58, "B-U-O-L": 0.78,
+      "A-U-E-V": 0.65, "A-U-E-L": 0.75, "A-U-O-V": 0.62, "A-U-O-L": 0.90,
+      "B-S-E-V": 0.72, "B-S-E-L": 0.78, "B-S-O-V": 0.75, "B-S-O-L": 0.88,
+      "A-S-E-V": 0.75, "A-S-E-L": 0.82, "A-S-O-V": 0.80, "A-S-O-L": 0.95,
+    },
+  },
+
+  mobileQAEngineer: {
+    id: "mobileQAEngineer",
+    title: "Mobile QA Engineer",
+    description:
+      "Test and ensure quality of mobile applications. Focus on device compatibility, performance, and user experience.",
+    skills: [
+      "Mobile testing",
+      "Appium/Espresso/XCTest",
+      "Device testing",
+      "Performance testing",
+      "Test automation",
+      "iOS/Android platforms",
+      "CI/CD for mobile",
+      "Bug reporting",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Mobile platforms basics", "Manual testing", "Bug tracking", "Test cases"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Appium basics", "Automated testing", "Device farms", "CI/CD integration"] },
+      { phase: "Advanced", duration: "3-4 months", items: ["Advanced automation", "Performance testing", "Security testing", "Test strategy"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Mobile test architecture", "Team leadership", "Quality processes", "Tool evaluation"] },
+    ],
+    resources: [
+      { name: "Appium", url: "https://appium.io", type: "tool" },
+      { name: "BrowserStack", url: "https://browserstack.com/guide/mobile-testing", type: "resource" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.80, "B-U-E-L": 0.75, "B-U-O-V": 0.85, "B-U-O-L": 0.88,
+      "A-U-E-V": 0.82, "A-U-E-L": 0.85, "A-U-O-V": 0.88, "A-U-O-L": 0.95,
+      "B-S-E-V": 0.55, "B-S-E-L": 0.60, "B-S-O-V": 0.58, "B-S-O-L": 0.65,
+      "A-S-E-V": 0.60, "A-S-E-L": 0.68, "A-S-O-V": 0.62, "A-S-O-L": 0.72,
+    },
+  },
+
+  // GROWTH & PRODUCT ROLES
+
+  growthEngineer: {
+    id: "growthEngineer",
+    title: "Growth Engineer",
+    description:
+      "Build features and run experiments to drive user growth. Focus on metrics, experimentation, and data-driven product development.",
+    skills: [
+      "A/B testing",
+      "Analytics (Amplitude, Mixpanel)",
+      "Experimentation frameworks",
+      "Frontend development",
+      "SQL and data analysis",
+      "Product metrics",
+      "Feature flags",
+      "Growth tactics",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Frontend basics", "Analytics setup", "SQL fundamentals", "Basic A/B testing"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Experimentation platforms", "Statistical significance", "Feature development", "Funnel analysis"] },
+      { phase: "Advanced", duration: "3-4 months", items: ["Growth frameworks", "Advanced experiments", "Data modeling", "Growth strategy"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Growth leadership", "Experimentation culture", "Product strategy", "Team scaling"] },
+    ],
+    resources: [
+      { name: "Reforge", url: "https://reforge.com", type: "platform" },
+      { name: "Growth Hackers", url: "https://growthhackers.com", type: "community" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.90, "B-U-E-L": 0.98, "B-U-O-V": 0.85, "B-U-O-L": 0.88,
+      "A-U-E-V": 0.92, "A-U-E-L": 0.95, "A-U-O-V": 0.88, "A-U-O-L": 0.90,
+      "B-S-E-V": 0.65, "B-S-E-L": 0.78, "B-S-O-V": 0.60, "B-S-O-L": 0.70,
+      "A-S-E-V": 0.70, "A-S-E-L": 0.82, "A-S-O-V": 0.68, "A-S-O-L": 0.75,
+    },
+  },
+
+  developerAdvocate: {
+    id: "developerAdvocate",
+    title: "Developer Advocate",
+    description:
+      "Bridge the gap between developers and products. Create content, speak at conferences, and build developer communities.",
+    skills: [
+      "Technical writing",
+      "Public speaking",
+      "Content creation",
+      "Community building",
+      "Developer experience",
+      "Social media",
+      "Documentation",
+      "Technical breadth",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Build technical blog", "Active on social media", "Join communities", "Learn product deeply"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Create tutorials", "Give local talks", "Make videos", "Build demos"] },
+      { phase: "Advanced", duration: "4-6 months", items: ["Conference speaking", "Developer program", "Community management", "Content strategy"] },
+      { phase: "Expert", duration: "Ongoing", items: ["DevRel leadership", "Program design", "Industry impact", "Thought leadership"] },
+    ],
+    resources: [
+      { name: "DevRel Collective", url: "https://devrelcollective.fun", type: "community" },
+      { name: "Dev.to", url: "https://dev.to", type: "platform" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.98, "B-U-E-L": 0.85, "B-U-O-V": 0.92, "B-U-O-L": 0.78,
+      "A-U-E-V": 0.95, "A-U-E-L": 0.90, "A-U-O-V": 0.88, "A-U-O-L": 0.80,
+      "B-S-E-V": 0.82, "B-S-E-L": 0.75, "B-S-O-V": 0.75, "B-S-O-L": 0.68,
+      "A-S-E-V": 0.85, "A-S-E-L": 0.82, "A-S-O-V": 0.78, "A-S-O-L": 0.72,
+    },
+  },
+
+  // SPECIALIZED ROLES
+
+  blockchainEngineer: {
+    id: "blockchainEngineer",
+    title: "Blockchain Engineer",
+    description:
+      "Build decentralized applications and smart contracts. Work with blockchain protocols and Web3 technologies.",
+    skills: [
+      "Solidity / Rust",
+      "Smart contracts",
+      "Web3.js / Ethers.js",
+      "Blockchain protocols",
+      "DeFi concepts",
+      "Security (reentrancy, etc)",
+      "IPFS / decentralized storage",
+      "Testing frameworks",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Blockchain basics", "Ethereum fundamentals", "Solidity basics", "Deploy first contract"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Advanced Solidity", "DeFi protocols", "Web3 integration", "Contract security"] },
+      { phase: "Advanced", duration: "4-6 months", items: ["Protocol development", "Layer 2 solutions", "Advanced security", "Production dApps"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Protocol design", "Security auditing", "Research", "Web3 leadership"] },
+    ],
+    resources: [
+      { name: "CryptoZombies", url: "https://cryptozombies.io", type: "course" },
+      { name: "Ethereum.org", url: "https://ethereum.org/developers", type: "docs" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.75, "B-U-E-L": 0.72, "B-U-O-V": 0.68, "B-U-O-L": 0.65,
+      "A-U-E-V": 0.80, "A-U-E-L": 0.78, "A-U-O-V": 0.72, "A-U-O-L": 0.70,
+      "B-S-E-V": 0.92, "B-S-E-L": 0.95, "B-S-O-V": 0.85, "B-S-O-L": 0.88,
+      "A-S-E-V": 0.95, "A-S-E-L": 0.98, "A-S-O-V": 0.90, "A-S-O-L": 0.92,
+    },
+  },
+
+  gameDeveloper: {
+    id: "gameDeveloper",
+    title: "Game Developer",
+    description:
+      "Create interactive gaming experiences. Work with game engines, graphics, physics, and gameplay mechanics.",
+    skills: [
+      "Unity / Unreal Engine",
+      "C# / C++",
+      "Game design",
+      "3D mathematics",
+      "Physics engines",
+      "Graphics programming",
+      "Animation systems",
+      "Multiplayer networking",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "3-4 months", items: ["Choose engine (Unity/Unreal)", "Basic programming", "2D game development", "Game design basics"] },
+      { phase: "Intermediate", duration: "4-6 months", items: ["3D game development", "Physics and collision", "Animation", "Build complete games"] },
+      { phase: "Advanced", duration: "6-12 months", items: ["Advanced graphics", "Multiplayer", "Performance optimization", "Publish games"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Game architecture", "Team leadership", "Advanced rendering", "Engine development"] },
+    ],
+    resources: [
+      { name: "Unity Learn", url: "https://learn.unity.com", type: "platform" },
+      { name: "Unreal Docs", url: "https://docs.unrealengine.com", type: "docs" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.92, "B-U-E-L": 0.85, "B-U-O-V": 0.95, "B-U-O-L": 0.82,
+      "A-U-E-V": 0.88, "A-U-E-L": 0.82, "A-U-O-V": 0.90, "A-U-O-L": 0.80,
+      "B-S-E-V": 0.85, "B-S-E-L": 0.78, "B-S-O-V": 0.80, "B-S-O-L": 0.72,
+      "A-S-E-V": 0.82, "A-S-E-L": 0.80, "A-S-O-V": 0.78, "A-S-O-L": 0.75,
+    },
+  },
+
+  embeddedSoftwareEngineer: {
+    id: "embeddedSoftwareEngineer",
+    title: "Embedded Software Engineer",
+    description:
+      "Develop software for embedded systems and hardware devices. Work close to the metal with real-time constraints.",
+    skills: [
+      "C / C++",
+      "Embedded Linux",
+      "Real-time operating systems",
+      "Hardware interfaces",
+      "Debugging tools",
+      "Low-level optimization",
+      "Communication protocols",
+      "Firmware development",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "3-4 months", items: ["C programming mastery", "Electronics basics", "Microcontrollers", "Simple embedded projects"] },
+      { phase: "Intermediate", duration: "4-6 months", items: ["RTOS concepts", "Communication protocols", "Embedded Linux", "Driver development"] },
+      { phase: "Advanced", duration: "6-12 months", items: ["Real-time systems", "Performance optimization", "Complex systems", "Production firmware"] },
+      { phase: "Expert", duration: "Ongoing", items: ["System architecture", "Team leadership", "Hardware/software co-design", "Safety-critical systems"] },
+    ],
+    resources: [
+      { name: "Embedded.fm", url: "https://embedded.fm", type: "podcast" },
+      { name: "FreeRTOS", url: "https://freertos.org", type: "docs" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.48, "B-U-E-L": 0.50, "B-U-O-V": 0.52, "B-U-O-L": 0.55,
+      "A-U-E-V": 0.55, "A-U-E-L": 0.58, "A-U-O-V": 0.60, "A-U-O-L": 0.62,
+      "B-S-E-V": 0.82, "B-S-E-L": 0.78, "B-S-O-V": 0.92, "B-S-O-L": 0.88,
+      "A-S-E-V": 0.85, "A-S-E-L": 0.82, "A-S-O-V": 0.95, "A-S-O-L": 0.92,
+    },
+  },
+
+  // FRONTEND SPECIALIZED
+
+  designSystemsEngineer: {
+    id: "designSystemsEngineer",
+    title: "Design Systems Engineer",
+    description:
+      "Build and maintain design systems and component libraries. Bridge design and engineering with reusable UI components.",
+    skills: [
+      "React/Vue components",
+      "CSS architecture",
+      "Design tokens",
+      "Component APIs",
+      "Storybook",
+      "Documentation",
+      "Accessibility",
+      "Design tools (Figma)",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Frontend mastery", "Component architecture", "CSS systems", "Design basics"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Build component library", "Design tokens", "Storybook setup", "API design"] },
+      { phase: "Advanced", duration: "3-4 months", items: ["Cross-platform components", "Theme systems", "Documentation site", "Migration tools"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Design system strategy", "Team enablement", "Design-dev workflow", "System governance"] },
+    ],
+    resources: [
+      { name: "Design Systems Repo", url: "https://designsystemsrepo.com", type: "resource" },
+      { name: "Storybook", url: "https://storybook.js.org", type: "tool" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.85, "B-U-E-L": 0.82, "B-U-O-V": 0.92, "B-U-O-L": 0.88,
+      "A-U-E-V": 0.88, "A-U-E-L": 0.90, "A-U-O-V": 0.95, "A-U-O-L": 0.92,
+      "B-S-E-V": 0.58, "B-S-E-L": 0.62, "B-S-O-V": 0.65, "B-S-O-L": 0.68,
+      "A-S-E-V": 0.62, "A-S-E-L": 0.70, "A-S-O-V": 0.68, "A-S-O-L": 0.75,
+    },
+  },
+
+  animationEngineer: {
+    id: "animationEngineer",
+    title: "Animation Engineer",
+    description:
+      "Create smooth, performant animations and micro-interactions. Focus on motion design and delightful user experiences.",
+    skills: [
+      "Framer Motion / GSAP",
+      "CSS animations",
+      "WebGL / Three.js",
+      "Animation principles",
+      "Performance optimization",
+      "SVG animations",
+      "Canvas API",
+      "Motion design",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["CSS animations", "JavaScript basics", "Animation libraries", "Motion principles"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Advanced animations", "SVG animations", "Performance", "Micro-interactions"] },
+      { phase: "Advanced", duration: "3-4 months", items: ["WebGL basics", "Three.js", "Complex transitions", "Animation systems"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Advanced WebGL", "Custom engines", "Motion strategy", "Brand animation"] },
+    ],
+    resources: [
+      { name: "Framer Motion", url: "https://framer.com/motion", type: "docs" },
+      { name: "Principles of Animation", url: "https://www.youtube.com/watch?v=uDqjIdI4bF4", type: "video" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.95, "B-U-E-L": 0.85, "B-U-O-V": 0.98, "B-U-O-L": 0.88,
+      "A-U-E-V": 0.92, "A-U-E-L": 0.88, "A-U-O-V": 0.95, "A-U-O-L": 0.90,
+      "B-S-E-V": 0.68, "B-S-E-L": 0.65, "B-S-O-V": 0.70, "B-S-O-L": 0.68,
+      "A-S-E-V": 0.72, "A-S-E-L": 0.70, "A-S-O-V": 0.75, "A-S-O-L": 0.72,
+    },
+  },
+
+  // BACKEND SPECIALIZED
+
+  microservicesEngineer: {
+    id: "microservicesEngineer",
+    title: "Microservices Engineer",
+    description:
+      "Design and build microservices architectures. Focus on distributed systems, service communication, and system resilience.",
+    skills: [
+      "Microservices patterns",
+      "API Gateway",
+      "Service mesh",
+      "Message queues",
+      "Distributed tracing",
+      "Circuit breakers",
+      "Docker / Kubernetes",
+      "Event-driven architecture",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "3-4 months", items: ["Backend fundamentals", "Containerization", "REST APIs", "Basic microservices"] },
+      { phase: "Intermediate", duration: "4-6 months", items: ["Service communication", "Message queues", "Service discovery", "Build microservices"] },
+      { phase: "Advanced", duration: "6-12 months", items: ["Service mesh", "Distributed tracing", "Saga patterns", "Production microservices"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Architecture design", "Team leadership", "Migration strategies", "Enterprise architecture"] },
+    ],
+    resources: [
+      { name: "Microservices.io", url: "https://microservices.io", type: "resource" },
+      { name: "Building Microservices", url: "https://samnewman.io/books/building_microservices_2nd_edition", type: "book" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.45, "B-U-E-L": 0.48, "B-U-O-V": 0.42, "B-U-O-L": 0.45,
+      "A-U-E-V": 0.50, "A-U-E-L": 0.55, "A-U-O-V": 0.48, "A-U-O-L": 0.52,
+      "B-S-E-V": 0.90, "B-S-E-L": 0.88, "B-S-O-V": 0.92, "B-S-O-L": 0.85,
+      "A-S-E-V": 0.92, "A-S-E-L": 0.95, "A-S-O-V": 0.95, "A-S-O-L": 0.90,
+    },
+  },
+
+  searchEngineer: {
+    id: "searchEngineer",
+    title: "Search Engineer",
+    description:
+      "Build and optimize search systems. Focus on relevance, ranking algorithms, and query understanding.",
+    skills: [
+      "Elasticsearch / Solr",
+      "Search algorithms",
+      "Ranking models",
+      "Query parsing",
+      "Indexing strategies",
+      "Text analysis",
+      "Search relevance",
+      "Performance tuning",
+    ],
+    roadmap: [
+      { phase: "Foundation", duration: "2-3 months", items: ["Search basics", "Elasticsearch fundamentals", "Indexing", "Basic queries"] },
+      { phase: "Intermediate", duration: "3-4 months", items: ["Advanced queries", "Analyzers", "Relevance tuning", "Search pipelines"] },
+      { phase: "Advanced", duration: "4-6 months", items: ["Custom ranking", "Machine learning ranking", "Distributed search", "Search analytics"] },
+      { phase: "Expert", duration: "Ongoing", items: ["Search architecture", "Team leadership", "Search strategy", "Novel algorithms"] },
+    ],
+    resources: [
+      { name: "Elasticsearch Guide", url: "https://elastic.co/guide", type: "docs" },
+      { name: "Search Patterns", url: "https://queryunderstanding.com", type: "resource" },
+    ],
+    personalityWeights: {
+      "B-U-E-V": 0.48, "B-U-E-L": 0.55, "B-U-O-V": 0.45, "B-U-O-L": 0.50,
+      "A-U-E-V": 0.55, "A-U-E-L": 0.68, "A-U-O-V": 0.52, "A-U-O-L": 0.60,
+      "B-S-E-V": 0.82, "B-S-E-L": 0.90, "B-S-O-V": 0.80, "B-S-O-L": 0.85,
+      "A-S-E-V": 0.85, "A-S-E-L": 0.95, "A-S-O-V": 0.82, "A-S-O-L": 0.90,
+    },
+  },
 };
 
 // Get top N role recommendations for a personality type

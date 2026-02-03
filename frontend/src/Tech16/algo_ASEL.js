@@ -1,5 +1,5 @@
 function rankRolesFor_ASEL(scores) {
-  // A-S-E-L: ML Engineer, Data Engineer, Backend Engineer
-  return ["ML Engineer", "Data Engineer", "Backend Engineer"];
+  // A-S-E-L: Analyzer, Systems-facing, Exploratory, Logic-led
+  return ["Data Scientist", "Research Scientist", "ML Engineer"];
 }
 export default rankRolesFor_ASEL;

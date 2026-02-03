@@ -1,5 +1,5 @@
 function rankRolesFor_ASEV(scores) {
-  // A-S-E-V: Backend Engineer, Platform Engineer, Site Reliability Engineer (SRE)
-  return ["Backend Engineer", "Platform Engineer", "Site Reliability Engineer (SRE)"];
+  // A-S-E-V: Analyzer, Systems-facing, Exploratory, Vision-led
+  return ["Solutions Architect", "Research Scientist", "Platform Engineer"];
 }
 export default rankRolesFor_ASEV;
