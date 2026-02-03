@@ -107,25 +107,38 @@ export function rankRolesByMatch(scores, roles) {
     roleLookup.set(normalizedName, role);
   });
 
-  // Find the top 3 role objects
+  // Find the top 3 role objects (deduplicate if algorithm returns roles that map to same actual role)
   const top3Roles = [];
   const top3Ids = new Set();
+  let matchPercentage = 100; // Start at 100 and decrement for each unique role
 
   topRoleNames.forEach((roleName, index) => {
     const normalizedName = normalizeRoleName(roleName);
     const role = roleLookup.get(normalizedName);
 
     if (role) {
+      // Check if this role is already in top 3 (happens when multiple algorithm outputs map to same role)
+      if (top3Ids.has(role.id)) {
+        console.log(`Skipping duplicate role "${roleName}" (already have "${role.name}" in top 3)`);
+        return; // Skip duplicate
+      }
+
       top3Roles.push({
         ...role,
-        matchPercentage: 100 - index, // 100, 99, 98 to ensure proper ordering
-        rank: index + 1,
+        matchPercentage: matchPercentage, // 100, 99, 98, etc. for each unique role
+        rank: top3Roles.length + 1,
       });
       top3Ids.add(role.id);
+      matchPercentage--; // Decrement for next unique role
     } else {
       console.warn(`Top role not found in roles list: ${roleName}`);
     }
   });
+
+  // If we don't have 3 roles yet (due to duplicates), fill in with distance-based top roles
+  if (top3Roles.length < 3) {
+    console.log(`Only ${top3Roles.length} unique roles from algorithm, filling remaining with distance-based scoring`);
+  }
 
   // Calculate distance-based scores for remaining roles
   const remainingRoles = roles
@@ -139,7 +152,26 @@ export function rankRolesByMatch(scores, roles) {
     })
     .sort((a, b) => b.matchPercentage - a.matchPercentage);
 
-  // Combine: top 3 first, then remaining roles
+  // If algorithm didn't provide 3 unique roles (due to duplicates), fill with distance-based top roles
+  if (top3Roles.length < 3) {
+    const neededRoles = 3 - top3Roles.length;
+    const fillRoles = remainingRoles.slice(0, neededRoles).map((role, index) => ({
+      ...role,
+      matchPercentage: matchPercentage - index, // Continue from where we left off
+      rank: top3Roles.length + index + 1,
+    }));
+
+    // Add filled roles to top3 and mark their IDs as used
+    fillRoles.forEach(role => {
+      top3Roles.push(role);
+      top3Ids.add(role.id);
+    });
+
+    // Remove filled roles from remaining
+    remainingRoles.splice(0, neededRoles);
+  }
+
+  // Combine: top 3 first (guaranteed 3 roles now), then remaining roles
   return [...top3Roles, ...remainingRoles];
 }
 
@@ -218,42 +250,96 @@ function calculateDistanceScore(scores, roleName) {
 /**
  * Normalize role names for matching between algorithm output and role list
  * Handles common variations in role naming
+ * Maps algorithm outputs to actual role names in local data (roles.js)
  */
 function normalizeRoleName(name) {
   // Convert to lowercase and remove extra whitespace
   let normalized = name.toLowerCase().trim();
 
-  // Handle common variations
+  // COMPREHENSIVE MAPPING: Algorithm outputs → Local roles.js names
+  // Each canonical name maps to the actual title in roles.js
   const variations = {
-    'frontend developer': ['frontend developer', 'frontend'],
-    'backend engineer': ['backend engineer', 'backend'],
-    'full stack engineer': ['full stack engineer', 'fullstack engineer', 'full-stack engineer'],
-    'mobile developer': ['mobile developer', 'mobile developer (ios/android)', 'mobile'],
-    'devops engineer': ['devops engineer', 'devops/infrastructure', 'devops', 'infrastructure engineer'],
-    'data engineer': ['data engineer', 'dataengineer'],
-    'ml engineer': ['ml engineer', 'machine learning engineer'],
-    'data scientist': ['data scientist', 'datascientist'],
-    'security engineer': ['security engineer', 'security'],
-    'qa engineer': ['qa engineer', 'qa/sdet', 'qa engineer / sdet', 'sdet', 'test engineer'],
-    'site reliability engineer': ['site reliability engineer', 'sre', 'site reliability engineer (sre)'],
-    'database administrator': ['database administrator', 'dba'],
-    'ux engineer': ['ux engineer', 'ux engineer / design systems', 'design systems engineer'],
-    'product engineer': ['product engineer', 'product'],
-    'platform engineer': ['platform engineer', 'platform'],
-    'growth engineer': ['growth engineer', 'growth'],
-    'systems engineer': ['systems engineer', 'systems'],
-    'search engineer': ['search engineer', 'search'],
-    'performance engineer': ['performance engineer', 'performance'],
-    'devex engineer': ['devex engineer', 'developer experience engineer'],
-    'developer advocate': ['developer advocate', 'devrel'],
-    'blockchain engineer': ['blockchain engineer', 'blockchain/web3', 'web3 engineer'],
-    'game developer': ['game developer', 'game'],
-    'robotics engineer': ['robotics engineer', 'robotics/iot', 'iot engineer'],
-    'research scientist': ['research scientist', 'researcher'],
-    'solutions architect': ['solutions architect', 'architect'],
+    // Frontend roles → "Frontend Engineer"
+    'frontend engineer': ['frontend engineer', 'frontend developer', 'frontend', 'web developer'],
+
+    // Backend roles → "Backend Engineer"
+    'backend engineer': ['backend engineer', 'backend developer', 'backend'],
+
+    // Full-stack → "Full-Stack Engineer"
+    'full-stack engineer': ['full-stack engineer', 'full stack engineer', 'fullstack engineer', 'full stack developer', 'fullstack developer'],
+
+    // Mobile → "Mobile Engineer"
+    'mobile engineer': ['mobile engineer', 'mobile developer', 'mobile developer (ios/android)', 'mobile', 'ios developer', 'android developer'],
+
+    // DevOps/SRE → "DevOps / SRE"
+    'devops / sre': ['devops / sre', 'devops engineer', 'devops', 'sre', 'site reliability engineer', 'site reliability engineer (sre)', 'infrastructure engineer', 'devops/infrastructure'],
+
+    // Data Engineering → "Data Engineer"
+    'data engineer': ['data engineer', 'dataengineer', 'data platform engineer'],
+
+    // ML/AI → "ML Engineer"
+    'ml engineer': ['ml engineer', 'machine learning engineer', 'ai engineer', 'mlops engineer'],
+
+    // Data Science → "Data Scientist"
+    'data scientist': ['data scientist', 'datascientist', 'data analyst'],
+
+    // Research → "Research Scientist"
+    'research scientist': ['research scientist', 'researcher', 'research engineer', 'ml research engineer'],
+
+    // Security → "Security Engineer"
+    'security engineer': ['security engineer', 'security', 'appsec engineer', 'devsecops engineer'],
+
+    // QA/Testing → "QA / Test Engineer"
+    'qa / test engineer': ['qa / test engineer', 'qa engineer', 'qa/sdet', 'qa engineer / sdet', 'sdet', 'test engineer', 'qa/test automation engineer', 'test automation engineer'],
+
+    // Product Management → "Product Manager" or "Technical PM"
+    'product manager': ['product manager', 'pm'],
     'technical pm': ['technical pm', 'technical product manager', 'tech pm'],
-    'product designer': ['product designer', 'designer'],
-    'ux researcher': ['ux researcher', 'user researcher'],
+
+    // Architecture → "Solutions Architect"
+    'solutions architect': ['solutions architect', 'architect', 'systems architect', 'cloud architect'],
+
+    // Design → "Product Designer" or "UX Researcher"
+    'product designer': ['product designer', 'designer', 'ui/ux designer', 'ux engineer', 'ux engineer / design systems', 'design systems engineer'],
+    'ux researcher': ['ux researcher', 'user researcher', 'ux researcher'],
+
+  };
+
+  // FALLBACK MAPPINGS: Map non-existent roles to closest actual role
+  // If a role doesn't exist in local data, redirect to the most similar role
+  const fallbackMappings = {
+    'platform engineer': 'backend engineer',
+    'platform': 'backend engineer',
+    'growth engineer': 'frontend engineer',
+    'growth': 'frontend engineer',
+    'experimentation engineer': 'frontend engineer',
+    'product engineer': 'frontend engineer',
+    'product': 'frontend engineer',
+    'database administrator': 'data engineer',
+    'dba': 'data engineer',
+    'database engineer': 'data engineer',
+    'systems engineer': 'backend engineer',
+    'systems': 'backend engineer',
+    'performance engineer': 'backend engineer',
+    'performance': 'backend engineer',
+    'search engineer': 'backend engineer',
+    'search': 'backend engineer',
+    'devex engineer': 'backend engineer',
+    'developer experience engineer': 'backend engineer',
+    'devex': 'backend engineer',
+    'developer advocate': 'frontend engineer',
+    'devrel': 'frontend engineer',
+    'developer relations': 'frontend engineer',
+    'blockchain engineer': 'backend engineer',
+    'blockchain/web3': 'backend engineer',
+    'web3 engineer': 'backend engineer',
+    'web3 developer': 'backend engineer',
+    'game developer': 'frontend engineer',
+    'game': 'frontend engineer',
+    'game engineer': 'frontend engineer',
+    'robotics engineer': 'backend engineer',
+    'robotics/iot': 'backend engineer',
+    'iot engineer': 'backend engineer',
   };
 
   // Find canonical name
@@ -261,6 +347,12 @@ function normalizeRoleName(name) {
     if (aliases.includes(normalized)) {
       return canonical;
     }
+  }
+
+  // Check fallback mappings for non-existent roles
+  if (fallbackMappings[normalized]) {
+    console.log(`Mapping non-existent role "${name}" to "${fallbackMappings[normalized]}"`);
+    return fallbackMappings[normalized];
   }
 
   return normalized;
