@@ -1,8 +1,8 @@
 # Tech 16 Personalities
 
-A comprehensive full-stack personality assessment application for tech professionals. Take a 40-question quiz to discover your unique tech personality type and get personalized career recommendations.
+A comprehensive personality assessment application for tech professionals. Take a 40-question quiz to discover your unique tech personality type and get personalized career recommendations.
 
-**🌐 Live Site:** [https://16techpersonalities.com](https://16techpersonalities.com)
+**🌐 Live Site:** [https://16techpersonalities.vercel.app](https://16techpersonalities.vercel.app)
 
 ## Features
 
@@ -20,44 +20,38 @@ A comprehensive full-stack personality assessment application for tech professio
 
 ### User Features
 - **Anonymous Quiz Taking**: No signup required
-- **Results Dashboard**: View quiz history and saved results
-- **Share Results**: Generate shareable links
-- **Download PDF Card**: Export beautiful results card
-- **Compare Feature**: Side-by-side personality comparison
-- **Learning Roadmaps**: Detailed career paths from beginner to expert
+- **Results Dashboard**: Interactive personality profile with radar chart
+- **Detailed Insights**: Strengths, challenges, and work preferences
+- **Top 3 Role Recommendations**: Personalized career matches with learning roadmaps
+- **42+ Tech Roles**: View all ranked by personality fit
+- **Share Results**: Generate shareable text with Web Share API
+- **Download Results**: Export as formatted text file
+- **Learning Roadmaps**: Detailed 4-phase career paths from beginner to expert
 
-### Authentication
-- Email/password authentication
-- Google OAuth integration
-- Protected routes for dashboard
-- Row-level security (RLS) policies
-
-### Admin CMS
-- Manage personality profiles (CRUD)
-- Manage tech roles (CRUD)
-- Edit role scoring weights
-- View analytics and type distribution
-- Monitor quiz completion rates
+### Data & Content
+- **16 Personality Profiles**: Comprehensive descriptions with unique insights
+- **42+ Tech Roles**: All major specializations with detailed information
+- **Scenario-Based Questions**: Realistic tech workplace scenarios
+- **Balanced Question Distribution**: 8 questions per spectrum
 
 ## Tech Stack
 
 ### Frontend
-- **Next.js 14** with App Router
-- **TypeScript** (strict mode)
-- **Tailwind CSS** with custom theme
-- **Recharts** for data visualization
-- **jsPDF + html2canvas** for PDF export
-- **Lucide React** for icons
+- **React 18** with Create React App
+- **Styled Components** for styling
+- **Recharts** for radar chart visualization
+- **localStorage** for progress saving
 
 ### Backend & Database
-- **Supabase** for authentication and database
+- **Supabase** (optional for data persistence)
 - **PostgreSQL** for data storage
 - **Row Level Security (RLS)** for data protection
 - **JSONB** for flexible data storage
 
+**Note**: The current production version operates client-side only with localStorage. Supabase integration is available but optional.
+
 ### Development Tools
 - **ESLint** for code quality
-- **TypeScript** for type safety
 
 ## Project Structure
 
@@ -65,47 +59,23 @@ A comprehensive full-stack personality assessment application for tech professio
 16TechPersonalities/
 ├── frontend/
 │   ├── src/
-│   │   ├── app/
-│   │   │   ├── layout.tsx              # Root layout with auth
-│   │   │   ├── page.tsx                # Landing page
-│   │   │   ├── quiz/
-│   │   │   │   └── page.tsx            # Quiz interface
-│   │   │   ├── results/
-│   │   │   │   └── [id]/page.tsx       # Results display
-│   │   │   ├── compare/
-│   │   │   │   └── page.tsx            # Compare results
-│   │   │   ├── dashboard/
-│   │   │   │   └── page.tsx            # User dashboard
-│   │   │   ├── admin/
-│   │   │   │   └── page.tsx            # Admin CMS
-│   │   │   ├── auth/
-│   │   │   │   ├── login/page.tsx      # Login page
-│   │   │   │   └── signup/page.tsx     # Signup page
-│   │   │   └── api/
-│   │   │       └── quiz/
-│   │   │           └── submit/route.ts # Quiz submission API
-│   │   ├── components/
-│   │   │   ├── QuizQuestion.tsx        # Quiz question component
-│   │   │   ├── RadarChart.tsx          # Radar chart visualization
-│   │   │   ├── SpectrumBar.tsx         # Spectrum score bar
-│   │   │   ├── RoleCard.tsx            # Role recommendation card
-│   │   │   ├── ResultsCard.tsx         # Exportable results card
-│   │   │   └── AuthProvider.tsx        # Authentication context
-│   │   ├── lib/
-│   │   │   ├── supabase.ts             # Supabase client
-│   │   │   ├── scoring.ts              # Scoring algorithm
-│   │   │   ├── roleMapping.ts          # Role recommendation logic
-│   │   │   └── utils.ts                # Utility functions
-│   │   └── types/
-│   │       └── index.ts                # TypeScript types
-│   ├── package.json
-│   ├── next.config.js
-│   ├── tailwind.config.ts
-│   └── tsconfig.json
+│   │   ├── Tech16/
+│   │   │   ├── index.js                  # Main app component
+│   │   │   ├── Quiz.js                   # Quiz interface
+│   │   │   ├── Results.js                # Results display
+│   │   │   ├── AllRolesRanked.js         # All roles view
+│   │   │   ├── scoring.js                # Scoring algorithm
+│   │   │   ├── roleMatching.js           # Role recommendation logic
+│   │   │   └── data/
+│   │   │       ├── questions.js          # 40 quiz questions
+│   │   │       ├── personalities.js      # 16 personality profiles
+│   │   │       └── roles.js              # 42+ tech roles
+│   │   └── App.js
+│   └── package.json
 ├── database/
 │   ├── migrations/
-│   │   └── 001_initial_schema.sql     # Database schema
-│   └── seed.sql                        # Seed data
+│   │   └── 001_initial_schema.sql        # Database schema
+│   └── seed.sql                          # Seed data
 └── README.md
 ```
 
@@ -130,7 +100,7 @@ A comprehensive full-stack personality assessment application for tech professio
 
 ### Prerequisites
 - Node.js 18+ and npm
-- Supabase account
+- (Optional) Supabase account for data persistence
 - Git
 
 ### 1. Clone and Install
@@ -140,40 +110,27 @@ cd frontend
 npm install
 ```
 
-### 2. Set Up Supabase
+### 2. (Optional) Set Up Supabase
+
+If you want to use Supabase for data persistence:
 
 1. Create a new Supabase project at [supabase.com](https://supabase.com)
 2. Get your project URL and anon key from Settings > API
-3. Copy `.env.local.example` to `.env.local`
-4. Fill in your Supabase credentials:
+3. Create `.env.local`:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
+REACT_APP_SUPABASE_URL=your_supabase_project_url
+REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-### 3. Run Database Migrations
+4. Run database migrations in Supabase SQL editor:
+   - First: `database/migrations/001_initial_schema.sql`
+   - Then: `database/seed.sql`
 
-In your Supabase SQL editor, run:
-
-1. First, run `database/migrations/001_initial_schema.sql`
-2. Then, run `database/seed.sql` to populate initial data
-
-### 4. Configure Authentication
-
-In your Supabase project:
-
-1. Go to Authentication > Providers
-2. Enable Email provider
-3. Enable Google OAuth (optional):
-   - Add Google OAuth credentials
-   - Configure redirect URLs
-
-### 5. Start Development Server
+### 3. Start Development Server
 
 ```bash
-npm run dev
+npm start
 ```
 
 Visit [http://localhost:3000](http://localhost:3000)
@@ -184,22 +141,10 @@ Visit [http://localhost:3000](http://localhost:3000)
 
 1. Push your code to GitHub
 2. Import project in Vercel
-3. Add environment variables:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `NEXT_PUBLIC_BASE_URL`
+3. (Optional) Add environment variables if using Supabase:
+   - `REACT_APP_SUPABASE_URL`
+   - `REACT_APP_SUPABASE_ANON_KEY`
 4. Deploy
-
-### Production Checklist
-
-- [ ] Set up custom domain
-- [ ] Configure Supabase production instance
-- [ ] Enable Google OAuth with production URLs
-- [ ] Set up monitoring and error tracking
-- [ ] Configure CDN for static assets
-- [ ] Set up backups for database
-- [ ] Review and test RLS policies
-- [ ] Enable rate limiting for API routes
 
 ## Scoring Algorithm
 
@@ -227,9 +172,9 @@ Result: B-U-E-V-A (The Innovator)
 
 ## Role Recommendation Algorithm
 
-1. **Base Weights**: Each role has predefined fit weights for each personality type
-2. **Score Modifiers**: Applied based on individual spectrum scores
-3. **Ranking**: Roles sorted by adjusted fit score
+1. **Euclidean Distance**: Calculate distance between personality spectrum scores and ideal role profiles
+2. **Trait Weights**: Each role has predefined fit weights for each spectrum
+3. **Ranking**: Roles sorted by distance (lower = better fit)
 4. **Top 3**: Display top 3 role matches with learning roadmaps
 
 ## Development
@@ -237,24 +182,23 @@ Result: B-U-E-V-A (The Innovator)
 ### Available Scripts
 
 ```bash
-npm run dev      # Start development server
-npm run build    # Build for production
-npm run start    # Start production server
-npm run lint     # Run ESLint
+npm start     # Start development server
+npm run build # Build for production
+npm test      # Run tests
 ```
 
 ### Code Structure
 
-- **Server Components**: Used by default for better performance
-- **Client Components**: Marked with 'use client' directive
-- **API Routes**: RESTful endpoints in /app/api
-- **Type Safety**: Comprehensive TypeScript types
+- **Client Components**: All React components for quiz and results
+- **Type Safety**: PropTypes for component validation
+- **State Management**: React useState and useEffect hooks
+- **Data-Driven**: All content loaded from data files for easy updates
 
 ### Adding New Features
 
-1. **New Personality Type**: Update `personality_profiles` table
-2. **New Role**: Add to `tech_roles` and `role_scoring_weights`
-3. **New Question**: Update quiz version with new question
+1. **New Personality Type**: Update `data/personalities.js`
+2. **New Role**: Add to `data/roles.js`
+3. **New Question**: Update `data/questions.js`
 4. **New Spectrum**: Requires schema and code changes
 
 ## Contributing
@@ -270,23 +214,6 @@ MIT License - Feel free to use this project as a learning resource.
 - Inspired by Myers-Briggs Type Indicator (MBTI)
 - Built with modern web technologies
 - Designed for the tech community
-
-## Support
-
-For issues or questions:
-1. Check the documentation
-2. Review Supabase logs
-3. Check browser console for errors
-4. Verify environment variables
-
-## Roadmap
-
-- [ ] Mobile app (React Native)
-- [ ] Career path visualization
-- [ ] Team compatibility analysis
-- [ ] Skills assessment integration
-- [ ] Job board integration
-- [ ] Community features
 
 ---
 
