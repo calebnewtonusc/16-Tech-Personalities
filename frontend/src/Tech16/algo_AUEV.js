@@ -1,5 +1,5 @@
 function rankRolesFor_AUEV(scores) {
-  // A-U-E-V: UX Engineer / Design Systems, Frontend Developer, Product Engineer
-  return ["UX Engineer / Design Systems", "Frontend Developer", "Product Engineer"];
+  // A-U-E-V: Analyzer, User-facing, Exploratory, Vision-led
+  return ["Product Designer", "UX Researcher", "Product Manager"];
 }
 export default rankRolesFor_AUEV;

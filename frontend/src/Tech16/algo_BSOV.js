@@ -1,5 +1,5 @@
 function rankRolesFor_BSOV(scores) {
-  // B-S-O-V: DevOps Engineer, Site Reliability Engineer (SRE), Platform Engineer
-  return ["DevOps Engineer", "Site Reliability Engineer (SRE)", "Platform Engineer"];
+  // B-S-O-V: Builder, Systems-facing, Operational, Vision-led
+  return ["DevOps / SRE", "Platform Engineer", "Cloud Engineer"];
 }
 export default rankRolesFor_BSOV;

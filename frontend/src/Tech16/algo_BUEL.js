@@ -1,5 +1,5 @@
 function rankRolesFor_BUEL(scores) {
-  // B-U-E-L: Frontend Developer, Growth Engineer, Product Engineer
-  return ["Frontend Developer", "Growth Engineer", "Product Engineer"];
+  // B-U-E-L: Builder, User-facing, Exploratory, Logic-led
+  return ["Frontend Engineer", "Growth Engineer", "Full-Stack Engineer"];
 }
 export default rankRolesFor_BUEL;

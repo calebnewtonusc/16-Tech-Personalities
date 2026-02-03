@@ -15,7 +15,7 @@ Personality assessment application for tech professionals. Take a 40-question qu
   - Decision Driver (Vision-Led vs Logic-Led)
   - Execution (Adaptive vs Structured)
 - **16 Unique Personality Types**: 4-letter codes with -A/-T suffix
-- **42+ Tech Roles**: Career recommendations based on personality fit
+- **42 Tech Roles**: Career recommendations based on personality fit across all engineering disciplines
 
 ### User Experience
 - **Anonymous Quiz**: No signup required

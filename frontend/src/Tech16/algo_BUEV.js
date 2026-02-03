@@ -1,5 +1,5 @@
 function rankRolesFor_BUEV(scores) {
-  // B-U-E-V: Frontend Developer, Mobile Developer, UX Engineer
-  return ["Frontend Developer", "Mobile Developer (iOS/Android)", "UX Engineer / Design Systems"];
+  // B-U-E-V: Builder, User-facing, Exploratory, Vision-led
+  return ["Frontend Engineer", "Mobile Engineer", "Product Designer"];
 }
 export default rankRolesFor_BUEV;

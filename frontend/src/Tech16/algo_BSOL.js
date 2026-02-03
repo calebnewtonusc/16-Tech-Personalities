@@ -1,5 +1,5 @@
 function rankRolesFor_BSOL(scores) {
-  // B-S-O-L: DevOps Engineer, Database Administrator, Data Engineer
-  return ["DevOps Engineer", "Database Administrator", "Data Engineer"];
+  // B-S-O-L: Builder, Systems-facing, Operational, Logic-led
+  return ["DevOps / SRE", "Database Administrator", "Database Engineer"];
 }
 export default rankRolesFor_BSOL;

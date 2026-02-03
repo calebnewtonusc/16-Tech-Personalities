@@ -257,89 +257,86 @@ function normalizeRoleName(name) {
   let normalized = name.toLowerCase().trim();
 
   // COMPREHENSIVE MAPPING: Algorithm outputs → Local roles.js names
-  // Each canonical name maps to the actual title in roles.js
+  // Each canonical name maps to the actual title in roles.js (42 total roles)
   const variations = {
-    // Frontend roles → "Frontend Engineer"
+    // FRONTEND & UI ROLES
     'frontend engineer': ['frontend engineer', 'frontend developer', 'frontend', 'web developer'],
+    'mobile engineer': ['mobile engineer', 'mobile developer', 'mobile developer (ios/android)', 'mobile', 'ios developer', 'android developer', 'ios engineer', 'android engineer'],
+    'product designer': ['product designer', 'designer', 'ui/ux designer', 'ui/ux designer (technical)'],
+    'ux researcher': ['ux researcher', 'user researcher'],
+    'design systems engineer': ['design systems engineer', 'design system engineer', 'ux engineer', 'ux engineer / design systems'],
+    'animation engineer': ['animation engineer', 'motion designer', 'animation developer'],
 
-    // Backend roles → "Backend Engineer"
-    'backend engineer': ['backend engineer', 'backend developer', 'backend'],
+    // BACKEND & API ROLES
+    'backend engineer': ['backend engineer', 'backend developer', 'backend', 'api engineer', 'protocol engineer'],
+    'full-stack engineer': ['full-stack engineer', 'full stack engineer', 'fullstack engineer', 'full stack developer', 'fullstack developer', 'full-stack developer'],
+    'microservices engineer': ['microservices engineer', 'microservice engineer', 'distributed systems engineer'],
+    'search engineer': ['search engineer', 'search', 'elasticsearch engineer'],
 
-    // Full-stack → "Full-Stack Engineer"
-    'full-stack engineer': ['full-stack engineer', 'full stack engineer', 'fullstack engineer', 'full stack developer', 'fullstack developer'],
+    // INFRASTRUCTURE & PLATFORM ROLES
+    'devops / sre': ['devops / sre', 'devops engineer', 'devops', 'sre', 'site reliability engineer', 'site reliability engineer (sre)', 'devops/infrastructure', 'reliability engineer'],
+    'platform engineer': ['platform engineer', 'platform', 'infrastructure engineer'],
+    'systems engineer': ['systems engineer', 'systems', 'real-time systems engineer'],
+    'cloud engineer': ['cloud engineer', 'cloud', 'cloud architect'],
+    'kubernetes engineer': ['kubernetes engineer', 'k8s engineer', 'container platform engineer'],
+    'ci/cd engineer': ['ci/cd engineer', 'cicd engineer', 'build engineer', 'release engineer'],
 
-    // Mobile → "Mobile Engineer"
-    'mobile engineer': ['mobile engineer', 'mobile developer', 'mobile developer (ios/android)', 'mobile', 'ios developer', 'android developer'],
+    // DATABASE ROLES
+    'data engineer': ['data engineer', 'dataengineer', 'data pipeline engineer', 'streaming data engineer', 'etl developer', 'data warehouse engineer'],
+    'database engineer': ['database engineer', 'db engineer', 'sql developer', 'nosql engineer'],
+    'database administrator': ['database administrator', 'dba', 'database administrator (dba)'],
 
-    // DevOps/SRE → "DevOps / SRE"
-    'devops / sre': ['devops / sre', 'devops engineer', 'devops', 'sre', 'site reliability engineer', 'site reliability engineer (sre)', 'infrastructure engineer', 'devops/infrastructure'],
-
-    // Data Engineering → "Data Engineer"
-    'data engineer': ['data engineer', 'dataengineer', 'data platform engineer'],
-
-    // ML/AI → "ML Engineer"
-    'ml engineer': ['ml engineer', 'machine learning engineer', 'ai engineer', 'mlops engineer'],
-
-    // Data Science → "Data Scientist"
+    // MACHINE LEARNING & AI ROLES
+    'ml engineer': ['ml engineer', 'machine learning engineer', 'ai engineer', 'applied machine learning engineer'],
     'data scientist': ['data scientist', 'datascientist', 'data analyst'],
-
-    // Research → "Research Scientist"
     'research scientist': ['research scientist', 'researcher', 'research engineer', 'ml research engineer'],
+    'mlops engineer': ['mlops engineer', 'mlops', 'ml platform engineer'],
+    'computer vision engineer': ['computer vision engineer', 'cv engineer', 'vision engineer'],
+    'nlp engineer': ['nlp engineer', 'natural language processing engineer', 'deep learning engineer'],
+    'llm engineer': ['llm engineer', 'large language model engineer', 'generative ai engineer'],
 
-    // Security → "Security Engineer"
-    'security engineer': ['security engineer', 'security', 'appsec engineer', 'devsecops engineer'],
+    // SECURITY ROLES
+    'security engineer': ['security engineer', 'security', 'infrastructure security engineer', 'network security engineer', 'cloud security engineer'],
+    'application security engineer': ['application security engineer', 'appsec engineer', 'appsec'],
+    'devsecops engineer': ['devsecops engineer', 'devsecops'],
+    'penetration tester': ['penetration tester', 'pentester', 'ethical hacker'],
+    'security researcher': ['security researcher', 'security research engineer'],
 
-    // QA/Testing → "QA / Test Engineer"
-    'qa / test engineer': ['qa / test engineer', 'qa engineer', 'qa/sdet', 'qa engineer / sdet', 'sdet', 'test engineer', 'qa/test automation engineer', 'test automation engineer'],
+    // QA & TESTING ROLES
+    'qa / test engineer': ['qa / test engineer', 'qa engineer', 'qa/sdet', 'qa engineer / sdet', 'sdet', 'test engineer', 'software test engineer (sdet)', 'qa/test automation engineer', 'performance test engineer', 'test infrastructure engineer'],
+    'test automation engineer': ['test automation engineer', 'automation engineer', 'test automation'],
+    'mobile qa engineer': ['mobile qa engineer', 'mobile tester', 'mobile test engineer'],
 
-    // Product Management → "Product Manager" or "Technical PM"
-    'product manager': ['product manager', 'pm'],
+    // PRODUCT & MANAGEMENT ROLES
+    'product manager': ['product manager', 'pm', 'product manager (technical)'],
     'technical pm': ['technical pm', 'technical product manager', 'tech pm'],
 
-    // Architecture → "Solutions Architect"
-    'solutions architect': ['solutions architect', 'architect', 'systems architect', 'cloud architect'],
+    // ARCHITECTURE & STRATEGY ROLES
+    'solutions architect': ['solutions architect', 'architect', 'systems architect'],
 
-    // Design → "Product Designer" or "UX Researcher"
-    'product designer': ['product designer', 'designer', 'ui/ux designer', 'ux engineer', 'ux engineer / design systems', 'design systems engineer'],
-    'ux researcher': ['ux researcher', 'user researcher', 'ux researcher'],
+    // GROWTH & ADVOCACY ROLES
+    'growth engineer': ['growth engineer', 'growth', 'experimentation engineer', 'a/b testing engineer'],
+    'developer advocate': ['developer advocate', 'devrel', 'developer relations', 'developer relations engineer', 'developer advocate engineer'],
 
+    // SPECIALIZED ROLES
+    'blockchain engineer': ['blockchain engineer', 'blockchain', 'blockchain developer', 'smart contract engineer', 'web3 engineer', 'web3 developer', 'blockchain/web3'],
+    'game developer': ['game developer', 'game', 'game engineer', 'unity developer', 'unreal engine developer', 'game engine programmer', 'gameplay engineer', 'graphics engineer'],
+    'embedded software engineer': ['embedded software engineer', 'embedded engineer', 'firmware engineer', 'iot engineer', 'robotics engineer', 'robotics/iot'],
   };
 
-  // FALLBACK MAPPINGS: Map non-existent roles to closest actual role
-  // If a role doesn't exist in local data, redirect to the most similar role
+  // FALLBACK MAPPINGS: Map truly non-existent roles to closest actual role
+  // Most roles now exist, so only a few fallbacks needed
   const fallbackMappings = {
-    'platform engineer': 'backend engineer',
-    'platform': 'backend engineer',
-    'growth engineer': 'frontend engineer',
-    'growth': 'frontend engineer',
-    'experimentation engineer': 'frontend engineer',
-    'product engineer': 'frontend engineer',
-    'product': 'frontend engineer',
-    'database administrator': 'data engineer',
-    'dba': 'data engineer',
-    'database engineer': 'data engineer',
-    'systems engineer': 'backend engineer',
-    'systems': 'backend engineer',
-    'performance engineer': 'backend engineer',
-    'performance': 'backend engineer',
-    'search engineer': 'backend engineer',
-    'search': 'backend engineer',
-    'devex engineer': 'backend engineer',
-    'developer experience engineer': 'backend engineer',
-    'devex': 'backend engineer',
-    'developer advocate': 'frontend engineer',
-    'devrel': 'frontend engineer',
-    'developer relations': 'frontend engineer',
-    'blockchain engineer': 'backend engineer',
-    'blockchain/web3': 'backend engineer',
-    'web3 engineer': 'backend engineer',
-    'web3 developer': 'backend engineer',
-    'game developer': 'frontend engineer',
-    'game': 'frontend engineer',
-    'game engineer': 'frontend engineer',
-    'robotics engineer': 'backend engineer',
-    'robotics/iot': 'backend engineer',
-    'iot engineer': 'backend engineer',
+    'product engineer': 'frontend engineer',  // Product-focused frontend work
+    'product': 'growth engineer',  // Product + growth overlap
+    'performance engineer': 'systems engineer',  // System performance work
+    'devex engineer': 'platform engineer',  // Developer experience = platform
+    'developer experience engineer': 'platform engineer',
+    'devex': 'platform engineer',
+    'developer tools engineer': 'platform engineer',  // DevTools = platform
+    'sdk engineer': 'platform engineer',  // SDK development = platform
+    'observability engineer': 'devops / sre',  // Observability = SRE work
+    'compiler engineer': 'systems engineer',  // Low-level systems work
   };
 
   // Find canonical name
