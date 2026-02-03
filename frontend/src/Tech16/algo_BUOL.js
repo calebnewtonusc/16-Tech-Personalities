@@ -1,6 +1,5 @@
 function rankRolesFor_BUOL(scores) {
-  const { focus_score, interface_score, change_score, decision_score, execution_score } = scores;
-  const focusStrength = Math.abs(focus_score - 50);
+  const { interface_score, change_score, decision_score, execution_score } = scores;
   const interfaceStrength = Math.abs(interface_score - 50);
   const changeStrength = Math.abs(change_score - 50);
   const decisionStrength = Math.abs(decision_score - 50);
