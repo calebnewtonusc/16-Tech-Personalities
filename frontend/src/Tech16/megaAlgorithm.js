@@ -180,55 +180,117 @@ export function rankRolesByMatch(scores, roles) {
  * Uses the same logic as the original algorithm
  */
 function calculateDistanceScore(scores, roleName) {
-  // Role category definitions (subset of most common categories)
+  /**
+   * Role ideal profiles for all 42 roles
+   * Format: i=interface, f=focus, c=change, d=decision, e=execution, flex=flexibility
+   * Scores: 0-100 where lower favors first pole, higher favors second pole
+   * - i: User-facing (low) vs Systems-facing (high)
+   * - f: Builder (low) vs Analyzer (high)
+   * - c: Exploratory (low) vs Operational (high)
+   * - d: Vision-led (low) vs Logic-led (high)
+   * - e: Adaptive (low) vs Structured (high)
+   */
   const categories = {
-    'frontend developer': { i: 15, f: 50, c: 40, d: 48, e: 50, flex: 42 },
+    // FRONTEND & UI ROLES
+    'frontend engineer': { i: 15, f: 45, c: 40, d: 48, e: 50, flex: 42 },
+    'mobile engineer': { i: 18, f: 48, c: 38, d: 45, e: 48, flex: 40 },
+    'product designer': { i: 8, f: 60, c: 30, d: 30, e: 45, flex: 45 },
+    'ux researcher': { i: 10, f: 75, c: 50, d: 35, e: 50, flex: 38 },
+    'design systems engineer': { i: 20, f: 58, c: 45, d: 50, e: 55, flex: 35 },
+    'animation engineer': { i: 12, f: 45, c: 35, d: 40, e: 45, flex: 42 },
+
+    // BACKEND & API ROLES
     'backend engineer': { i: 82, f: 50, c: 35, d: 50, e: 55, flex: 45 },
-    'mobile developer': { i: 18, f: 50, c: 38, d: 45, e: 48, flex: 32 },
-    'ux engineer': { i: 12, f: 55, c: 25, d: 35, e: 40, flex: 35 },
-    'devops engineer': { i: 82, f: 42, c: 78, d: 48, e: 78, flex: 35 },
-    'data engineer': { i: 85, f: 50, c: 62, d: 72, e: 75, flex: 38 },
-    'ml engineer': { i: 80, f: 70, c: 35, d: 75, e: 60, flex: 32 },
-    'security engineer': { i: 78, f: 72, c: 72, d: 80, e: 82, flex: 32 },
-    'qa engineer': { i: 45, f: 55, c: 75, d: 75, e: 85, flex: 28 },
-    'full stack engineer': { i: 38, f: 58, c: 65, d: 65, e: 75, flex: 25 },
-    'product engineer': { i: 28, f: 50, c: 50, d: 48, e: 52, flex: 48 },
-    'platform engineer': { i: 82, f: 50, c: 55, d: 50, e: 65, flex: 35 },
-    'site reliability engineer': { i: 85, f: 55, c: 82, d: 70, e: 85, flex: 30 },
-    'database administrator': { i: 80, f: 50, c: 80, d: 80, e: 85, flex: 28 },
-    'growth engineer': { i: 25, f: 50, c: 32, d: 78, e: 48, flex: 38 },
-    'data scientist': { i: 70, f: 75, c: 45, d: 80, e: 55, flex: 35 },
-    'systems engineer': { i: 88, f: 68, c: 68, d: 72, e: 75, flex: 32 },
-    'performance engineer': { i: 78, f: 65, c: 70, d: 78, e: 75, flex: 32 },
-    'search engineer': { i: 74, f: 64, c: 56, d: 72, e: 66, flex: 42 },
-    'developer advocate': { i: 22, f: 58, c: 28, d: 52, e: 42, flex: 40 },
+    'full-stack engineer': { i: 50, f: 48, c: 45, d: 52, e: 58, flex: 48 },
+    'microservices engineer': { i: 85, f: 55, c: 40, d: 55, e: 62, flex: 38 },
+    'search engineer': { i: 78, f: 62, c: 50, d: 70, e: 62, flex: 40 },
+
+    // INFRASTRUCTURE & PLATFORM ROLES
+    'devops / sre': { i: 85, f: 48, c: 78, d: 55, e: 80, flex: 32 },
+    'platform engineer': { i: 82, f: 52, c: 55, d: 52, e: 65, flex: 38 },
+    'systems engineer': { i: 88, f: 68, c: 68, d: 72, e: 75, flex: 30 },
+    'cloud engineer': { i: 80, f: 52, c: 60, d: 58, e: 68, flex: 38 },
+    'kubernetes engineer': { i: 85, f: 55, c: 65, d: 62, e: 72, flex: 32 },
+    'ci/cd engineer': { i: 82, f: 48, c: 70, d: 60, e: 75, flex: 35 },
+
+    // DATABASE ROLES
+    'data engineer': { i: 85, f: 52, c: 62, d: 72, e: 75, flex: 35 },
+    'database engineer': { i: 82, f: 58, c: 68, d: 75, e: 78, flex: 32 },
+    'database administrator': { i: 80, f: 55, c: 80, d: 80, e: 85, flex: 28 },
+
+    // MACHINE LEARNING & AI ROLES
+    'ml engineer': { i: 78, f: 68, c: 35, d: 75, e: 60, flex: 35 },
+    'data scientist': { i: 72, f: 75, c: 45, d: 80, e: 58, flex: 38 },
+    'research scientist': { i: 75, f: 82, c: 25, d: 78, e: 52, flex: 35 },
+    'mlops engineer': { i: 80, f: 58, c: 65, d: 72, e: 70, flex: 35 },
+    'computer vision engineer': { i: 78, f: 72, c: 38, d: 75, e: 62, flex: 35 },
+    'nlp engineer': { i: 80, f: 70, c: 42, d: 78, e: 65, flex: 35 },
+    'llm engineer': { i: 78, f: 68, c: 40, d: 75, e: 62, flex: 38 },
+
+    // SECURITY ROLES
+    'security engineer': { i: 80, f: 72, c: 72, d: 80, e: 82, flex: 28 },
+    'application security engineer': { i: 75, f: 70, c: 65, d: 78, e: 75, flex: 30 },
+    'devsecops engineer': { i: 82, f: 62, c: 75, d: 75, e: 80, flex: 30 },
+    'penetration tester': { i: 72, f: 65, c: 45, d: 72, e: 65, flex: 38 },
+    'security researcher': { i: 78, f: 78, c: 35, d: 80, e: 60, flex: 32 },
+
+    // QA & TESTING ROLES
+    'qa / test engineer': { i: 45, f: 58, c: 75, d: 75, e: 85, flex: 28 },
+    'test automation engineer': { i: 65, f: 52, c: 72, d: 72, e: 80, flex: 32 },
+    'mobile qa engineer': { i: 35, f: 55, c: 70, d: 70, e: 78, flex: 32 },
+
+    // PRODUCT & MANAGEMENT ROLES
+    'product manager': { i: 25, f: 62, c: 55, d: 48, e: 58, flex: 45 },
+    'technical pm': { i: 35, f: 65, c: 58, d: 52, e: 62, flex: 42 },
+
+    // ARCHITECTURE & STRATEGY ROLES
+    'solutions architect': { i: 70, f: 75, c: 60, d: 68, e: 70, flex: 35 },
+
+    // GROWTH & ADVOCACY ROLES
+    'growth engineer': { i: 22, f: 48, c: 32, d: 75, e: 48, flex: 42 },
+    'developer advocate': { i: 20, f: 55, c: 28, d: 50, e: 45, flex: 45 },
+
+    // SPECIALIZED ROLES
+    'blockchain engineer': { i: 75, f: 58, c: 50, d: 65, e: 62, flex: 38 },
+    'game developer': { i: 65, f: 45, c: 35, d: 48, e: 55, flex: 42 },
+    'embedded software engineer': { i: 85, f: 55, c: 68, d: 68, e: 75, flex: 32 },
   };
 
   const normalized = normalizeRoleName(roleName);
   const category = categories[normalized] || { i: 50, f: 50, c: 50, d: 50, e: 50, flex: 35 };
 
-  // Calculate distance with flexibility
+  /**
+   * Trait importance weights - Interface is most critical for role fit
+   * Total weight: 1.0 (normalized)
+   */
+  const traitWeights = {
+    interface: 0.30,  // Most important - User vs Systems determines domain
+    focus: 0.15,      // Modifier - affects approach, not domain
+    change: 0.20,     // Important - Exploratory vs Operational affects role type
+    decision: 0.20,   // Important - Vision vs Logic affects role type
+    execution: 0.15,  // Less critical - Adaptive vs Structured is more flexible
+  };
+
+  // Calculate distance with trait-specific weighting
   const traits = [
-    { user: scores.focus_score, ideal: category.f },
-    { user: scores.interface_score, ideal: category.i },
-    { user: scores.change_score, ideal: category.c },
-    { user: scores.decision_score, ideal: category.d },
-    { user: scores.execution_score, ideal: category.e },
+    { name: 'focus', user: scores.focus_score, ideal: category.f, weight: traitWeights.focus },
+    { name: 'interface', user: scores.interface_score, ideal: category.i, weight: traitWeights.interface },
+    { name: 'change', user: scores.change_score, ideal: category.c, weight: traitWeights.change },
+    { name: 'decision', user: scores.decision_score, ideal: category.d, weight: traitWeights.decision },
+    { name: 'execution', user: scores.execution_score, ideal: category.e, weight: traitWeights.execution },
   ];
 
-  let totalDistance = 0;
-  let directionMatches = 0;
+  let weightedDistance = 0;
+  let weightedDirectionScore = 0;
 
-  traits.forEach(({ user, ideal }) => {
+  traits.forEach(({ name, user, ideal, weight }) => {
     const rawDistance = Math.abs(user - ideal);
 
-    // Direction matching
-    const userDir = user < 50 ? 'low' : user > 50 ? 'high' : 'neutral';
-    const idealDir = ideal < 50 ? 'low' : ideal > 50 ? 'high' : 'neutral';
+    // Direction matching with soft boundaries (40-60 is neutral zone)
+    const userDir = user < 40 ? 'low' : user > 60 ? 'high' : 'neutral';
+    const idealDir = ideal < 40 ? 'low' : ideal > 60 ? 'high' : 'neutral';
 
-    if (userDir === idealDir || idealDir === 'neutral' || userDir === 'neutral') {
-      directionMatches += 1;
-    }
+    const directionMatch = (userDir === idealDir || idealDir === 'neutral' || userDir === 'neutral') ? 1 : 0;
 
     // Distance calculation with flexibility
     let adjustedDistance;
@@ -237,12 +299,22 @@ function calculateDistanceScore(scores, roleName) {
     } else {
       adjustedDistance = 20 + (rawDistance - category.flex) * 0.8;
     }
-    totalDistance += adjustedDistance;
+
+    // Apply trait weight to both direction and distance
+    weightedDirectionScore += directionMatch * weight;
+    weightedDistance += adjustedDistance * weight;
   });
 
-  // Score: higher is better
-  const directionScore = (directionMatches / 5) * 50; // 0-50
-  const distanceScore = Math.max(0, 50 - (totalDistance / 5)); // 0-50
+  // Adaptive weighting: preference strength affects direction vs distance balance
+  // Strong preferences (far from 50) care more about direction
+  // Weak preferences (near 50) care more about distance
+  const avgPreferenceStrength = traits.reduce((sum, t) => sum + Math.abs(t.user - 50), 0) / 5;
+  const directionWeight = Math.min(0.7, 0.4 + (avgPreferenceStrength / 100)); // 0.4-0.7
+  const distanceWeight = 1 - directionWeight; // 0.6-0.3
+
+  // Final score calculation (0-100)
+  const directionScore = weightedDirectionScore * 100 * directionWeight;
+  const distanceScore = Math.max(0, (1 - weightedDistance / 20) * 100 * distanceWeight);
 
   return Math.round(directionScore + distanceScore);
 }
