@@ -46,13 +46,14 @@ export function getPersonalityColor(typeCode) {
   if (!typeCode) return categoryColorPalettes.innovators;
 
   const parts = typeCode.split('-');
-  // Format: Focus-Interface-Change-Decision (B/A-U/S-E/O-V/L)
-  // Position 0: Focus (B/A)
-  // Position 1: Interface (U/S)
-  // Position 2: Change/Scope (E/O)
-  // Position 3: Decision (V/L)
-  const interfaceDimension = parts[1]; // U or S
-  const scopeDimension = parts[2]; // E or O
+  // Format: Interface-Change-Decision-Execution(-Focus optional) (U/S-E/O-V/L-A/T-B/A)
+  // Position 0: Interface (U/S)
+  // Position 1: Change/Scope (E/O)
+  // Position 2: Decision (V/L)
+  // Position 3: Execution (A/T)
+  // Position 4: Focus (B/A) - optional modifier
+  const interfaceDimension = parts[0]; // U or S
+  const scopeDimension = parts[1]; // E or O
 
   // Determine category based on Interface × Scope
   if (interfaceDimension === 'U' && scopeDimension === 'E') {
@@ -181,13 +182,14 @@ export function getPersonalityCategory(typeCode) {
   if (!typeCode) return null;
 
   const parts = typeCode.split('-');
-  // Format: Focus-Interface-Change-Decision (B/A-U/S-E/O-V/L)
-  // Position 0: Focus (B/A)
-  // Position 1: Interface (U/S)
-  // Position 2: Change/Scope (E/O)
-  // Position 3: Decision (V/L)
-  const interfaceDimension = parts[1]; // U or S
-  const scopeDimension = parts[2]; // E or O
+  // Format: Interface-Change-Decision-Execution(-Focus optional) (U/S-E/O-V/L-A/T-B/A)
+  // Position 0: Interface (U/S)
+  // Position 1: Change/Scope (E/O)
+  // Position 2: Decision (V/L)
+  // Position 3: Execution (A/T)
+  // Position 4: Focus (B/A) - optional modifier
+  const interfaceDimension = parts[0]; // U or S
+  const scopeDimension = parts[1]; // E or O
 
   // Find matching category
   for (const [key, category] of Object.entries(personalityCategories)) {
