@@ -122,14 +122,19 @@ export function generatePersonalityType(scores) {
   // Determine each letter based on which side of 50 the score falls
   // If exactly 50, we need to pick one side - use < 50 to favor low side for true neutrals
 
-  // Correct order: Focus-Interface-Change-Decision (4-letter base code)
+  // Core 4-letter type code: Focus-Interface-Change-Decision
   const focus = scores.focus_score < 50 ? 'B' : 'A'; // Builder vs Analyzer
   const interface_ = scores.interface_score < 50 ? 'U' : 'S'; // User-Facing vs Systems-Facing
   const change = scores.change_score < 50 ? 'E' : 'O'; // Exploratory vs Operational
   const decision = scores.decision_score < 50 ? 'V' : 'L'; // Vision-Led vs Logic-Led
 
-  // Format: B/A-U/S-E/O-V/L (e.g., "B-U-E-V")
-  return `${focus}-${interface_}-${change}-${decision}`;
+  // Execution style suffix (like A/T in 16 Personalities)
+  const execution = scores.execution_score < 50 ? 'A' : 'T'; // Adaptive vs Structured
+
+  // Format: B/A-U/S-E/O-V/L-A/T (e.g., "B-U-E-V-A")
+  // The first 4 letters determine the personality type (16 types)
+  // The 5th letter (execution) is a modifier that adds nuance
+  return `${focus}-${interface_}-${change}-${decision}-${execution}`;
 }
 
 /**
