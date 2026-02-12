@@ -5,6 +5,8 @@ import Results from './Results';
 import PersonalityTypesGallery from './PersonalityTypesGallery';
 import PersonalityTypeDetail from './PersonalityTypeDetail';
 import AllRolesRanked from './AllRolesRanked';
+import PrivacyPolicy from './PrivacyPolicy';
+import TermsOfService from './TermsOfService';
 import { spectrums } from './data/questions';
 import { getAllPersonalityCodes } from './data/personalities';
 import { getPersonalityColor } from './theme';
@@ -752,8 +754,58 @@ const FooterNote = styled.small`
   font-size: 0.8125rem;
 `;
 
+const FooterLinks = styled.div`
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+`;
+
+const FooterLink = styled.button`
+  background: none;
+  border: none;
+  color: #3498db;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0.25rem 0.5rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #2980b9;
+  }
+`;
+
+const DisclaimerSection = styled.div`
+  background: rgba(231, 76, 60, 0.08);
+  border: 2px solid rgba(231, 76, 60, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 3rem 0;
+  text-align: center;
+`;
+
+const DisclaimerTitle = styled.h3`
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #c0392b;
+  margin-bottom: 1rem;
+`;
+
+const DisclaimerText = styled.p`
+  font-size: 0.9375rem;
+  color: #5a6c7d;
+  line-height: 1.7;
+  margin: 0.5rem 0;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
 const Tech16 = () => {
-  const [view, setView] = useState('landing'); // 'landing', 'quiz', 'results', 'types', 'type-detail', 'all-roles'
+  const [view, setView] = useState('landing'); // 'landing', 'quiz', 'results', 'types', 'type-detail', 'all-roles', 'privacy', 'terms'
   const [quizData, setQuizData] = useState(null); // { responses, questions }
   const [selectedTypeCode, setSelectedTypeCode] = useState(null);
   const [roleCount, setRoleCount] = useState(null); // Actual role count from database
@@ -835,6 +887,16 @@ const Tech16 = () => {
 
   const handleBackToResults = () => {
     setView('results');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleViewPrivacy = () => {
+    setView('privacy');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleViewTerms = () => {
+    setView('terms');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -938,6 +1000,32 @@ const Tech16 = () => {
     );
   }
 
+  if (view === 'privacy') {
+    return (
+      <ThemeProvider theme={tech16Theme}>
+        <PageWrapper>
+          <Header />
+          <GradientBackground>
+            <PrivacyPolicy onBack={handleBackToLanding} />
+          </GradientBackground>
+        </PageWrapper>
+      </ThemeProvider>
+    );
+  }
+
+  if (view === 'terms') {
+    return (
+      <ThemeProvider theme={tech16Theme}>
+        <PageWrapper>
+          <Header />
+          <GradientBackground>
+            <TermsOfService onBack={handleBackToLanding} />
+          </GradientBackground>
+        </PageWrapper>
+      </ThemeProvider>
+    );
+  }
+
 
   // Landing page
   // Show all 5 personality dimensions
@@ -1024,6 +1112,16 @@ const Tech16 = () => {
             <Tagline>
               Take the quiz to find your developer personality type and get personalized engineering role recommendations
             </Tagline>
+
+            <DisclaimerSection>
+              <DisclaimerTitle>⚠️ Important Disclaimer</DisclaimerTitle>
+              <DisclaimerText>
+                <strong>For entertainment and educational purposes only.</strong> This is a student portfolio project and is NOT a scientifically validated psychometric instrument.
+              </DisclaimerText>
+              <DisclaimerText>
+                This tool is not a substitute for professional career counseling and should not be used for hiring decisions.
+              </DisclaimerText>
+            </DisclaimerSection>
 
             <CTASection>
               <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -1196,6 +1294,13 @@ const Tech16 = () => {
                 <FooterDescription>
                   Focused on hands-on technical roles across {roleCount || '42'}+ engineering positions
                 </FooterDescription>
+                <FooterDescription style={{ fontSize: '0.8125rem', marginTop: '1rem', fontStyle: 'italic' }}>
+                  <strong>Disclaimer:</strong> For entertainment and educational purposes only. Not a validated psychometric instrument.
+                </FooterDescription>
+                <FooterLinks>
+                  <FooterLink onClick={handleViewPrivacy}>Privacy Policy</FooterLink>
+                  <FooterLink onClick={handleViewTerms}>Terms of Service</FooterLink>
+                </FooterLinks>
                 <FooterNote>
                   Built with React, styled-components, and Recharts
                 </FooterNote>
