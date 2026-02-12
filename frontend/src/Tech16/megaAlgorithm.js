@@ -1,5 +1,5 @@
 /**
- * MEGA-ALGORITHM: Perfect Role Matching System
+ * MEGA-ALGORITHM: Rule-Based Role Matching System
  *
  * This algorithm combines 16 core algorithms based on 4 dimensions:
  * - Interface (U/S), Change (E/O), Decision (V/L), Execution (A/T)
@@ -10,7 +10,7 @@
  * 1. Determine personality type from 4 core dimensions (U/S × E/O × V/L × A/T)
  * 2. Route to the appropriate algorithm (one of 16)
  * 3. Algorithm checks focus_score to determine Builder vs Analyzer variant
- * 4. Return top 3 roles based on deep manual reasoning
+ * 4. Return top 3 roles based on predefined rules
  *
  * @param {Object} scores - { focus_score, interface_score, change_score, decision_score, execution_score }
  * @param {Array} roles - Array of role objects with { id, name }
@@ -62,15 +62,15 @@ function determinePersonalityType(scores) {
 }
 
 /**
- * Main mega-algorithm function - HYBRID APPROACH
+ * Main mega-algorithm function - RULE-BASED HYBRID APPROACH
  *
  * Strategy:
- * 1. Top 3: Use type-specific algorithms (100% accuracy from manual reasoning)
+ * 1. Top 3: Use type-specific algorithms (predefined rules for each personality type)
  * 2. Remaining roles: Use distance-based scoring for proper ranking
  *
  * @param {Object} scores - { focus_score, interface_score, change_score, decision_score, execution_score }
  * @param {Array} roles - Array of role objects with { id, name }
- * @returns {Array} All roles sorted by match (top 3 guaranteed by type-specific algorithm)
+ * @returns {Array} All roles sorted by match (top 3 determined by type-specific algorithm)
  */
 export function rankRolesByMatch(scores, roles) {
   // Determine personality type

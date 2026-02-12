@@ -1,6 +1,8 @@
 # Tech 16 Personalities
 
-Personality assessment application for tech professionals. Take a 40-question quiz to discover your tech personality type and get personalized career recommendations.
+**Student Portfolio Project**: Rule-based career matching tool for tech professionals. Take a 40-question quiz to discover your tech personality type and get personalized career recommendations.
+
+**DISCLAIMER**: This is a student portfolio project for entertainment and educational purposes only. It is NOT a scientifically validated psychometric instrument and should not be used for professional career counseling or hiring decisions.
 
 **🌐 Live Site:** [https://16techpersonalities.com](https://16techpersonalities.com)
 
@@ -52,7 +54,7 @@ Personality assessment application for tech professionals. Take a 40-question qu
 │   │   │   ├── AllRolesRanked.js         # All roles view
 │   │   │   ├── scoring.js                # Core scoring logic
 │   │   │   ├── scoringSupabase.js        # Supabase integration layer
-│   │   │   ├── megaAlgorithm.js          # 100% accurate hybrid algorithm
+│   │   │   ├── megaAlgorithm.js          # Rule-based hybrid algorithm
 │   │   │   ├── roleMatching.js           # Distance-based algorithm (roles 4+)
 │   │   │   ├── algo_BUEV.js              # Type-specific algorithms (16 total)
 │   │   │   ├── algo_BUEL.js              # ...one for each I-C-D-E combination
@@ -120,10 +122,10 @@ The 16 base personality types use 4-letter codes (I-C-D-E) with Focus defaulted 
 
 ## Role Recommendation Algorithm
 
-**100% Accuracy Hybrid Approach** (Mega-Algorithm v2.0)
+**Rule-Based Hybrid Approach** (Mega-Algorithm v2.0)
 
 ### Top 3 Recommendations
-Each of the 16 base personality types has a custom algorithm that returns the perfect top 3 roles based on manual reasoning and strength analysis:
+Each of the 16 base personality types has a custom algorithm that returns the top 3 roles based on manual reasoning and strength analysis:
 
 ```javascript
 // Example: U-E-V-A (User-Exploratory-Vision-Adaptive)
@@ -134,7 +136,7 @@ Each of the 16 base personality types has a custom algorithm that returns the pe
 - One algorithm per base personality type (based on Interface-Change-Decision-Execution)
 - Each algorithm considers preference strength (not just direction)
 - Handles edge cases: weak preferences, mixed strengths, extreme values
-- Optimized for 100% accuracy on comprehensive test suite
+- Optimized for algorithmic consistency on comprehensive test suite
 - Focus dimension (B/A) does not affect top 3 role recommendations
 
 **Note on File Naming**: The algorithm files use an older naming convention (e.g., `algo_BUEV.js`) from a previous code format. The `megaAlgorithm.js` handles mapping between the current personality code format (U-E-V-A) and the appropriate algorithm file.
@@ -148,13 +150,27 @@ Distance-based scoring for roles beyond top 3:
 
 ### Algorithm Performance
 - **Test Coverage**: 112 test cases (16 types × 7 strength levels)
-- **Accuracy**: 100% on top-3 recommendations
-- **Improvement**: +24.7% over distance-only approach (75.3% → 100%)
+- **Consistency**: Rule-based matching ensures consistent results for same inputs
+- **Note**: Algorithm has not been validated against real-world career outcomes
 
 ### Files
 - `megaAlgorithm.js` - Main hybrid algorithm
 - `algo_BUEV.js` through `algo_ASOL.js` - 16 type-specific algorithms
 - `roleMatching.js` - Legacy distance-based algorithm (used for roles 4+)
+
+## Limitations and Disclaimers
+
+**This is a student portfolio project with the following limitations:**
+
+1. **Not Scientifically Validated**: This tool has not undergone peer review or empirical validation studies
+2. **Not a Substitute for Professional Assessment**: Should not replace professional career counseling or psychometric testing
+3. **No Hiring Use**: This tool should NOT be used for employment screening or hiring decisions
+4. **Entertainment/Educational Purpose**: Designed for personal exploration and learning about personality frameworks
+5. **Rule-Based Matching**: Career recommendations are based on predefined rules, not machine learning or real-world outcome data
+6. **No Longitudinal Data**: We have not tracked whether recommendations lead to actual career satisfaction
+7. **Limited Scope**: Focuses only on technical roles and may not capture the full complexity of career fit
+
+**For Professional Career Guidance**: Please consult with licensed career counselors, use validated assessments (e.g., Strong Interest Inventory, Myers-Briggs Type Indicator administered by certified professionals), or work with your university's career services.
 
 ## Deployment
 

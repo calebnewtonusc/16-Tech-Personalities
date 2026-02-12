@@ -438,7 +438,7 @@ export function calculateRoleMatch(scores, roleName) {
 }
 
 /**
- * MEGA-ALGORITHM v2.0 - HYBRID APPROACH (100% accuracy)
+ * MEGA-ALGORITHM v2.0 - RULE-BASED HYBRID APPROACH
  *
  * Top 3 roles: Use type-specific algorithms (one for each of 16 personality types)
  * Remaining roles: Use distance-based scoring from calculateRoleMatch above
