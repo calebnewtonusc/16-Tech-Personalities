@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { AlertTriangle } from 'lucide-react';
 import { Button, Card, Container } from './components/SharedComponents';
 
 const PageContainer = styled.div`
@@ -104,7 +105,7 @@ const TermsOfService = ({ onBack }) => {
 
         <ContentCard>
           <WarningBox>
-            <WarningTitle>[exclamationmark.triangle] Critical Disclaimer</WarningTitle>
+            <WarningTitle><AlertTriangle className="w-5 h-5 inline" /> Critical Disclaimer</WarningTitle>
             <WarningText>
               <strong>This is a student portfolio project for entertainment and educational purposes only.</strong>
             </WarningText>
