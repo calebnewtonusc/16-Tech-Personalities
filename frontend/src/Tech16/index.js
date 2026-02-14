@@ -1072,24 +1072,24 @@ const Tech16 = () => {
 
   const features = [
     {
-      icon: '📊',
+      icon: '[chart.bar.fill]',
       title: '40 Thoughtful Questions',
       description: 'Scenario-based questions that reveal your natural working style and preferences.',
     },
     {
-      icon: '🎯',
+      icon: '[target]',
       title: '5 Personality Dimensions',
       description:
         'Measure your position on 4 core dimensions (Interface, Change Style, Decision Driver, Execution) plus a Focus tendency suffix modifier.',
     },
     {
-      icon: '💼',
+      icon: '[briefcase.fill]',
       title: 'Engineering Role Recommendations',
       description:
         `Discover your best-fit engineering roles from ${roleCount || '42'}+ hands-on positions across frontend, backend, mobile, data, ML, security, and more.`,
     },
     {
-      icon: '🗺️',
+      icon: '[map.fill]',
       title: 'Personalized Learning Paths',
       description:
         'Comprehensive skill roadmaps with resources, courses, and recommended learning sequences.',
@@ -1114,7 +1114,7 @@ const Tech16 = () => {
             </Tagline>
 
             <DisclaimerSection>
-              <DisclaimerTitle>⚠️ Important Disclaimer</DisclaimerTitle>
+              <DisclaimerTitle>[exclamationmark.triangle] Important Disclaimer</DisclaimerTitle>
               <DisclaimerText>
                 <strong>For entertainment and educational purposes only.</strong> This is a student portfolio project and is NOT a scientifically validated psychometric instrument.
               </DisclaimerText>

@@ -129,7 +129,7 @@ async function verifyAlgorithm() {
     return;
   }
 
-  console.log(`✓ Loaded ${roles.length} roles from database\n`);
+  console.log(`[checkmark] Loaded ${roles.length} roles from database\n`);
 
   // Test Case 1: Systems-oriented personality (high interface_score)
   const systemsScores = {
@@ -151,12 +151,12 @@ async function verifyAlgorithm() {
   // Check for 0% matches
   const zeroMatches = systemsRanked.filter(r => r.matchPercentage === 0);
   if (zeroMatches.length > 0) {
-    console.log(`\n⚠️  WARNING: ${zeroMatches.length} roles have 0% match!`);
+    console.log(`\n[exclamationmark.triangle]  WARNING: ${zeroMatches.length} roles have 0% match!`);
     zeroMatches.slice(0, 5).forEach(role => {
       console.log(`    - ${role.name}`);
     });
   } else {
-    console.log('\n✓ No 0% matches found');
+    console.log('\n[checkmark] No 0% matches found');
   }
 
   // Test Case 2: User-facing personality (low interface_score)

@@ -90,11 +90,11 @@ function test(name, condition, details = '') {
   totalTests++;
   if (condition) {
     passedTests++;
-    console.log(`  ✓ ${name}`);
+    console.log(`  [checkmark] ${name}`);
     if (details) console.log(`    ${details}`);
   } else {
     failedTests++;
-    console.log(`  ✗ ${name}`);
+    console.log(`  [xmark] ${name}`);
     if (details) console.log(`    ${details}`);
   }
 }
@@ -112,7 +112,7 @@ async function runTests() {
   // ============================================================
   // TEST 1: DATABASE INTEGRITY
   // ============================================================
-  console.log('📊 TEST 1: DATABASE INTEGRITY\n');
+  console.log('[chart.bar.fill] TEST 1: DATABASE INTEGRITY\n');
 
   try {
     // Test 1.1: Quiz versions table
@@ -184,14 +184,14 @@ async function runTests() {
       mobileRoles.length > 0 ? `Found: ${mobileRoles.map(r => r.name).join(', ')}` : 'Consolidated to Mobile Engineer');
 
   } catch (error) {
-    console.log(`  ✗ Database test failed: ${error.message}`);
+    console.log(`  [xmark] Database test failed: ${error.message}`);
     failedTests++;
   }
 
   // ============================================================
   // TEST 2: SCORING ALGORITHM
   // ============================================================
-  console.log('\n📊 TEST 2: SCORING ALGORITHM\n');
+  console.log('\n[chart.bar.fill] TEST 2: SCORING ALGORITHM\n');
 
   // Test 2.1: All strongly agree = 100% across all spectrums
   const allAgree = Array(40).fill(4); // 4 = Strongly Agree
@@ -223,7 +223,7 @@ async function runTests() {
   // ============================================================
   // TEST 3: ROLE MATCHING ALGORITHM
   // ============================================================
-  console.log('\n📊 TEST 3: ROLE MATCHING ALGORITHM\n');
+  console.log('\n[chart.bar.fill] TEST 3: ROLE MATCHING ALGORITHM\n');
 
   // Test 3.1: No 0% matches
   const systemsScores = { focus_score: 75, interface_score: 85, change_score: 70, decision_score: 75, execution_score: 80 };
@@ -279,7 +279,7 @@ async function runTests() {
   // ============================================================
   // TEST 4: PERSONALITY TYPE GENERATION
   // ============================================================
-  console.log('\n📊 TEST 4: PERSONALITY TYPE GENERATION\n');
+  console.log('\n[chart.bar.fill] TEST 4: PERSONALITY TYPE GENERATION\n');
 
   // Test all 16 base personality types
   // Format: [Interface]-[Change]-[Decision]-[Execution]
@@ -306,7 +306,7 @@ async function runTests() {
   // ============================================================
   // TEST 5: DATA CONSISTENCY
   // ============================================================
-  console.log('\n📊 TEST 5: DATA CONSISTENCY\n');
+  console.log('\n[chart.bar.fill] TEST 5: DATA CONSISTENCY\n');
 
   // Test 5.1: All questions have required fields
   const hasAllFields = questions.every(q =>
@@ -335,7 +335,7 @@ async function runTests() {
   // ============================================================
   // TEST 6: EDGE CASES
   // ============================================================
-  console.log('\n📊 TEST 6: EDGE CASES\n');
+  console.log('\n[chart.bar.fill] TEST 6: EDGE CASES\n');
 
   // Test 6.1: Extreme scores still produce valid matches
   const extremeScores = { focus_score: 100, interface_score: 100, change_score: 100, decision_score: 100, execution_score: 100 };
@@ -363,13 +363,13 @@ async function runTests() {
   console.log('╚════════════════════════════════════════════════════════════════╝\n');
 
   console.log(`  Total Tests:  ${totalTests}`);
-  console.log(`  ✓ Passed:     ${passedTests} (${((passedTests/totalTests)*100).toFixed(1)}%)`);
-  console.log(`  ✗ Failed:     ${failedTests} (${((failedTests/totalTests)*100).toFixed(1)}%)`);
+  console.log(`  [checkmark] Passed:     ${passedTests} (${((passedTests/totalTests)*100).toFixed(1)}%)`);
+  console.log(`  [xmark] Failed:     ${failedTests} (${((failedTests/totalTests)*100).toFixed(1)}%)`);
 
   if (failedTests === 0) {
-    console.log('\n  🎉 ALL TESTS PASSED! Project is in excellent condition.\n');
+    console.log('\n  [checkmark.circle] ALL TESTS PASSED! Project is in excellent condition.\n');
   } else {
-    console.log(`\n  ⚠️  ${failedTests} test(s) failed. Review issues above.\n`);
+    console.log(`\n  [exclamationmark.triangle]  ${failedTests} test(s) failed. Review issues above.\n`);
   }
 
   console.log('════════════════════════════════════════════════════════════════\n');

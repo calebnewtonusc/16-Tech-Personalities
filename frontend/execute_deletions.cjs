@@ -67,12 +67,12 @@ async function deleteRedundantRoles() {
       .select();
 
     if (error) {
-      console.error(`❌ Error deleting "${roleName}":`, error.message);
+      console.error(`[xmark.circle] Error deleting "${roleName}":`, error.message);
     } else if (data && data.length > 0) {
-      console.log(`✓ Deleted: ${roleName}`);
+      console.log(`[checkmark] Deleted: ${roleName}`);
       deletedCount++;
     } else {
-      console.log(`⚠ Not found: ${roleName}`);
+      console.log(`[exclamationmark.triangle] Not found: ${roleName}`);
       notFoundCount++;
     }
   }
