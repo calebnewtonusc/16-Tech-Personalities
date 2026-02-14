@@ -56,7 +56,7 @@ async function testAllPersonalities() {
   for (const personality of ALL_PERSONALITIES) {
     totalTests++;
 
-    console.log(`\n📊 Testing: ${personality.code} - ${personality.name}\n`);
+    console.log(`\n[chart.bar.fill] Testing: ${personality.code} - ${personality.name}\n`);
 
     // Generate scores from type code
     const scores = generateScoresFromType(personality.code);
@@ -68,9 +68,9 @@ async function testAllPersonalities() {
     // Get top 10
     const top10 = rankedRoles.slice(0, 10);
 
-    console.log('\n🏆 Top 10 Roles:');
+    console.log('\n[trophy.fill] Top 10 Roles:');
     top10.forEach((role, idx) => {
-      const badge = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `${idx + 1}.`;
+      const badge = idx === 0 ? '[1.circle.fill]' : idx === 1 ? '[2.circle.fill]' : idx === 2 ? '[3.circle.fill]' : `${idx + 1}.`;
       console.log(`  ${badge} ${role.name} - ${role.matchPercentage}% match`);
     });
 
@@ -80,7 +80,7 @@ async function testAllPersonalities() {
       top10Names.some(name => name.includes(expected) || expected.includes(name))
     );
 
-    console.log(`\n✓ Expected roles found in top 10: ${foundExpected.length}/${personality.expectedTopRoles.length}`);
+    console.log(`\n[checkmark] Expected roles found in top 10: ${foundExpected.length}/${personality.expectedTopRoles.length}`);
     if (foundExpected.length > 0) {
       console.log(`  Found: ${foundExpected.join(', ')}`);
     }
@@ -94,13 +94,13 @@ async function testAllPersonalities() {
     // Validate match range
     const minMatch = Math.min(...rankedRoles.map(r => r.matchPercentage));
     const maxMatch = Math.max(...rankedRoles.map(r => r.matchPercentage));
-    console.log(`\n📈 Match Range: ${minMatch}% - ${maxMatch}%`);
+    console.log(`\n[chart.line.uptrend.xyaxis] Match Range: ${minMatch}% - ${maxMatch}%`);
 
     if (minMatch >= 15 && maxMatch <= 100) {
-      console.log('✓ Match range valid (15-100%)');
+      console.log('[checkmark] Match range valid (15-100%)');
       passedTests++;
     } else {
-      console.log('✗ Match range INVALID');
+      console.log('[xmark] Match range INVALID');
     }
 
     console.log('═'.repeat(80));
@@ -113,9 +113,9 @@ async function testAllPersonalities() {
   console.log(`Valid Match Ranges: ${passedTests}/${totalTests} (${Math.round(passedTests/totalTests*100)}%)`);
 
   if (passedTests === totalTests) {
-    console.log('\n🎉 ALL TESTS PASSED! Role matching is working correctly for all 16 personalities.\n');
+    console.log('\n[checkmark.circle] ALL TESTS PASSED! Role matching is working correctly for all 16 personalities.\n');
   } else {
-    console.log(`\n⚠️  ${totalTests - passedTests} tests failed. Review role matching algorithm.\n`);
+    console.log(`\n[exclamationmark.triangle]  ${totalTests - passedTests} tests failed. Review role matching algorithm.\n`);
   }
 }
 

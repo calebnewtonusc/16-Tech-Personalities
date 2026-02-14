@@ -76,14 +76,14 @@ async function runTests() {
     .single();
 
   if (error) {
-    console.error('❌ ERROR: Could not fetch quiz version 2:', error.message);
+    console.error('[xmark.circle] ERROR: Could not fetch quiz version 2:', error.message);
     console.log('\nMake sure you have run the migration:');
     console.log('  psql [DATABASE_URL] -f database/migrations/002_redesigned_questions.sql');
     return;
   }
 
   const questions = data.questions.questions;
-  console.log(`✓ Loaded ${questions.length} questions from version 2\n`);
+  console.log(`[checkmark] Loaded ${questions.length} questions from version 2\n`);
 
   let allPassed = true;
 
@@ -100,15 +100,15 @@ async function runTests() {
 
   console.log('Expected: All scores = 100% (100% toward high traits)');
   console.log('Actual:');
-  console.log(`  Focus:     ${allAgreeScores.focus_score}% ${allAgreeScores.focus_score === 100 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Interface: ${allAgreeScores.interface_score}% ${allAgreeScores.interface_score === 100 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Change:    ${allAgreeScores.change_score}% ${allAgreeScores.change_score === 100 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Decision:  ${allAgreeScores.decision_score}% ${allAgreeScores.decision_score === 100 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Execution: ${allAgreeScores.execution_score}% ${allAgreeScores.execution_score === 100 ? '✓' : '❌ FAIL'}`);
+  console.log(`  Focus:     ${allAgreeScores.focus_score}% ${allAgreeScores.focus_score === 100 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Interface: ${allAgreeScores.interface_score}% ${allAgreeScores.interface_score === 100 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Change:    ${allAgreeScores.change_score}% ${allAgreeScores.change_score === 100 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Decision:  ${allAgreeScores.decision_score}% ${allAgreeScores.decision_score === 100 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Execution: ${allAgreeScores.execution_score}% ${allAgreeScores.execution_score === 100 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
   console.log(`\nPersonality Type: ${allAgreeType} (Expected: S-O-L-T-A)`);
 
   const test1Pass = Object.values(allAgreeScores).every(score => score === 100);
-  console.log(test1Pass ? '\n✓ TEST 1 PASSED' : '\n❌ TEST 1 FAILED');
+  console.log(test1Pass ? '\n[checkmark] TEST 1 PASSED' : '\n[xmark.circle] TEST 1 FAILED');
   allPassed = allPassed && test1Pass;
 
   console.log('\n');
@@ -126,15 +126,15 @@ async function runTests() {
 
   console.log('Expected: All scores = 0% (0% toward high traits = 100% toward low traits)');
   console.log('Actual:');
-  console.log(`  Focus:     ${allDisagreeScores.focus_score}% ${allDisagreeScores.focus_score === 0 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Interface: ${allDisagreeScores.interface_score}% ${allDisagreeScores.interface_score === 0 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Change:    ${allDisagreeScores.change_score}% ${allDisagreeScores.change_score === 0 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Decision:  ${allDisagreeScores.decision_score}% ${allDisagreeScores.decision_score === 0 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Execution: ${allDisagreeScores.execution_score}% ${allDisagreeScores.execution_score === 0 ? '✓' : '❌ FAIL'}`);
+  console.log(`  Focus:     ${allDisagreeScores.focus_score}% ${allDisagreeScores.focus_score === 0 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Interface: ${allDisagreeScores.interface_score}% ${allDisagreeScores.interface_score === 0 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Change:    ${allDisagreeScores.change_score}% ${allDisagreeScores.change_score === 0 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Decision:  ${allDisagreeScores.decision_score}% ${allDisagreeScores.decision_score === 0 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Execution: ${allDisagreeScores.execution_score}% ${allDisagreeScores.execution_score === 0 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
   console.log(`\nPersonality Type: ${allDisagreeType} (Expected: U-E-V-A-B)`);
 
   const test2Pass = Object.values(allDisagreeScores).every(score => score === 0);
-  console.log(test2Pass ? '\n✓ TEST 2 PASSED' : '\n❌ TEST 2 FAILED');
+  console.log(test2Pass ? '\n[checkmark] TEST 2 PASSED' : '\n[xmark.circle] TEST 2 FAILED');
   allPassed = allPassed && test2Pass;
 
   console.log('\n');
@@ -152,15 +152,15 @@ async function runTests() {
 
   console.log('Expected: All scores = 50%');
   console.log('Actual:');
-  console.log(`  Focus:     ${allNeutralScores.focus_score}% ${allNeutralScores.focus_score === 50 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Interface: ${allNeutralScores.interface_score}% ${allNeutralScores.interface_score === 50 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Change:    ${allNeutralScores.change_score}% ${allNeutralScores.change_score === 50 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Decision:  ${allNeutralScores.decision_score}% ${allNeutralScores.decision_score === 50 ? '✓' : '❌ FAIL'}`);
-  console.log(`  Execution: ${allNeutralScores.execution_score}% ${allNeutralScores.execution_score === 50 ? '✓' : '❌ FAIL'}`);
+  console.log(`  Focus:     ${allNeutralScores.focus_score}% ${allNeutralScores.focus_score === 50 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Interface: ${allNeutralScores.interface_score}% ${allNeutralScores.interface_score === 50 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Change:    ${allNeutralScores.change_score}% ${allNeutralScores.change_score === 50 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Decision:  ${allNeutralScores.decision_score}% ${allNeutralScores.decision_score === 50 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
+  console.log(`  Execution: ${allNeutralScores.execution_score}% ${allNeutralScores.execution_score === 50 ? '[checkmark]' : '[xmark.circle] FAIL'}`);
   console.log(`\nPersonality Type: ${allNeutralType} (Expected: U-E-V-A-B per tie-breaking <= 50 logic)`);
 
   const test3Pass = Object.values(allNeutralScores).every(score => score === 50);
-  console.log(test3Pass ? '\n✓ TEST 3 PASSED' : '\n❌ TEST 3 FAILED');
+  console.log(test3Pass ? '\n[checkmark] TEST 3 PASSED' : '\n[xmark.circle] TEST 3 FAILED');
   allPassed = allPassed && test3Pass;
 
   console.log('\n');
@@ -200,23 +200,23 @@ async function runTests() {
     mixedScores.decision_score > 55 && mixedScores.decision_score < 65 &&
     mixedScores.execution_score > 60 && mixedScores.execution_score < 65
   );
-  console.log(test4Pass ? '\n✓ TEST 4 PASSED' : '\n❌ TEST 4 FAILED (acceptable if scores match calculated expectations)');
+  console.log(test4Pass ? '\n[checkmark] TEST 4 PASSED' : '\n[xmark.circle] TEST 4 FAILED (acceptable if scores match calculated expectations)');
 
   console.log('\n');
   console.log('='.repeat(70));
   console.log('SUMMARY');
   console.log('='.repeat(70));
-  console.log(`\nTest 1 (All Agree):     ${test1Pass ? '✓ PASSED' : '❌ FAILED'}`);
-  console.log(`Test 2 (All Disagree):  ${test2Pass ? '✓ PASSED' : '❌ FAILED'}`);
-  console.log(`Test 3 (All Neutral):   ${test3Pass ? '✓ PASSED' : '❌ FAILED'}`);
-  console.log(`Test 4 (Mixed Pattern): ${test4Pass ? '✓ PASSED' : '~ CHECK MANUALLY'}`);
+  console.log(`\nTest 1 (All Agree):     ${test1Pass ? '[checkmark] PASSED' : '[xmark.circle] FAILED'}`);
+  console.log(`Test 2 (All Disagree):  ${test2Pass ? '[checkmark] PASSED' : '[xmark.circle] FAILED'}`);
+  console.log(`Test 3 (All Neutral):   ${test3Pass ? '[checkmark] PASSED' : '[xmark.circle] FAILED'}`);
+  console.log(`Test 4 (Mixed Pattern): ${test4Pass ? '[checkmark] PASSED' : '~ CHECK MANUALLY'}`);
 
   if (test1Pass && test2Pass && test3Pass) {
-    console.log('\n✅ ALL CRITICAL TESTS PASSED');
+    console.log('\n[checkmark.circle] ALL CRITICAL TESTS PASSED');
     console.log('\nThe scoring bug is FIXED! Uniform responses now produce expected extreme scores.');
     console.log('Version 2 is ready for deployment.');
   } else {
-    console.log('\n❌ SOME TESTS FAILED');
+    console.log('\n[xmark.circle] SOME TESTS FAILED');
     console.log('\nReview the migration script and ensure all questions point to single direction per spectrum.');
   }
 

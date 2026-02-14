@@ -4,7 +4,7 @@
 
 **DISCLAIMER**: This is a student portfolio project for entertainment and educational purposes only. It is NOT a scientifically validated psychometric instrument and should not be used for professional career counseling or hiring decisions.
 
-**🌐 Live Site:** [https://16techpersonalities.com](https://16techpersonalities.com)
+**[globe] Live Site:** [https://16techpersonalities.com](https://16techpersonalities.com)
 
 ## Features
 

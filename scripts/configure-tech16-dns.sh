@@ -8,7 +8,7 @@ source /Users/joelnewton/Desktop/.godaddy-credentials
 DOMAIN="16techpersonalities.com"
 VERCEL_IP="76.76.21.21"
 
-echo "🔧 Configuring DNS for $DOMAIN"
+echo "[wrench.fill] Configuring DNS for $DOMAIN"
 echo ""
 
 # Function to add/update A record
@@ -16,7 +16,7 @@ add_a_record() {
     local NAME=$1
     local IP=$2
 
-    echo "📝 Setting A record: $NAME → $IP"
+    echo "[pencil.circle] Setting A record: $NAME → $IP"
 
     # Delete existing record first
     curl -s -X DELETE \
@@ -31,7 +31,7 @@ add_a_record() {
         -d "[{\"type\": \"A\", \"name\": \"${NAME}\", \"data\": \"${IP}\", \"ttl\": 600}]")
 
     if [ -z "$RESPONSE" ]; then
-        echo "✅ Success!"
+        echo "[checkmark.circle] Success!"
     else
         echo "Response: $RESPONSE"
     fi
@@ -45,11 +45,11 @@ echo ""
 add_a_record "www" "$VERCEL_IP"
 echo ""
 
-echo "🎉 DNS configuration complete!"
+echo "[checkmark.circle] DNS configuration complete!"
 echo ""
-echo "⏳ DNS propagation can take 5-60 minutes"
-echo "🔍 Check status: https://www.whatsmydns.net/#A/16techpersonalities.com"
+echo "[hourglass] DNS propagation can take 5-60 minutes"
+echo "[magnifyingglass] Check status: https://www.whatsmydns.net/#A/16techpersonalities.com"
 echo ""
-echo "📱 Your site will be live at:"
+echo "[iphone] Your site will be live at:"
 echo "   - https://16techpersonalities.com"
 echo "   - https://www.16techpersonalities.com"

@@ -53,12 +53,12 @@ async function checkQuestions() {
   spectrums.forEach(spectrum => {
     const spectrumData = Object.values(distribution).filter(d => d.spectrum === spectrum);
     if (spectrumData.length > 1) {
-      console.log(`⚠️  ${spectrum}: Has ${spectrumData.length} different directions - questions alternate!`);
+      console.log(`[exclamationmark.triangle]  ${spectrum}: Has ${spectrumData.length} different directions - questions alternate!`);
       spectrumData.forEach(d => {
         console.log(`    - ${d.direction}: ${d.count} questions`);
       });
     } else if (spectrumData.length === 1) {
-      console.log(`✓  ${spectrum}: All ${spectrumData[0].count} questions point to ${spectrumData[0].direction} (consistent)`);
+      console.log(`[checkmark]  ${spectrum}: All ${spectrumData[0].count} questions point to ${spectrumData[0].direction} (consistent)`);
     }
   });
 }

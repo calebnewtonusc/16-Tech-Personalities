@@ -6,7 +6,7 @@ SUPABASE_ANON_KEY="sb_publishable_ojj4hci2Q0M5Gcrd8Wt98Q_H5oFdzFR"
 TOKEN=$(cat /Users/joelnewton/Desktop/.supabase-token)
 PROJECT_REF="qpjgeuonakbnhdkmkrhl"
 
-echo "🔄 Creating safe function to fix codes (delete duplicates first)..."
+echo "[arrow.triangle.2.circlepath] Creating safe function to fix codes (delete duplicates first)..."
 
 # Create a function that deletes duplicates THEN updates
 SQL_FUNC="
@@ -72,15 +72,15 @@ RESPONSE=$(curl -s -X POST \
     -d "{\"query\": $(jq -Rs . < /tmp/create_safe_function.sql)}")
 
 if echo "$RESPONSE" | grep -q "error"; then
-    echo "❌ Error creating function"
+    echo "[xmark.circle] Error creating function"
     echo "$RESPONSE" | jq '.'
     exit 1
 else
-    echo "✅ Safe function created!"
+    echo "[checkmark.circle] Safe function created!"
 fi
 
 echo ""
-echo "🚀 Calling safe function to fix codes..."
+echo "[rocket.fill] Calling safe function to fix codes..."
 
 # Call the function via RPC
 CALL_RESULT=$(curl -s -X POST \
@@ -90,8 +90,8 @@ CALL_RESULT=$(curl -s -X POST \
     -H "Content-Type: application/json")
 
 if echo "$CALL_RESULT" | grep -q "error\|code"; then
-    echo "❌ Error: $CALL_RESULT"
+    echo "[xmark.circle] Error: $CALL_RESULT"
 else
-    echo "✅ Update complete!"
+    echo "[checkmark.circle] Update complete!"
     echo "Results: $CALL_RESULT"
 fi

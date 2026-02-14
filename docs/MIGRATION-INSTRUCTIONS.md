@@ -1,4 +1,4 @@
-# 🚀 Tech16 Database Migration Instructions
+# [rocket.fill] Tech16 Database Migration Instructions
 
 I've opened the Supabase SQL Editor for you!
 
@@ -34,7 +34,7 @@ I've opened the Supabase SQL Editor for you!
 
 ---
 
-## ✅ Verification
+## [checkmark.circle] Verification
 
 After both migrations run successfully, verify in the SQL Editor:
 
@@ -49,7 +49,7 @@ FROM quiz_versions WHERE is_active = true;
 
 ---
 
-## 🎉 Done!
+## [checkmark.circle] Done!
 
 After migrations complete:
 1. Test the quiz locally

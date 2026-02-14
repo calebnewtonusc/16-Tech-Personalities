@@ -104,7 +104,7 @@ const TermsOfService = ({ onBack }) => {
 
         <ContentCard>
           <WarningBox>
-            <WarningTitle>⚠️ Critical Disclaimer</WarningTitle>
+            <WarningTitle>[exclamationmark.triangle] Critical Disclaimer</WarningTitle>
             <WarningText>
               <strong>This is a student portfolio project for entertainment and educational purposes only.</strong>
             </WarningText>
