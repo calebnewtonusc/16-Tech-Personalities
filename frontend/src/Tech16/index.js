@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import { BarChart3, Target, Briefcase, Map, AlertTriangle } from 'lucide-react';
 import Quiz from './Quiz';
 import Results from './Results';
 import PersonalityTypesGallery from './PersonalityTypesGallery';
@@ -1072,24 +1073,24 @@ const Tech16 = () => {
 
   const features = [
     {
-      icon: '[chart.bar.fill]',
+      icon: <BarChart3 className="w-6 h-6" />,
       title: '40 Thoughtful Questions',
       description: 'Scenario-based questions that reveal your natural working style and preferences.',
     },
     {
-      icon: '[target]',
+      icon: <Target className="w-6 h-6" />,
       title: '5 Personality Dimensions',
       description:
         'Measure your position on 4 core dimensions (Interface, Change Style, Decision Driver, Execution) plus a Focus tendency suffix modifier.',
     },
     {
-      icon: '[briefcase.fill]',
+      icon: <Briefcase className="w-6 h-6" />,
       title: 'Engineering Role Recommendations',
       description:
         `Discover your best-fit engineering roles from ${roleCount || '42'}+ hands-on positions across frontend, backend, mobile, data, ML, security, and more.`,
     },
     {
-      icon: '[map.fill]',
+      icon: <Map className="w-6 h-6" />,
       title: 'Personalized Learning Paths',
       description:
         'Comprehensive skill roadmaps with resources, courses, and recommended learning sequences.',
@@ -1114,7 +1115,7 @@ const Tech16 = () => {
             </Tagline>
 
             <DisclaimerSection>
-              <DisclaimerTitle>[exclamationmark.triangle] Important Disclaimer</DisclaimerTitle>
+              <DisclaimerTitle><AlertTriangle className="w-5 h-5 inline" /> Important Disclaimer</DisclaimerTitle>
               <DisclaimerText>
                 <strong>For entertainment and educational purposes only.</strong> This is a student portfolio project and is NOT a scientifically validated psychometric instrument.
               </DisclaimerText>
