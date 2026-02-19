@@ -239,7 +239,7 @@ export const ProgressBar = ({ progress, height, variant, animated, showLabel }) 
 };
 
 // Modal
-export const Modal = styled.div`
+const Modal = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -254,7 +254,7 @@ export const Modal = styled.div`
   backdrop-filter: blur(4px);
 `;
 
-export const ModalContent = styled.div`
+const ModalContent = styled.div`
   background: ${({ theme }) => theme.card};
   border-radius: 16px;
   padding: 2rem;
@@ -271,21 +271,21 @@ export const ModalContent = styled.div`
   }
 `;
 
-export const ModalHeader = styled.div`
+const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
 `;
 
-export const ModalTitle = styled.h2`
+const ModalTitle = styled.h2`
   font-size: 1.75rem;
   font-weight: 700;
   color: ${({ theme }) => theme.text_primary};
   margin: 0;
 `;
 
-export const ModalClose = styled.button`
+const ModalClose = styled.button`
   background: none;
   border: none;
   color: ${({ theme }) => theme.text_secondary};
@@ -343,7 +343,7 @@ const TooltipText = styled.div`
   }
 `;
 
-export const Tooltip = ({ children, text }) => {
+const Tooltip = ({ children, text }) => {
   const [show, setShow] = React.useState(false);
 
   return (
@@ -512,7 +512,7 @@ export const SpectrumDisplay = ({ name, leftPole, rightPole, leftPercent, rightP
 };
 
 // Colored Personality Code Component
-export const ColoredCodeContainer = styled.span`
+const ColoredCodeContainer = styled.span`
   font-family: 'Courier New', monospace;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -521,12 +521,12 @@ export const ColoredCodeContainer = styled.span`
   gap: 0.25em;
 `;
 
-export const ColoredLetter = styled.span`
+const ColoredLetter = styled.span`
   color: ${({ $color }) => $color || '#333'};
   text-shadow: 0 1px 3px ${({ $color }) => $color ? `${$color}40` : 'rgba(0,0,0,0.2)'};
 `;
 
-export const CodeDivider = styled.span`
+const CodeDivider = styled.span`
   color: ${({ theme }) => theme.text_secondary || '#999'};
   opacity: 0.5;
 `;
@@ -673,7 +673,7 @@ const Spinner = styled.div`
   }
 `;
 
-export const LoadingSpinner = () => (
+const LoadingSpinner = () => (
   <SpinnerContainer>
     <Spinner />
   </SpinnerContainer>
@@ -697,7 +697,7 @@ const EmptyStateText = styled.p`
   line-height: 1.5;
 `;
 
-export const EmptyState = ({ icon, message }) => (
+const EmptyState = ({ icon, message }) => (
   <EmptyStateContainer>
     {icon && <EmptyStateIcon>{icon}</EmptyStateIcon>}
     <EmptyStateText>{message}</EmptyStateText>

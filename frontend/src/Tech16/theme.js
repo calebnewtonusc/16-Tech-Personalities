@@ -2,7 +2,7 @@
 // Inspired by 16 Personalities' color-coded approach
 
 // Color palettes for the 4 personality categories (based on Interface × Scope)
-export const categoryColorPalettes = {
+const categoryColorPalettes = {
   // Innovators: User-Facing + Exploratory
   innovators: {
     primary: '#9b59b6', // Purple
@@ -34,7 +34,7 @@ export const categoryColorPalettes = {
 };
 
 // Legacy dimension-based colors (kept for backward compatibility)
-export const personalityColors = {
+const personalityColors = {
   'U': categoryColorPalettes.innovators, // User-Facing defaults to purple
   'S': categoryColorPalettes.architects,  // Systems-Facing defaults to blue
   'A': categoryColorPalettes.crafters,    // Adaptive -> green
@@ -78,7 +78,7 @@ export function getAccentColor(typeCode) {
 }
 
 // Role category colors
-export const roleCategoryColors = {
+const roleCategoryColors = {
   frontend: {
     primary: '#9b59b6',
     gradient: 'linear-gradient(135deg, #9b59b6, #c39bd3)',
@@ -205,7 +205,7 @@ export function getPersonalityCategory(typeCode) {
 }
 
 // Letter colors for the 10 distinct dimension values
-export const letterColors = {
+const letterColors = {
   // Interface dimension (Position 1)
   U: '#2196f3', // Bright Blue - User-Facing
   S: '#37474f', // Dark Slate Gray - Systems-Facing
@@ -225,7 +225,7 @@ export const letterColors = {
 
 // Get color for a specific letter at a given position in the personality code
 // Position: 0=Interface, 1=Change, 2=Decision, 3=Execution, 4=Focus
-export function getLetterColor(letter, position) {
+function getLetterColor(letter, position) {
   if (letter === 'A') {
     // A can be either Execution (position 3) or Focus (position 4)
     return position === 3 ? letterColors.A_EXEC : letterColors.A_FOCUS;

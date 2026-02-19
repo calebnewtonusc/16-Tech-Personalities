@@ -1,6 +1,6 @@
 // 16 Tech Roles with descriptions, skills, roadmaps, and personality fit scoring
 
-export const roles = {
+const roles = {
   frontend: {
     id: "frontend",
     title: "Frontend Engineer",
@@ -2165,7 +2165,7 @@ export const roles = {
 };
 
 // Get top N role recommendations for a personality type
-export const getTopRoles = (personalityCode, n = 3) => {
+const getTopRoles = (personalityCode, n = 3) => {
   const roleScores = Object.values(roles).map(role => ({
     ...role,
     fitScore: role.personalityWeights[personalityCode] || 0.5,

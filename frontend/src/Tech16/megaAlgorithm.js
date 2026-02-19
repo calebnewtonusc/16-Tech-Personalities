@@ -435,4 +435,4 @@ function normalizeRoleName(name) {
 }
 
 // For backward compatibility with existing test files
-export { rankRolesByMatch as default };
+// (default export removed - unused externally, rankRolesByMatch is the named export)

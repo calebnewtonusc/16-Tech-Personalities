@@ -344,7 +344,7 @@ function findRoleCategory(roleName) {
  * @param {string} roleName - Name of the role to match against
  * @returns {number} Match percentage (0-100)
  */
-export function calculateRoleMatch(scores, roleName) {
+function calculateRoleMatch(scores, roleName) {
   const category = findRoleCategory(roleName);
   const { idealTraits, flexibility } = category;
 

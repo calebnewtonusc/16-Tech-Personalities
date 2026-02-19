@@ -618,7 +618,7 @@ export const personalities = {
 };
 
 // Helper function to get personality by code
-export const getPersonalityByCode = (code) => {
+const getPersonalityByCode = (code) => {
   return personalities[code] || null;
 };
 

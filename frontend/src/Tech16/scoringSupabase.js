@@ -140,14 +140,14 @@ export function generatePersonalityType(scores) {
 /**
  * Get focus tendency (Builder vs Analyzer) as separate metadata
  */
-export function getFocusTendency(scores) {
+function getFocusTendency(scores) {
   return scores.focus_score < 50 ? 'Builder' : 'Analyzer';
 }
 
 /**
  * Get spectrum label for a given score
  */
-export function getSpectrumLabel(spectrum, score) {
+function getSpectrumLabel(spectrum, score) {
   const labels = {
     focus: {
       low: { label: 'Builder', code: 'B' },
@@ -177,7 +177,7 @@ export function getSpectrumLabel(spectrum, score) {
 /**
  * Calculate percentage for display (how strongly you lean toward one side)
  */
-export function getSpectrumPercentage(score) {
+function getSpectrumPercentage(score) {
   // Convert 0-100 score to 0-100% leaning
   // Score of 50 = 0% (neutral)
   // Score of 0 or 100 = 100% (strong leaning)
@@ -187,7 +187,7 @@ export function getSpectrumPercentage(score) {
 /**
  * Get descriptive strength label
  */
-export function getStrengthLabel(percentage) {
+function getStrengthLabel(percentage) {
   if (percentage < 10) return 'Balanced';
   if (percentage < 30) return 'Slight';
   if (percentage < 50) return 'Moderate';
