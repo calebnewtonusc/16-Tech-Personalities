@@ -571,6 +571,9 @@ const Quiz = ({ onComplete }) => {
     }
   }, [answeredCount, questions, responses, onComplete]);
 
+  const isLastQuestion = currentQuestionIndex === questions.length - 1;
+  const canSubmit = answeredCount === questions.length;
+
   // Keyboard navigation
   useEffect(() => {
     if (!currentQuestion) return;
@@ -607,9 +610,6 @@ const Quiz = ({ onComplete }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestion, handleAnswer, handleNext, handlePrevious, handleSubmit, isLastQuestion, canSubmit]);
-
-  const isLastQuestion = currentQuestionIndex === questions.length - 1;
-  const canSubmit = answeredCount === questions.length;
 
   if (loading) {
     return (
