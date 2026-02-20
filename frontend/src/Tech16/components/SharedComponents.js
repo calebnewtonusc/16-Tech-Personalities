@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { keyframes, css } from 'styled-components';
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
 
 // Animations
 const fadeIn = keyframes`
@@ -14,6 +14,7 @@ const fadeIn = keyframes`
   }
 `;
 
+// eslint-disable-next-line no-unused-vars
 const slideIn = keyframes`
   from {
     transform: translateX(100%);
@@ -34,6 +35,7 @@ const pulse = keyframes`
   }
 `;
 
+// eslint-disable-next-line no-unused-vars
 const gradientShift = keyframes`
   0% {
     background-position: 0% 50%;
@@ -239,6 +241,7 @@ export const ProgressBar = ({ progress, height, variant, animated, showLabel }) 
 };
 
 // Modal
+// eslint-disable-next-line no-unused-vars
 const Modal = styled.div`
   position: fixed;
   top: 0;
@@ -254,6 +257,7 @@ const Modal = styled.div`
   backdrop-filter: blur(4px);
 `;
 
+// eslint-disable-next-line no-unused-vars
 const ModalContent = styled.div`
   background: ${({ theme }) => theme.card};
   border-radius: 16px;
@@ -271,6 +275,7 @@ const ModalContent = styled.div`
   }
 `;
 
+// eslint-disable-next-line no-unused-vars
 const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -278,6 +283,7 @@ const ModalHeader = styled.div`
   margin-bottom: 1.5rem;
 `;
 
+// eslint-disable-next-line no-unused-vars
 const ModalTitle = styled.h2`
   font-size: 1.75rem;
   font-weight: 700;
@@ -285,6 +291,7 @@ const ModalTitle = styled.h2`
   margin: 0;
 `;
 
+// eslint-disable-next-line no-unused-vars
 const ModalClose = styled.button`
   background: none;
   border: none;
@@ -343,6 +350,7 @@ const TooltipText = styled.div`
   }
 `;
 
+// eslint-disable-next-line no-unused-vars
 const Tooltip = ({ children, text }) => {
   const [show, setShow] = React.useState(false);
 
@@ -377,46 +385,166 @@ const RadarLegend = styled.div`
   }
 `;
 
+// Dimension color map for radar chart dot fills
+const RADAR_DIMENSION_COLORS = {
+  'Technical Focus': '#FF8C42',
+  'Interface Preference': '#4A90E2',
+  'Change Orientation': '#9B59B6',
+  'Decision Style': '#F39C12',
+  'Execution Style': '#E74C3C',
+};
+
+// Custom tooltip for the radar chart
+const RadarTooltipContainer = styled.div`
+  background: ${({ theme }) => theme ? theme.card : '#fff'};
+  border: 1.5px solid rgba(52, 152, 219, 0.3);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2c3e50;
+  min-width: 180px;
+`;
+
+const CustomRadarTooltip = ({ active, payload }) => {
+  if (!active || !payload || !payload.length) return null;
+  const { dimension, value } = payload[0].payload;
+  const color = RADAR_DIMENSION_COLORS[dimension] || '#3498db';
+
+  // Determine interpretation based on dimension and score
+  const getInterpretation = (dim, val) => {
+    const interpretations = {
+      'Technical Focus': val >= 50 ? `Analyzer (${Math.round(val)}%)` : `Builder (${Math.round(100 - val)}%)`,
+      'Interface Preference': val >= 50 ? `Systems-Facing (${Math.round(val)}%)` : `User-Facing (${Math.round(100 - val)}%)`,
+      'Change Orientation': val >= 50 ? `Operational (${Math.round(val)}%)` : `Exploratory (${Math.round(100 - val)}%)`,
+      'Decision Style': val >= 50 ? `Logic-Led (${Math.round(val)}%)` : `Vision-Led (${Math.round(100 - val)}%)`,
+      'Execution Style': val >= 50 ? `Structured (${Math.round(val)}%)` : `Adaptive (${Math.round(100 - val)}%)`,
+    };
+    return interpretations[dim] || `${Math.round(val)}%`;
+  };
+
+  return (
+    <RadarTooltipContainer>
+      <div style={{ color, marginBottom: '0.25rem', fontSize: '0.8125rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        {dimension}
+      </div>
+      <div style={{ fontSize: '1rem', color: '#2c3e50' }}>
+        {getInterpretation(dimension, value)}
+      </div>
+    </RadarTooltipContainer>
+  );
+};
+
 export const RadarChartComponent = ({ data, height }) => {
-  // If data is empty or invalid, don't render the chart
   if (!data || data.length === 0) {
     return null;
   }
 
   const chartHeight = parseInt(height) || 500;
 
+  // Color the dots based on dimension
+  const CustomDot = (props) => {
+    const { cx, cy, payload } = props;
+    if (!cx || !cy) return null;
+    const color = RADAR_DIMENSION_COLORS[payload.dimension] || '#3498db';
+    return (
+      <circle
+        cx={cx}
+        cy={cy}
+        r={6}
+        fill={color}
+        stroke="#ffffff"
+        strokeWidth={2}
+        style={{ filter: `drop-shadow(0 0 6px ${color}99)` }}
+      />
+    );
+  };
+
+  // Custom tick renderer for better label styling
+  const CustomAngleAxisTick = ({ x, y, payload, cx, cy }) => {
+    const dimension = payload.value;
+    const color = RADAR_DIMENSION_COLORS[dimension] || '#2c3e50';
+    // Shorten labels for readability
+    const shortLabels = {
+      'Technical Focus': 'Focus',
+      'Interface Preference': 'Interface',
+      'Change Orientation': 'Change',
+      'Decision Style': 'Decision',
+      'Execution Style': 'Execution',
+    };
+    const label = shortLabels[dimension] || dimension;
+
+    // Determine text anchor based on position relative to center
+    const angle = Math.atan2(y - cy, x - cx) * (180 / Math.PI);
+    let textAnchor = 'middle';
+    if (angle < -30 && angle > -150) textAnchor = 'middle';
+    else if (x < cx - 10) textAnchor = 'end';
+    else if (x > cx + 10) textAnchor = 'start';
+
+    return (
+      <g>
+        <text
+          x={x}
+          y={y}
+          fill={color}
+          fontSize={13}
+          fontWeight={700}
+          textAnchor={textAnchor}
+          dominantBaseline="middle"
+          style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+        >
+          {label}
+        </text>
+      </g>
+    );
+  };
+
   return (
     <div>
-      <ChartContainer height={height}>
+      <ChartContainer height={height} role="img" aria-label="Personality dimensions radar chart">
         <ResponsiveContainer width="100%" height={chartHeight}>
-          <RadarChart data={data}>
-            <PolarGrid stroke="#00000020" />
+          <RadarChart data={data} margin={{ top: 20, right: 50, bottom: 20, left: 50 }}>
+            <PolarGrid stroke="rgba(52, 152, 219, 0.15)" gridType="polygon" />
             <PolarAngleAxis
               dataKey="dimension"
-              stroke="#000000"
-              tick={{ fill: '#000000', fontSize: 14, fontWeight: 600 }}
+              tick={<CustomAngleAxisTick />}
               tickLine={false}
             />
             <PolarRadiusAxis
               angle={90}
               domain={[0, 100]}
-              tick={false}
+              tick={{ fill: '#95a5a6', fontSize: 11 }}
               axisLine={false}
+              tickCount={5}
+              tickFormatter={(v) => `${v}%`}
             />
+            <RechartsTooltip content={<CustomRadarTooltip />} />
             <Radar
-              name="Score"
+              name="Your Score"
               dataKey="value"
               stroke="#3498db"
-              fill="#3498db"
-              fillOpacity={0.5}
-              strokeWidth={3}
+              fill="url(#radarGradient)"
+              fillOpacity={0.55}
+              strokeWidth={2.5}
+              dot={<CustomDot />}
+              activeDot={{ r: 8, fill: '#3498db', stroke: '#fff', strokeWidth: 2 }}
             />
+            <defs>
+              <linearGradient id="radarGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#3498db" stopOpacity={0.7} />
+                <stop offset="100%" stopColor="#9b59b6" stopOpacity={0.4} />
+              </linearGradient>
+            </defs>
           </RadarChart>
         </ResponsiveContainer>
       </ChartContainer>
       <RadarLegend>
-        <strong>Reading the chart:</strong> Points closer to the <strong>center</strong> indicate lower trait strength (0%),
-        while points near the <strong>outer edge</strong> indicate higher trait strength (100%).
+        <strong>How to read:</strong> Points near the <strong>outer edge</strong> indicate higher trait strength (100%).
+        Points near the <strong>center</strong> indicate lower strength (0%).
+        <span style={{ display: 'block', marginTop: '0.5rem', fontSize: '0.8125rem' }}>
+          Hover over the chart to see dimension details and your score.
+        </span>
       </RadarLegend>
     </div>
   );
@@ -488,25 +616,77 @@ const SpectrumMarker = styled.div`
   z-index: 10;
 `;
 
+// eslint-disable-next-line no-unused-vars
+const SpectrumBarTrack = styled.div`
+  width: 100%;
+  height: 14px;
+  background: ${({ $leftColor, $rightColor, theme }) => {
+    if ($leftColor && $rightColor) {
+      return `linear-gradient(90deg, ${$leftColor}70, ${theme.text_primary}10, ${$rightColor}70)`;
+    }
+    return `linear-gradient(90deg, ${theme.primary}40, ${theme.text_primary}20, ${theme.primary}40)`;
+  }};
+  border-radius: 7px;
+  position: relative;
+  overflow: visible;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+`;
+
+// eslint-disable-next-line no-unused-vars
+const SpectrumFill = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: ${({ $percent }) => $percent}%;
+  background: transparent;
+  border-radius: 7px;
+`;
+
+const SpectrumDominantLabel = styled.div`
+  text-align: center;
+  margin-top: 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: ${({ $color }) => $color || '#3498db'};
+  letter-spacing: 0.02em;
+`;
+
 export const SpectrumDisplay = ({ name, leftPole, rightPole, leftPercent, rightPercent, leftColor, rightColor }) => {
-  const markerPosition = rightPercent; // Position based on right pole percentage (0% = left, 100% = right)
+  const markerPosition = rightPercent;
   const dominantSide = rightPercent >= 50 ? 'right' : 'left';
   const markerColor = dominantSide === 'right' ? rightColor : leftColor;
+  const dominantLabel = dominantSide === 'right'
+    ? `${rightPole} — ${rightPercent}%`
+    : `${leftPole} — ${leftPercent}%`;
 
   return (
-    <SpectrumContainer>
-      <SpectrumName>{name}</SpectrumName>
+    <SpectrumContainer
+      role="group"
+      aria-label={`${name}: ${dominantLabel}`}
+    >
+      <SpectrumHeader>
+        <SpectrumName>{name}</SpectrumName>
+      </SpectrumHeader>
       <SpectrumPoles>
-        <Pole dominant={dominantSide === 'left'} $color={leftColor}>
-          {leftPole} ({leftPercent}%)
+        <Pole dominant={dominantSide === 'left'} $color={leftColor} aria-hidden="true">
+          {leftPole} <span style={{ fontWeight: 400, fontSize: '0.8125rem' }}>({leftPercent}%)</span>
         </Pole>
-        <Pole dominant={dominantSide === 'right'} $color={rightColor}>
-          {rightPole} ({rightPercent}%)
+        <Pole dominant={dominantSide === 'right'} $color={rightColor} aria-hidden="true">
+          {rightPole} <span style={{ fontWeight: 400, fontSize: '0.8125rem' }}>({rightPercent}%)</span>
         </Pole>
       </SpectrumPoles>
       <SpectrumBar $leftColor={leftColor} $rightColor={rightColor}>
-        <SpectrumMarker position={markerPosition} $markerColor={markerColor} />
+        <SpectrumMarker
+          position={markerPosition}
+          $markerColor={markerColor}
+          aria-hidden="true"
+          title={`Position: ${markerPosition}%`}
+        />
       </SpectrumBar>
+      <SpectrumDominantLabel $color={markerColor}>
+        {dominantLabel}
+      </SpectrumDominantLabel>
     </SpectrumContainer>
   );
 };
@@ -648,32 +828,46 @@ export const Grid = styled.div`
 `;
 
 // Loading Spinner
+const spinAnim = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
 const SpinnerContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
+  padding: ${({ padding }) => padding || '3rem'};
+  gap: 1.25rem;
 `;
 
 const Spinner = styled.div`
-  width: 40px;
-  height: 40px;
+  width: ${({ size }) => size || '40px'};
+  height: ${({ size }) => size || '40px'};
   border: 4px solid ${({ theme }) => theme.text_primary + '20'};
   border-top: 4px solid ${({ theme }) => theme.primary};
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+  animation: ${spinAnim} 0.8s linear infinite;
 `;
 
-const LoadingSpinner = () => (
+const SpinnerLabel = styled.p`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.text_secondary};
+  font-weight: 500;
+  text-align: center;
+  margin: 0;
+`;
+
+export const LoadingSpinner = ({ message, size, padding }) => (
+  <SpinnerContainer padding={padding}>
+    <Spinner size={size} aria-hidden="true" />
+    {message && <SpinnerLabel>{message}</SpinnerLabel>}
+  </SpinnerContainer>
+);
+
+// eslint-disable-next-line no-unused-vars
+const InlineSpinner = () => (
   <SpinnerContainer>
     <Spinner />
   </SpinnerContainer>
@@ -697,6 +891,7 @@ const EmptyStateText = styled.p`
   line-height: 1.5;
 `;
 
+// eslint-disable-next-line no-unused-vars
 const EmptyState = ({ icon, message }) => (
   <EmptyStateContainer>
     {icon && <EmptyStateIcon>{icon}</EmptyStateIcon>}

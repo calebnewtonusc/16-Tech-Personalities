@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { calculateScores, generatePersonalityType, getBasePersonalityType } from './scoringSupabase';
 import { supabase } from '../supabase';
 import { getPersonalityColor, getAccentColor, getRoleColor, getDisplayTypeCode } from './theme';
@@ -17,6 +17,7 @@ import {
   SpectrumDisplay,
   RadarChartComponent,
   ColoredPersonalityCode,
+  LoadingSpinner,
 } from './components/SharedComponents';
 
 const ResultsContainer = styled.div`
@@ -317,21 +318,138 @@ const PhaseItems = styled.ul`
   }
 `;
 
+const fadeInUp = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+// eslint-disable-next-line no-unused-vars
 const ActionButtons = styled.div`
   display: flex;
   gap: 1rem;
   justify-content: center;
   margin-top: 3rem;
   flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 const ShareSection = styled.div`
   text-align: center;
   margin-top: 4rem;
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   background: ${({ theme }) => theme.card};
-  border-radius: 12px;
+  border-radius: 16px;
   border: 1px solid ${({ theme }) => theme.text_primary + '12'};
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  animation: ${fadeInUp} 0.5s ease;
+`;
+
+// eslint-disable-next-line no-unused-vars
+const RetakeSection = styled.div`
+  text-align: center;
+  margin-top: 1rem;
+`;
+
+const CopyConfirmation = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: #27ae60;
+  font-size: 0.875rem;
+  font-weight: 600;
+  animation: ${fadeInUp} 0.3s ease;
+`;
+
+const ShareGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.875rem;
+  max-width: 700px;
+  margin: 1.5rem auto 0;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const LoadingResultsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1.5rem;
+  animation: ${fadeInUp} 0.4s ease;
+`;
+
+const LoadingStepsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  max-width: 360px;
+  width: 100%;
+`;
+
+const LoadingStep = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: ${({ $active, $done }) =>
+    $done ? '#27ae60' : $active ? '#3498db' : '#95a5a6'};
+  background: ${({ $active, $done }) =>
+    $done ? 'rgba(39, 174, 96, 0.08)' : $active ? 'rgba(52, 152, 219, 0.08)' : 'transparent'};
+  transition: all 0.4s ease;
+`;
+
+const LoadingDot = styled.div`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: ${({ $active, $done }) =>
+    $done ? '#27ae60' : $active ? '#3498db' : 'rgba(0,0,0,0.12)'};
+  flex-shrink: 0;
+  transition: background 0.4s ease;
+`;
+
+const ResultsTopBar = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  background: ${({ theme }) => theme.card}f0;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid ${({ theme }) => theme.text_primary + '15'};
+  padding: 0.75rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  animation: ${fadeInUp} 0.3s ease;
+
+  @media (max-width: 768px) {
+    padding: 0.625rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+`;
+
+const ResultsTopBarTitle = styled.div`
+  font-size: 1rem;
+  font-weight: 700;
+  color: ${({ theme }) => theme.text_primary};
+`;
+
+const ResultsTopBarActions = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
 `;
 
 const ModifierExplanation = styled(Card)`
@@ -407,6 +525,8 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
   const [personality, setPersonality] = useState(null);
   const [topRoles, setTopRoles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingStep, setLoadingStep] = useState(0); // 0=scoring, 1=profile, 2=roles, 3=done
+  const [copyState, setCopyState] = useState(null); // null | 'text' | 'link'
 
   // Memoize scores calculation to prevent infinite re-renders
   const scores = useMemo(() => {
@@ -520,6 +640,13 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
     }));
   }, [spectrumBreakdown]);
 
+  // Advance loading step when scores are computed
+  useEffect(() => {
+    if (scores && personalityCode) {
+      setLoadingStep(1);
+    }
+  }, [scores, personalityCode]);
+
   // Load personality profile from Supabase
   useEffect(() => {
     async function loadPersonality() {
@@ -544,7 +671,6 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
           if (!localData) {
             console.error('Results - Personality not found in local data:', baseTypeCode);
             console.log('Results - Available personalities:', Object.keys(personalities));
-            // Set loading to false even on error so page doesn't hang
             setLoading(false);
             return;
           }
@@ -555,9 +681,9 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
         }
         console.log('Results - Loaded personality:', personality.name, personality.type_code);
         setPersonality(personality);
+        setLoadingStep(2);
       } catch (error) {
         console.error('Error loading personality:', error);
-        // Fallback to local data on error
         const baseTypeCode = getBasePersonalityType(personalityCode);
         const localData = personalities[baseTypeCode];
         if (localData) {
@@ -566,8 +692,8 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
             ...localData
           };
           setPersonality(personality);
+          setLoadingStep(2);
         } else {
-          // Set loading to false if we can't recover
           setLoading(false);
         }
       }
@@ -619,6 +745,7 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
         }));
 
         setTopRoles(top3);
+        setLoadingStep(3);
       } catch (error) {
         console.error('Results - Error loading roles:', error);
         console.error('Results - Error details:', error.message, error.stack);
@@ -633,26 +760,73 @@ const Results = ({ responses, questions, onRetake, onViewAllRoles }) => {
     }
   }, [personalityCode, scores]);
 
-  const handleShare = () => {
-    if (!personality) return;
-
+  const buildShareText = useCallback(() => {
+    if (!personality) return '';
     const displayCode = getDisplayTypeCode(personalityCode);
-    const shareText = `I just discovered my Tech 16 Personality: ${personality.name} (${displayCode})\n${focusTendency} Tendency (${focusPercentage}%)\n\nTop roles for me:\n${topRoles.map((r, i) => `${i + 1}. ${r.name} (${Math.round(r.fitScore * 100)}% fit)`).join('\n')}`;
+    const topRole = topRoles[0] ? `\nTop role match: ${topRoles[0].name} (${Math.round(topRoles[0].fitScore * 100)}% fit)` : '';
+    const spectrumSummary = spectrumBreakdown.map(s => {
+      const dominant = s.rightPercent >= 50
+        ? `${s.rightPole} (${s.rightPercent}%)`
+        : `${s.leftPole} (${s.leftPercent}%)`;
+      return `  ${s.name}: ${dominant}`;
+    }).join('\n');
+
+    return `My Tech 16 Personality: ${personality.name} [${displayCode}]
+${personality.tagline}
+
+Focus Tendency: ${focusTendency} (${focusPercentage}%)${topRole}
+
+Dimension breakdown:
+${spectrumSummary}
+
+All ${topRoles.length} role recommendations:
+${topRoles.map((r, i) => `${i + 1}. ${r.name} — ${Math.round(r.fitScore * 100)}% match`).join('\n')}
+
+Discover yours at tech16personalities.com`;
+  }, [personality, personalityCode, focusTendency, focusPercentage, topRoles, spectrumBreakdown]);
+
+  const handleShare = useCallback(() => {
+    if (!personality) return;
+    const shareText = buildShareText();
+    const displayCode = getDisplayTypeCode(personalityCode);
 
     if (navigator.share) {
       navigator
         .share({
-          title: 'My Tech 16 Personality Results',
+          title: `My Tech 16 Personality: ${personality.name} [${displayCode}]`,
           text: shareText,
+          url: window.location.href,
         })
         .catch(() => {});
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(shareText).then(() => {
-        alert('Results copied to clipboard!');
+        setCopyState('text');
+        setTimeout(() => setCopyState(null), 3000);
+      }).catch(() => {
+        alert('Copy failed. Please manually copy the page URL.');
       });
     }
-  };
+  }, [personality, personalityCode, buildShareText]);
+
+  const handleCopyLink = useCallback(() => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopyState('link');
+      setTimeout(() => setCopyState(null), 3000);
+    }).catch(() => {
+      alert('Could not copy link. Please copy the URL from your browser address bar.');
+    });
+  }, []);
+
+  const handleCopyText = useCallback(() => {
+    const shareText = buildShareText();
+    navigator.clipboard.writeText(shareText).then(() => {
+      setCopyState('text');
+      setTimeout(() => setCopyState(null), 3000);
+    }).catch(() => {
+      alert('Could not copy text. Please try again.');
+    });
+  }, [buildShareText]);
 
   const handleDownload = () => {
     if (!personality) return;
@@ -718,14 +892,42 @@ ${(personality.work_preferences || personality.workPreferences || []).map((w) =>
   }
 
   if (loading) {
+    const steps = [
+      { label: 'Calculating your dimension scores', done: loadingStep > 0, active: loadingStep === 0 },
+      { label: 'Finding your personality profile', done: loadingStep > 1, active: loadingStep === 1 },
+      { label: 'Matching tech roles to your type', done: loadingStep > 2, active: loadingStep === 2 },
+    ];
+
     return (
       <GradientBackground>
         <ResultsContainer>
           <Container>
-            <Header>
-              <Title>Loading Your Results...</Title>
-              <Subtitle>Analyzing your personality profile</Subtitle>
-            </Header>
+            <LoadingResultsContainer>
+              <LoadingSpinner
+                size="52px"
+                message=""
+                padding="0"
+                aria-label="Loading your personality results"
+              />
+              <div style={{ textAlign: 'center' }}>
+                <Title style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
+                  Analyzing Your Results
+                </Title>
+                <Subtitle style={{ margin: '0 auto 1.5rem' }}>
+                  We're calculating your personality type and finding your best-fit roles...
+                </Subtitle>
+              </div>
+              <LoadingStepsContainer role="status" aria-live="polite">
+                {steps.map((step, i) => (
+                  <LoadingStep key={i} $active={step.active} $done={step.done}>
+                    <LoadingDot $active={step.active} $done={step.done} />
+                    <span>{step.label}</span>
+                    {step.done && <span style={{ marginLeft: 'auto', fontWeight: 700 }}>Done</span>}
+                    {step.active && <span style={{ marginLeft: 'auto', fontStyle: 'italic' }}>...</span>}
+                  </LoadingStep>
+                ))}
+              </LoadingStepsContainer>
+            </LoadingResultsContainer>
           </Container>
         </ResultsContainer>
       </GradientBackground>
@@ -750,13 +952,46 @@ ${(personality.work_preferences || personality.workPreferences || []).map((w) =>
     );
   }
 
+  const displayCode = personality ? getDisplayTypeCode(personalityCode) : '';
+
   return (
     <GradientBackground>
+      {/* Sticky top bar with quick actions */}
+      <ResultsTopBar>
+        <ResultsTopBarTitle>
+          Your Results
+          {displayCode && (
+            <span style={{ marginLeft: '0.75rem', fontFamily: 'Courier New, monospace', color: '#3498db', fontSize: '0.9375rem' }}>
+              [{displayCode}]
+            </span>
+          )}
+        </ResultsTopBarTitle>
+        <ResultsTopBarActions>
+          <Button
+            onClick={handleCopyLink}
+            variant="outline"
+            size="small"
+            aria-label="Copy link to this page"
+            title="Copy page link"
+          >
+            {copyState === 'link' ? 'Copied!' : 'Copy Link'}
+          </Button>
+          <Button
+            onClick={onRetake}
+            variant="secondary"
+            size="small"
+            aria-label="Retake the quiz"
+          >
+            Retake Quiz
+          </Button>
+        </ResultsTopBarActions>
+      </ResultsTopBar>
+
       <ResultsContainer ref={resultsRef}>
         <Container maxWidth="1200px">
           <Header>
-            <Title>Your Results</Title>
-            <Subtitle>Discover your tech personality and career path</Subtitle>
+            <Title>Your Tech Personality</Title>
+            <Subtitle>Discover your developer type and ideal career path</Subtitle>
           </Header>
 
           <PersonalityCard $color={personalityColor}>
@@ -930,20 +1165,66 @@ ${(personality.work_preferences || personality.workPreferences || []).map((w) =>
           </Section>
 
           <ShareSection>
-            <SectionTitle style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>
+            <SectionTitle style={{ fontSize: '1.75rem', marginBottom: '0.75rem' }}>
               Share Your Results
             </SectionTitle>
-            <ActionButtons>
-              <Button onClick={handleShare} size="large">
+            <p style={{ color: '#5a6c7d', fontSize: '1rem', marginBottom: '0.5rem' }}>
+              Found your type interesting? Share it with others!
+            </p>
+            {copyState && (
+              <CopyConfirmation role="status" aria-live="polite">
+                <span aria-hidden="true">&#10003;</span>
+                {copyState === 'link' ? 'Link copied to clipboard!' : 'Results text copied to clipboard!'}
+              </CopyConfirmation>
+            )}
+            <ShareGrid>
+              <Button
+                onClick={handleShare}
+                size="large"
+                aria-label="Share results via native share dialog or clipboard"
+              >
                 Share Results
               </Button>
-              <Button onClick={handleDownload} variant="outline" size="large">
-                Download Results
+              <Button
+                onClick={handleCopyText}
+                variant="outline"
+                size="large"
+                aria-label="Copy results summary text to clipboard"
+              >
+                {copyState === 'text' ? 'Copied!' : 'Copy Summary'}
               </Button>
-              <Button onClick={onRetake} variant="secondary" size="large">
-                Retake Quiz
+              <Button
+                onClick={handleCopyLink}
+                variant="outline"
+                size="large"
+                aria-label="Copy link to this page"
+              >
+                {copyState === 'link' ? 'Copied!' : 'Copy Link'}
               </Button>
-            </ActionButtons>
+            </ShareGrid>
+
+            <div style={{ marginTop: '1.25rem', padding: '1rem 1.5rem', background: 'rgba(52,152,219,0.06)', borderRadius: '10px', textAlign: 'left', maxWidth: '600px', margin: '1.25rem auto 0' }}>
+              <p style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#5a6c7d', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Share Preview
+              </p>
+              <pre style={{ fontSize: '0.8125rem', color: '#2c3e50', whiteSpace: 'pre-wrap', fontFamily: 'inherit', margin: 0, lineHeight: 1.6 }}>
+                {buildShareText()}
+              </pre>
+            </div>
+
+            <div style={{ marginTop: '2rem', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: '2rem' }}>
+              <p style={{ color: '#5a6c7d', fontSize: '0.9375rem', marginBottom: '1rem' }}>
+                Want to explore further or start over?
+              </p>
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Button onClick={handleDownload} variant="outline" size="large" aria-label="Download results as a text file">
+                  Download Results
+                </Button>
+                <Button onClick={onRetake} variant="secondary" size="large" aria-label="Retake the quiz from the beginning">
+                  Retake Quiz
+                </Button>
+              </div>
+            </div>
           </ShareSection>
         </Container>
       </ResultsContainer>
