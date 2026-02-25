@@ -780,7 +780,7 @@ Dimension breakdown:
 ${spectrumSummary}
 
 All ${topRoles.length} role recommendations:
-${topRoles.map((r, i) => `${i + 1}. ${r.name} — ${Math.round(r.fitScore * 100)}% match`).join('\n')}
+${topRoles.map((r, i) => `${i + 1}. ${r.name}: ${Math.round(r.fitScore * 100)}% match`).join('\n')}
 
 Discover yours at tech16personalities.com`;
   }, [personality, personalityCode, focusTendency, focusPercentage, topRoles, spectrumBreakdown]);

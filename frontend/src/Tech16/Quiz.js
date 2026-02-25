@@ -725,7 +725,7 @@ const Quiz = ({ onComplete }) => {
                         onClick={() => handleAnswer(currentQuestion.id, index)}
                         aria-label={`${optionText} (press ${index + 1})`}
                         aria-pressed={isSelected}
-                        title={`${optionText} — press key ${index + 1}`}
+                        title={`${optionText} (press key ${index + 1})`}
                       >
                         <OptionNumber aria-hidden="true">{index + 1}</OptionNumber>
                         <OptionLabel>{optionText}</OptionLabel>

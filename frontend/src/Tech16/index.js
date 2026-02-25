@@ -1249,7 +1249,7 @@ const Tech16 = () => {
             <SectionLabel>The Focus Modifier</SectionLabel>
             <SectionHeading>Builder vs Analyzer</SectionHeading>
             <SectionSubheading>
-              In addition to your 4-letter core type, you'll receive a Focus modifier as the 5th letter — revealing your fundamental approach to problem-solving.
+              In addition to your 4-letter core type, you'll receive a Focus modifier as the 5th letter, revealing your fundamental approach to problem-solving.
             </SectionSubheading>
             <FocusCardWrapper>
               <SpectrumCard>
