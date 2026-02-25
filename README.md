@@ -5,7 +5,7 @@
 ![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?logo=vercel&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
-A personality-driven career matching tool for the tech industry — take a 40-question scenario-based quiz across 5 behavioral spectrums and discover which of 16 tech personality types fits you best, then see your top role recommendations from a catalog of 42 tech careers.
+A personality-driven career matching tool for the tech industry. Take a 40-question scenario-based quiz across 5 behavioral spectrums and discover which of 16 tech personality types fits you best, then see your top role recommendations from a catalog of 42 tech careers.
 
 **Live Site:** [16techpersonalities.com](https://16techpersonalities.com)
 
@@ -13,12 +13,12 @@ A personality-driven career matching tool for the tech industry — take a 40-qu
 
 ## Features
 
-- **40-Question Quiz** — scenario-based questions measuring 5 personality spectrums (Interface, Change, Decision, Execution, Focus)
-- **16 Personality Types** — unique 4 or 5-letter codes generated from your spectrum scores, each with detailed strengths and challenges
-- **42 Tech Role Recommendations** — hybrid rule-based algorithm combines 16 custom type-specific models with distance scoring for precise career matching
-- **Radar Chart Results Dashboard** — interactive Recharts visualization of your personality profile with shareable results
-- **No Sign-up Required** — quiz runs anonymously; progress saved to localStorage, results optionally persisted to Supabase
-- **Export & Share** — download results as a formatted text file or share via the Web Share API
+- **40-Question Quiz:** scenario-based questions measuring 5 personality spectrums (Interface, Change, Decision, Execution, Focus)
+- **16 Personality Types:** unique 4 or 5-letter codes generated from your spectrum scores, each with detailed strengths and challenges
+- **42 Tech Role Recommendations:** hybrid rule-based algorithm combines 16 custom type-specific models with distance scoring for precise career matching
+- **Radar Chart Results Dashboard:** interactive Recharts visualization of your personality profile with shareable results
+- **No Sign-up Required:** quiz runs anonymously; progress saved to localStorage, results optionally persisted to Supabase
+- **Export & Share:** download results as a formatted text file or share via the Web Share API
 
 ## Tech Stack
 
@@ -38,7 +38,7 @@ npm install
 npm start
 ```
 
-Create a `.env` file in `frontend/` with your Supabase credentials (optional — the app degrades gracefully to localStorage without them):
+Create a `.env` file in `frontend/` with your Supabase credentials (optional. The app degrades gracefully to localStorage without them):
 
 ```env
 REACT_APP_SUPABASE_URL=your_supabase_project_url
@@ -51,8 +51,8 @@ The app runs on [http://localhost:3000](http://localhost:3000).
 
 The scoring engine works in two passes:
 
-1. **Top 3 Roles** — each of the 16 base personality types has a hand-crafted algorithm (`algo_BUEV.js` through `algo_ASOL.js`) that factors in preference strength, edge cases, and mixed signals. Test coverage: 112 cases (16 types × 7 strength levels).
-2. **Remaining Roles (4+)** — Euclidean distance scoring with direction-matching and flexibility weighting, handled by `roleMatching.js`.
+1. **Top 3 Roles:** each of the 16 base personality types has a hand-crafted algorithm (`algo_BUEV.js` through `algo_ASOL.js`) that factors in preference strength, edge cases, and mixed signals. Test coverage: 112 cases (16 types x 7 strength levels).
+2. **Remaining Roles (4+):** Euclidean distance scoring with direction-matching and flexibility weighting, handled by `roleMatching.js`.
 
 The `megaAlgorithm.js` entry point routes between these two systems.
 
@@ -60,4 +60,4 @@ The `megaAlgorithm.js` entry point routes between these two systems.
 
 ---
 
-**Author:** Caleb Newton — [calebnewton.me](https://calebnewton.me)
+**Author:** Caleb Newton. [calebnewton.me](https://calebnewton.me)
