@@ -5,17 +5,22 @@ import Tech16App from './Tech16';
 
 // Tech16-specific blue theme
 const tech16Theme = {
-  bg: "#ffffff",
-  bgLight: "#f5f5f5",
-  primary: "#3498db",
-  text_primary: "#2c3e50",
-  text_secondary: "#5a6c7d",
+  bg: "#f2f2f7",
+  bgLight: "#ffffff",
+  primary: "#007AFF",
+  primaryLight: "#e8f0fe",
+  text_primary: "#1c1c1e",
+  text_secondary: "#3a3a3c",
+  text_muted: "#8e8e93",
   card: "#ffffff",
-  card_light: '#f8f9fa',
-  button: "#3498db",
+  card_light: "#f2f2f7",
+  button: "#007AFF",
   white: "#FFFFFF",
-  black: "#000000",
-  border: "#e0e0e0",
+  black: "#1c1c1e",
+  border: "rgba(60,60,67,0.12)",
+  separator: "rgba(60,60,67,0.08)",
+  shadow_sm: "0 1px 6px rgba(0,0,0,0.07)",
+  shadow_md: "0 4px 24px rgba(0,0,0,0.10)",
 };
 
 function App() {

@@ -14,33 +14,42 @@ import { getPersonalityColor } from './theme';
 import { Button, Card, GradientBackground, Container, Grid, ColoredPersonalityCode } from './components/SharedComponents';
 import { supabase } from '../supabase';
 
-// Tech16-specific theme with blue colors
+// Tech16-specific theme with Apple-inspired design
 const tech16Theme = {
-  bg: "#ffffff",
-  bgLight: "#f5f5f5",
-  primary: "#3498db", // Blue
-  text_primary: "#2c3e50",
-  text_secondary: "#5a6c7d",
+  bg: "#f2f2f7",
+  bgLight: "#ffffff",
+  primary: "#007AFF",
+  primaryLight: "#e8f0fe",
+  text_primary: "#1c1c1e",
+  text_secondary: "#3a3a3c",
+  text_muted: "#8e8e93",
   card: "#ffffff",
-  card_light: '#f8f9fa',
-  button: "#3498db",
+  card_light: "#f2f2f7",
+  button: "#007AFF",
   white: "#FFFFFF",
-  black: "#000000",
-  border: "#e0e0e0",
+  black: "#1c1c1e",
+  border: "rgba(60,60,67,0.12)",
+  separator: "rgba(60,60,67,0.08)",
+  shadow_sm: "0 1px 6px rgba(0,0,0,0.07)",
+  shadow_md: "0 4px 24px rgba(0,0,0,0.10)",
 };
 
 const PageWrapper = styled.div`
   margin: -8px -8px 0 -8px;
   padding: 0;
+  background: #f2f2f7;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
 `;
 
 const HeaderWrapper = styled.header`
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 100;
-  background: ${({ theme }) => theme.card || 'rgba(255, 255, 255, 0.95)'};
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid ${({ theme }) => theme.text_primary || '#000'}15;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background: rgba(242, 242, 247, 0.88);
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border-bottom: 0.5px solid rgba(60, 60, 67, 0.15);
+  box-shadow: none;
 `;
 
 const HeaderContainer = styled.div`
@@ -79,13 +88,10 @@ const HeaderLogoImage = styled.img`
 
 const HeaderLogoText = styled.span`
   font-size: 1.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #9b59b6, #3498db, #3498db, #e67e22);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-family: 'Courier New', monospace;
-  letter-spacing: 0.1em;
+  font-weight: 800;
+  color: #1c1c1e;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
+  letter-spacing: -0.4px;
 
   @media (max-width: 768px) {
     font-size: 1.25rem;
@@ -105,31 +111,17 @@ const HeaderNav = styled.nav`
 const NavLink = styled.button`
   background: none;
   border: none;
-  color: ${({ theme, $active }) => $active ? theme.primary || '#3498db' : theme.text_secondary || '#666'};
+  color: ${({ $active }) => $active ? '#007AFF' : '#8e8e93'};
   font-size: 1rem;
-  font-weight: ${({ $active }) => $active ? '600' : '500'};
+  font-weight: ${({ $active }) => $active ? '600' : '400'};
   cursor: pointer;
   padding: 0.5rem 0;
-  transition: all 0.3s ease;
+  transition: color 0.2s ease;
   position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: ${({ $active }) => $active ? '100%' : '0'};
-    height: 2px;
-    background: ${({ theme }) => theme.primary || '#3498db'};
-    transition: width 0.3s ease;
-  }
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 
   &:hover {
-    color: ${({ theme }) => theme.primary || '#3498db'};
-
-    &::after {
-      width: 100%;
-    }
+    color: #007AFF;
   }
 
   @media (max-width: 768px) {
@@ -138,6 +130,12 @@ const NavLink = styled.button`
 `;
 
 const HeaderCTA = styled(Button)`
+  background: #007AFF !important;
+  border-radius: 12px !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif !important;
+  font-weight: 600 !important;
+  border: none !important;
+
   @media (max-width: 768px) {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
@@ -147,53 +145,17 @@ const HeaderCTA = styled(Button)`
 const LandingContainer = styled.div`
   min-height: 100vh;
   padding: 0 0 4rem 0;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100vh;
-    background: linear-gradient(180deg,
-      rgba(52, 152, 219, 0.08) 0%,
-      rgba(155, 89, 182, 0.06) 8%,
-      rgba(155, 89, 182, 0.04) 15%,
-      rgba(155, 89, 182, 0.03) 22%,
-      rgba(155, 89, 182, 0.02) 30%,
-      rgba(155, 89, 182, 0.015) 38%,
-      rgba(155, 89, 182, 0.01) 46%,
-      rgba(155, 89, 182, 0.007) 54%,
-      rgba(155, 89, 182, 0.004) 62%,
-      rgba(155, 89, 182, 0.002) 70%,
-      rgba(155, 89, 182, 0.001) 80%,
-      rgba(155, 89, 182, 0.0005) 90%,
-      transparent 100%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  & > * {
-    position: relative;
-    z-index: 1;
-  }
+  background: transparent;
 `;
 
 const Hero = styled.div`
   text-align: center;
   margin: 0;
-  padding: 2.5rem 2rem 8rem 2rem;
+  padding: 2.5rem 2rem 6rem 2rem;
   background: transparent;
-  position: relative;
-
-  & > * {
-    position: relative;
-    z-index: 1;
-  }
 
   @media (max-width: 768px) {
-    padding: 3rem 1.5rem 6rem 1.5rem;
+    padding: 3rem 1.5rem 4rem 1.5rem;
   }
 `;
 
@@ -223,37 +185,23 @@ const LogoImage = styled.img`
 const Logo = styled.div`
   font-size: 3.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #9b59b6, #3498db, #3498db, #e67e22, #9b59b6);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-family: 'Courier New', monospace;
-  letter-spacing: 0.2em;
-  animation: gradientShift 8s ease infinite;
-
-  @keyframes gradientShift {
-    0%, 100% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-  }
+  color: #1c1c1e;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  letter-spacing: -0.6px;
 
   @media (max-width: 768px) {
     font-size: 2.25rem;
-    letter-spacing: 0.15em;
   }
 `;
 
 const Title = styled.h1`
   font-size: 3rem;
   font-weight: 800;
-  color: #2c3e50;
+  color: #1c1c1e;
   margin-bottom: 1.25rem;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  line-height: 1.15;
+  letter-spacing: -0.6px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
 
   @media (max-width: 768px) {
     font-size: 2rem;
@@ -262,13 +210,14 @@ const Title = styled.h1`
 
 const Tagline = styled.p`
   font-size: 1.25rem;
-  color: #5a6c7d;
+  color: #3a3a3c;
   margin-bottom: 2.5rem;
   max-width: 680px;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.7;
   font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 
   @media (max-width: 768px) {
     font-size: 1.0625rem;
@@ -277,68 +226,46 @@ const Tagline = styled.p`
 
 const CTASection = styled.div`
   text-align: center;
-  margin: 2.5rem 0;
-
-  & > div > ${Button}:first-child {
-    position: relative;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-      height: 100%;
-      border-radius: 8px;
-      background: ${({ theme }) => theme.primary || '#3498db'};
-      opacity: 0.3;
-      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 0.3;
-        transform: translate(-50%, -50%) scale(1);
-      }
-      50% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(1.15);
-      }
-    }
-  }
+  margin: 2rem 0;
 `;
 
 const Section = styled.div`
-  margin-bottom: 5rem;
-  padding: 0 1rem;
+  margin-bottom: 2rem;
+  padding: 28px 32px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
 
   @media (max-width: 768px) {
-    margin-bottom: 3.5rem;
+    margin-bottom: 1.5rem;
+    padding: 20px 20px;
+    border-radius: 16px;
   }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 2.25rem;
+  font-size: 22px;
   font-weight: 800;
-  color: #2c3e50;
+  color: #1c1c1e;
   margin-bottom: 1rem;
   text-align: center;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.4px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
 
   @media (max-width: 768px) {
-    font-size: 1.75rem;
+    font-size: 20px;
   }
 `;
 
 const SectionDescription = styled.p`
   font-size: 1.0625rem;
-  color: #5a6c7d;
+  color: #3a3a3c;
   text-align: center;
   max-width: 620px;
-  margin: 0 auto 3rem;
+  margin: 0 auto 2.5rem;
   line-height: 1.7;
   font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -347,53 +274,32 @@ const SectionDescription = styled.p`
 `;
 
 const SpectrumCard = styled(Card)`
-  padding: 2.25rem 2rem;
+  padding: 2rem;
   text-align: center;
   height: 100%;
-  border: 2px solid transparent;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  background: ${({ $leftColor, $rightColor }) =>
-    `linear-gradient(135deg, ${$leftColor}15 0%, ${$leftColor}08 25%, transparent 50%, ${$rightColor}08 75%, ${$rightColor}15 100%)`
-  };
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: ${({ $leftColor, $rightColor }) =>
-      `linear-gradient(135deg, ${$leftColor}20 0%, transparent 50%, ${$rightColor}20 100%)`
-    };
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  transition: all 0.3s ease;
+  background: #ffffff;
 
   &:hover {
-    transform: translateY(-4px) scale(1.01);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-    border-color: ${({ $leftColor }) => `${$leftColor}60`};
-
-    &::before {
-      opacity: 1;
-    }
+    transform: translateY(-3px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
   }
 
   @media (max-width: 768px) {
-    padding: 1.75rem 1.5rem;
+    padding: 1.5rem;
   }
 `;
 
 const SpectrumName = styled.h3`
   font-size: 1.1875rem;
   font-weight: 800;
-  color: ${({ $color }) => $color || '#3498db'};
+  color: ${({ $color }) => $color || '#007AFF'};
   margin-bottom: 1.25rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.3px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
 `;
 
 const SpectrumPoles = styled.div`
@@ -411,98 +317,71 @@ const Pole = styled.div`
 const PoleCode = styled.div`
   font-size: 1.75rem;
   font-weight: 800;
-  color: ${({ $color }) => $color || '#3498db'};
-  font-family: 'Courier New', monospace;
+  color: ${({ $color }) => $color || '#007AFF'};
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
   margin-bottom: 0.5rem;
-  letter-spacing: 0.08em;
+  letter-spacing: -0.3px;
 `;
 
 const PoleName = styled.div`
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #2c3e50;
-  letter-spacing: -0.01em;
+  color: #1c1c1e;
+  letter-spacing: -0.2px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const Divider = styled.div`
   font-size: 1.375rem;
-  color: #95a5a6;
-  font-weight: 400;
+  color: #8e8e93;
+  font-weight: 300;
 `;
 
 const SpectrumDescription = styled.p`
   font-size: 0.9375rem;
-  color: #5a6c7d;
+  color: #3a3a3c;
   line-height: 1.7;
   margin-top: 1.25rem;
   font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const StatsSection = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin: 4rem 0;
-  padding: 0 1rem;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 0;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 1rem;
-    margin: 3rem 0;
+    gap: 0.75rem;
+    margin: 1rem 0;
   }
 `;
 
 const StatCard = styled(Card)`
   text-align: center;
   padding: 2.25rem 1.75rem;
-  background: ${({ $color }) =>
-    $color ? `linear-gradient(135deg, ${$color}20, ${$color}10, transparent)` :
-    `linear-gradient(135deg, rgba(52, 152, 219, 0.20), rgba(52, 152, 219, 0.10), transparent)`
-  };
-  border: 2px solid ${({ $color }) => $color ? `${$color}40` : 'rgba(52, 152, 219, 0.4)'};
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: ${({ $color }) =>
-      $color ? `radial-gradient(circle, ${$color}25, transparent 70%)` : 'transparent'
-    };
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
+  background: #ffffff;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  transition: all 0.3s ease;
 
   &:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 16px 48px ${({ $color }) => $color ? `${$color}35` : 'rgba(52, 152, 219, 0.35)'};
-    border-color: ${({ $color }) => $color ? `${$color}70` : 'rgba(52, 152, 219, 0.7)'};
-
-    &::before {
-      opacity: 1;
-      animation: rotate 3s linear infinite;
-    }
-  }
-
-  @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    transform: translateY(-3px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
   }
 `;
 
 const StatNumber = styled.div`
   font-size: 3rem;
   font-weight: 800;
-  color: ${({ $color }) => $color || '#3498db'};
+  color: #007AFF;
   margin-bottom: 0.5rem;
-  font-family: 'Courier New', monospace;
-  letter-spacing: -0.02em;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  letter-spacing: -0.5px;
 
   @media (max-width: 768px) {
     font-size: 2.5rem;
@@ -510,10 +389,12 @@ const StatNumber = styled.div`
 `;
 
 const StatLabel = styled.div`
-  font-size: 0.9375rem;
-  color: #5a6c7d;
+  font-size: 13px;
+  color: #8e8e93;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const FeaturesList = styled.div`
@@ -526,37 +407,17 @@ const FeatureItem = styled.div`
   display: flex;
   align-items: start;
   gap: 1.25rem;
-  padding: 1.75rem;
-  margin-bottom: 1.25rem;
-  background: ${({ theme }) => theme.card || '#ffffff'};
-  border-radius: 14px;
-  border: 1.5px solid rgba(0, 0, 0, 0.06);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 4px;
-    background: linear-gradient(180deg, #3498db, #3498db);
-    transform: scaleY(0);
-    transform-origin: bottom;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  background: #ffffff;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  transition: all 0.3s ease;
 
   &:hover {
-    transform: translateX(12px);
-    border-color: rgba(52, 152, 219, 0.4);
-    box-shadow: 0 8px 24px rgba(52, 152, 219, 0.15);
-
-    &::before {
-      transform: scaleY(1);
-    }
+    transform: translateY(-2px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
   }
 `;
 
@@ -567,6 +428,7 @@ const FeatureIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #007AFF;
 `;
 
 const FeatureContent = styled.div`
@@ -576,17 +438,19 @@ const FeatureContent = styled.div`
 const FeatureTitle = styled.h4`
   font-size: 1.0625rem;
   font-weight: 700;
-  color: #2c3e50;
+  color: #1c1c1e;
   margin-bottom: 0.5rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.3px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
 `;
 
 const FeatureDescription = styled.p`
   font-size: 0.9375rem;
-  color: #5a6c7d;
+  color: #3a3a3c;
   line-height: 1.7;
   margin: 0;
   font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const ExampleTypes = styled.div`
@@ -608,61 +472,42 @@ const TypeCard = styled(Card)`
   padding: 1.75rem 1.5rem;
   text-align: center;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background: ${({ $color }) =>
-    $color ? `linear-gradient(135deg, ${$color.primary}15, ${$color.primary}08, transparent)` : 'rgba(255, 255, 255, 1)'
-  };
-  border: 2px solid ${({ $color }) => $color ? `${$color.primary}40` : 'rgba(0, 0, 0, 0.08)'};
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: ${({ $color }) =>
-      $color ? `linear-gradient(90deg, transparent, ${$color.primary}20, transparent)` : 'transparent'
-    };
-    transition: left 0.5s ease;
-  }
+  transition: all 0.3s ease;
+  background: #ffffff;
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
 
   &:hover {
-    transform: translateY(-6px) scale(1.02);
-    border-color: ${({ $color }) => $color ? `${$color.primary}80` : 'rgba(52, 152, 219, 0.8)'};
-    box-shadow: 0 16px 40px ${({ $color }) => $color ? `${$color.primary}35` : 'rgba(52, 152, 219, 0.35)'};
-
-    &::before {
-      left: 100%;
-    }
+    transform: translateY(-4px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
   }
 `;
 
 const TypeCode = styled.div`
   font-size: 1.375rem;
   font-weight: 800;
-  color: ${({ $color }) => $color ? $color.primary : '#3498db'};
-  font-family: 'Courier New', monospace;
+  color: ${({ $color }) => $color ? $color.primary : '#007AFF'};
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
   margin-bottom: 0.625rem;
-  letter-spacing: 0.12em;
+  letter-spacing: -0.3px;
 `;
 
 const TypeName = styled.div`
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #2c3e50;
-  letter-spacing: -0.01em;
+  color: #1c1c1e;
+  letter-spacing: -0.2px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const Footer = styled.div`
-  margin-top: 5rem;
+  margin-top: 2rem;
   padding: 3rem 2rem;
-  background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(155, 89, 182, 0.05));
-  border-top: 2px solid rgba(0, 0, 0, 0.08);
+  background: #f2f2f7;
+  border-top: 0.5px solid rgba(60, 60, 67, 0.15);
   border-radius: 20px 20px 0 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const FooterContent = styled.div`
@@ -676,7 +521,7 @@ const FooterContent = styled.div`
 
 const FooterMain = styled.div`
   text-align: center;
-  color: #5a6c7d;
+  color: #3a3a3c;
   font-size: 0.9375rem;
   line-height: 1.8;
 `;
@@ -684,47 +529,43 @@ const FooterMain = styled.div`
 const FooterTitle = styled.h3`
   font-size: 1.25rem;
   font-weight: 700;
-  color: #2c3e50;
+  color: #1c1c1e;
   margin-bottom: 0.75rem;
-  background: linear-gradient(135deg, #9b59b6, #3498db);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: -0.3px;
 `;
 
 const FooterDescription = styled.p`
   margin: 0.5rem 0;
-  color: #5a6c7d;
+  color: #8e8e93;
 `;
 
 const BuiltBySection = styled.a`
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1.5rem 2rem;
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 50px;
-  border: 2px solid rgba(52, 152, 219, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1rem 1.75rem;
+  background: #ffffff;
+  border-radius: 980px;
+  border: none;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
   transition: all 0.3s ease;
   text-decoration: none;
   cursor: pointer;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.15);
-    border-color: rgba(52, 152, 219, 0.4);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
   }
 `;
 
 const CreatorImage = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
   object-position: center 30%;
-  box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
-  border: 2px solid rgba(52, 152, 219, 0.3);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.10);
+  border: 2px solid rgba(60, 60, 67, 0.08);
 `;
 
 const CreatorInfo = styled.div`
@@ -735,24 +576,28 @@ const CreatorInfo = styled.div`
 `;
 
 const BuiltByLabel = styled.span`
-  font-size: 0.75rem;
-  color: #95a5a6;
+  font-size: 11px;
+  color: #8e8e93;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.5px;
   font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const CreatorName = styled.span`
   font-size: 1rem;
-  color: #2c3e50;
+  color: #1c1c1e;
   font-weight: 700;
+  letter-spacing: -0.2px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const FooterNote = styled.small`
   display: block;
   margin-top: 1rem;
-  opacity: 0.7;
+  color: #8e8e93;
   font-size: 0.8125rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const FooterLinks = styled.div`
@@ -766,43 +611,47 @@ const FooterLinks = styled.div`
 const FooterLink = styled.button`
   background: none;
   border: none;
-  color: #3498db;
+  color: #007AFF;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  text-decoration: underline;
+  text-decoration: none;
   padding: 0.25rem 0.5rem;
   transition: color 0.2s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 
   &:hover {
-    color: #2980b9;
+    color: #0056CC;
   }
 `;
 
 const DisclaimerSection = styled.div`
-  background: rgba(231, 76, 60, 0.08);
-  border: 2px solid rgba(231, 76, 60, 0.3);
-  border-radius: 12px;
-  padding: 2rem;
-  margin: 3rem 0;
+  background: rgba(255, 59, 48, 0.06);
+  border: 0.5px solid rgba(255, 59, 48, 0.25);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin: 2rem 0;
   text-align: center;
 `;
 
 const DisclaimerTitle = styled.h3`
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: #c0392b;
-  margin-bottom: 1rem;
+  color: #ff3b30;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.2px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
 `;
 
 const DisclaimerText = styled.p`
   font-size: 0.9375rem;
-  color: #5a6c7d;
+  color: #3a3a3c;
   line-height: 1.7;
-  margin: 0.5rem 0;
+  margin: 0.4rem 0;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const Tech16 = () => {
@@ -1148,12 +997,12 @@ const Tech16 = () => {
               <StatNumber $color="#9b59b6">{getAllPersonalityCodes().length}</StatNumber>
               <StatLabel>Personality Types</StatLabel>
             </StatCard>
-            <StatCard $color="#3498db">
-              <StatNumber $color="#3498db">{coreSpectrumKeys.length}</StatNumber>
+            <StatCard $color="#007AFF">
+              <StatNumber $color="#007AFF">{coreSpectrumKeys.length}</StatNumber>
               <StatLabel>Core Dimensions</StatLabel>
             </StatCard>
-            <StatCard $color="#3498db">
-              <StatNumber $color="#3498db">{roleCount ? `${roleCount}+` : '42+'}</StatNumber>
+            <StatCard $color="#007AFF">
+              <StatNumber $color="#007AFF">{roleCount ? `${roleCount}+` : '42+'}</StatNumber>
               <StatLabel>Tech Roles</StatLabel>
             </StatCard>
           </StatsSection>
