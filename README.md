@@ -1,208 +1,63 @@
-# Tech 16 Personalities
+# 16 Tech Personalities
 
-**Student Portfolio Project**: Rule-based career matching tool for tech professionals. Take a 40-question quiz to discover your tech personality type and get personalized career recommendations.
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase&logoColor=white)
+![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?logo=vercel&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
-**DISCLAIMER**: This is a student portfolio project for entertainment and educational purposes only. It is NOT a scientifically validated psychometric instrument and should not be used for professional career counseling or hiring decisions.
+A personality-driven career matching tool for the tech industry — take a 40-question scenario-based quiz across 5 behavioral spectrums and discover which of 16 tech personality types fits you best, then see your top role recommendations from a catalog of 42 tech careers.
 
-**[globe] Live Site:** [https://16techpersonalities.com](https://16techpersonalities.com)
+**Live Site:** [16techpersonalities.com](https://16techpersonalities.com)
+
+> Screenshot
 
 ## Features
 
-### Core Functionality
-- **40-Question Quiz**: Scenario-based questions measuring 5 personality spectrums
-- **5 Personality Spectrums**:
-  - Interface (User-Facing vs Systems-Facing)
-  - Change (Exploratory vs Operational)
-  - Decision (Vision-Led vs Logic-Led)
-  - Execution (Adaptive vs Structured)
-  - Focus (Builder vs Analyzer)
-- **16 Base Personality Types**: 4-letter codes (I-C-D-E) with optional 5th letter (B/A) for Focus
-- **42 Tech Roles**: Career recommendations based on personality fit across all engineering disciplines
-
-### User Experience
-- **Anonymous Quiz**: No signup required
-- **Results Dashboard**: Interactive profile with radar chart visualization
-- **Detailed Insights**: Strengths, challenges, and work preferences
-- **Top 3 Recommendations**: Best-fit roles based on personality match
-- **Share Results**: Web Share API integration
-- **Download Results**: Export as formatted text file
+- **40-Question Quiz** — scenario-based questions measuring 5 personality spectrums (Interface, Change, Decision, Execution, Focus)
+- **16 Personality Types** — unique 4 or 5-letter codes generated from your spectrum scores, each with detailed strengths and challenges
+- **42 Tech Role Recommendations** — hybrid rule-based algorithm combines 16 custom type-specific models with distance scoring for precise career matching
+- **Radar Chart Results Dashboard** — interactive Recharts visualization of your personality profile with shareable results
+- **No Sign-up Required** — quiz runs anonymously; progress saved to localStorage, results optionally persisted to Supabase
+- **Export & Share** — download results as a formatted text file or share via the Web Share API
 
 ## Tech Stack
 
-### Frontend
-- **React 19** with Create React App
-- **Styled Components** for styling
-- **Recharts** for radar chart visualization
-- **localStorage** for progress saving
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, Create React App, Styled Components |
+| Visualization | Recharts (radar chart) |
+| Backend / DB | Supabase (PostgreSQL + Row Level Security) |
+| State | localStorage with Supabase fallback |
+| Deployment | Vercel |
 
-### Backend & Database
-- **Supabase** for data persistence
-- **PostgreSQL** with Row Level Security
-- **JSONB** for flexible data storage
-- **Fallback Mode**: Gracefully degrades to localStorage when credentials unavailable
+## Getting Started
 
-## Project Structure
-
-```
-16TechPersonalities/
-├── frontend/
-│   ├── src/
-│   │   ├── Tech16/
-│   │   │   ├── index.js                  # Main app component
-│   │   │   ├── Quiz.js                   # Quiz interface
-│   │   │   ├── Results.js                # Results display with radar chart
-│   │   │   ├── AllRolesRanked.js         # All roles view
-│   │   │   ├── scoring.js                # Core scoring logic
-│   │   │   ├── scoringSupabase.js        # Supabase integration layer
-│   │   │   ├── megaAlgorithm.js          # Rule-based hybrid algorithm
-│   │   │   ├── roleMatching.js           # Distance-based algorithm (roles 4+)
-│   │   │   ├── algo_BUEV.js              # Type-specific algorithms (16 total)
-│   │   │   ├── algo_BUEL.js              # ...one for each I-C-D-E combination
-│   │   │   ├── ...                       # (BUOV, BUOL, BSEV, BSEL, BSOV, BSOL...)
-│   │   │   ├── ...                       # (AUEV, AUEL, AUOV, AUOL, ASEV, ASEL, ASOV, ASOL)
-│   │   │   ├── theme.js                  # Color themes and categorization
-│   │   │   ├── test_mega.js              # Comprehensive test suite
-│   │   │   ├── components/
-│   │   │   │   └── SharedComponents.js   # Reusable UI components
-│   │   │   └── data/
-│   │   │       ├── questions.js          # 40 quiz questions
-│   │   │       ├── personalities.js      # 16 personality profiles
-│   │   │       └── roles.js              # 42 tech roles
-│   │   ├── supabase.js                   # Supabase client setup
-│   │   └── App.js
-│   └── package.json
-├── scripts/
-│   └── run-migrations.sh                 # Database migration helper
-└── README.md
-```
-
-## Database Schema
-
-### Tables
-1. **personality_profiles**: 16 base personality type descriptions
-   - Stores profiles for each I-C-D-E combination (without Focus)
-   - Each profile includes name, description, strengths, and challenges
-2. **tech_roles**: 42 tech roles with descriptions and learning roadmaps
-3. **quiz_questions**: 40 scenario-based questions mapped to dimensions
-4. **role_scoring_weights**: Personality-to-role fit mappings (optional)
-
-### Supabase Setup
-The app uses Supabase for:
-- Fetching personality profiles by type code
-- Loading tech role information
-- Retrieving quiz questions
-
-All data has fallback to local JSON files in `src/Tech16/data/` when Supabase is unavailable.
-
-## Scoring Algorithm
-
-1. **Question Responses**: Each question maps to one of 5 spectrums
-2. **Likert Scale**: 5-point scale (Strongly Disagree to Strongly Agree)
-3. **Score Calculation**: Average of all questions per spectrum (0-100)
-4. **Type Generation** (Format: I-C-D-E-F):
-   - **Interface**: U (< 50) or S (≥ 50)
-   - **Change**: E (< 50) or O (≥ 50)
-   - **Decision**: V (< 50) or L (≥ 50)
-   - **Execution**: A (< 50) or T (≥ 50)
-   - **Focus**: B (< 50) or A (≥ 50)
-
-### Example
-```
-Interface: 20 → U (User-Facing)
-Change: 35 → E (Exploratory)
-Decision: 45 → V (Vision-Led)
-Execution: 40 → A (Adaptive)
-Focus: 30 → B (Builder)
-
-Result: U-E-V-A-B (The Innovator)
-```
-
-### Static Personality Pages
-The 16 base personality types use 4-letter codes (I-C-D-E) with Focus defaulted to 50 (neutral). Quiz results use the full 5-letter code (I-C-D-E-F) with the actual Focus score.
-
-## Role Recommendation Algorithm
-
-**Rule-Based Hybrid Approach** (Mega-Algorithm v2.0)
-
-### Top 3 Recommendations
-Each of the 16 base personality types has a custom algorithm that returns the top 3 roles based on manual reasoning and strength analysis:
-
-```javascript
-// Example: U-E-V-A (User-Exploratory-Vision-Adaptive)
-// Returns: ["Frontend Developer", "Mobile Developer", "UX Engineer"]
-```
-
-**16 Type-Specific Algorithms** (located in `frontend/src/Tech16/algo_*.js`):
-- One algorithm per base personality type (based on Interface-Change-Decision-Execution)
-- Each algorithm considers preference strength (not just direction)
-- Handles edge cases: weak preferences, mixed strengths, extreme values
-- Optimized for algorithmic consistency on comprehensive test suite
-- Focus dimension (B/A) does not affect top 3 role recommendations
-
-**Note on File Naming**: The algorithm files use an older naming convention (e.g., `algo_BUEV.js`) from a previous code format. The `megaAlgorithm.js` handles mapping between the current personality code format (U-E-V-A) and the appropriate algorithm file.
-
-### Remaining Roles (4+)
-Distance-based scoring for roles beyond top 3:
-1. **Direction Matching**: Same side of neutral (50) on each spectrum
-2. **Distance Calculation**: Euclidean distance with flexibility weighting
-3. **Hybrid Score**: Weighted combination of direction + distance
-4. **Final Ranking**: All roles sorted by match percentage
-
-### Algorithm Performance
-- **Test Coverage**: 112 test cases (16 types × 7 strength levels)
-- **Consistency**: Rule-based matching ensures consistent results for same inputs
-- **Note**: Algorithm has not been validated against real-world career outcomes
-
-### Files
-- `megaAlgorithm.js` - Main hybrid algorithm
-- `algo_BUEV.js` through `algo_ASOL.js` - 16 type-specific algorithms
-- `roleMatching.js` - Legacy distance-based algorithm (used for roles 4+)
-
-## Limitations and Disclaimers
-
-**This is a student portfolio project with the following limitations:**
-
-1. **Not Scientifically Validated**: This tool has not undergone peer review or empirical validation studies
-2. **Not a Substitute for Professional Assessment**: Should not replace professional career counseling or psychometric testing
-3. **No Hiring Use**: This tool should NOT be used for employment screening or hiring decisions
-4. **Entertainment/Educational Purpose**: Designed for personal exploration and learning about personality frameworks
-5. **Rule-Based Matching**: Career recommendations are based on predefined rules, not machine learning or real-world outcome data
-6. **No Longitudinal Data**: We have not tracked whether recommendations lead to actual career satisfaction
-7. **Limited Scope**: Focuses only on technical roles and may not capture the full complexity of career fit
-
-**For Professional Career Guidance**: Please consult with licensed career counselors, use validated assessments (e.g., Strong Interest Inventory, Myers-Briggs Type Indicator administered by certified professionals), or work with your university's career services.
-
-## Deployment
-
-### Production
-Deployed on **Vercel** at [https://16techpersonalities.com](https://16techpersonalities.com)
-
-### Environment Variables
-Required for Supabase integration:
-```bash
-REACT_APP_SUPABASE_URL=your_supabase_project_url
-REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-Set in Vercel dashboard or via CLI:
-```bash
-vercel env add REACT_APP_SUPABASE_URL production
-vercel env add REACT_APP_SUPABASE_ANON_KEY production
-```
-
-### Local Development
 ```bash
 cd frontend
 npm install
 npm start
 ```
 
-Create a `.env` file with Supabase credentials, or run in client-side only mode (localStorage fallback).
+Create a `.env` file in `frontend/` with your Supabase credentials (optional — the app degrades gracefully to localStorage without them):
 
-## License
+```env
+REACT_APP_SUPABASE_URL=your_supabase_project_url
+REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-MIT License
+The app runs on [http://localhost:3000](http://localhost:3000).
+
+## Algorithm
+
+The scoring engine works in two passes:
+
+1. **Top 3 Roles** — each of the 16 base personality types has a hand-crafted algorithm (`algo_BUEV.js` through `algo_ASOL.js`) that factors in preference strength, edge cases, and mixed signals. Test coverage: 112 cases (16 types × 7 strength levels).
+2. **Remaining Roles (4+)** — Euclidean distance scoring with direction-matching and flexibility weighting, handled by `roleMatching.js`.
+
+The `megaAlgorithm.js` entry point routes between these two systems.
+
+> **Disclaimer:** This is a student portfolio project for educational and entertainment purposes. It has not been scientifically validated and should not be used for professional career counseling or hiring decisions.
 
 ---
 
-Built for the tech community
+**Author:** Caleb Newton — [calebnewton.me](https://calebnewton.me)
