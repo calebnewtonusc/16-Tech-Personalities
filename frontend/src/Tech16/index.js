@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
-import { BarChart3, Target, Briefcase, Map, AlertTriangle } from 'lucide-react';
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { BarChart3, Target, Briefcase, Map } from 'lucide-react';
 import Quiz from './Quiz';
 import Results from './Results';
 import PersonalityTypesGallery from './PersonalityTypesGallery';
@@ -10,29 +10,44 @@ import PrivacyPolicy from './PrivacyPolicy';
 import TermsOfService from './TermsOfService';
 import { spectrums } from './data/questions';
 import { getAllPersonalityCodes } from './data/personalities';
-import { getPersonalityColor } from './theme';
-import { Button, Card, GradientBackground, Container, Grid, ColoredPersonalityCode } from './components/SharedComponents';
+import { GradientBackground, ColoredPersonalityCode } from './components/SharedComponents';
 import { supabase } from '../supabase';
 
-// Tech16-specific theme with Apple-inspired design
+// ─── Global Animations ────────────────────────────────────────────────────────
+
+const GlobalAnimations = createGlobalStyle`
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+`;
+
+// ─── Theme ─────────────────────────────────────────────────────────────────────
+
 const tech16Theme = {
-  bg: "#f2f2f7",
-  bgLight: "#ffffff",
-  primary: "#007AFF",
-  primaryLight: "#e8f0fe",
-  text_primary: "#1c1c1e",
-  text_secondary: "#3a3a3c",
-  text_muted: "#8e8e93",
-  card: "#ffffff",
-  card_light: "#f2f2f7",
-  button: "#007AFF",
-  white: "#FFFFFF",
-  black: "#1c1c1e",
-  border: "rgba(60,60,67,0.12)",
-  separator: "rgba(60,60,67,0.08)",
-  shadow_sm: "0 1px 6px rgba(0,0,0,0.07)",
-  shadow_md: "0 4px 24px rgba(0,0,0,0.10)",
+  bg: '#f2f2f7',
+  bgLight: '#ffffff',
+  primary: '#007AFF',
+  primaryLight: '#e8f0fe',
+  text_primary: '#1c1c1e',
+  text_secondary: '#3a3a3c',
+  text_muted: '#8e8e93',
+  card: '#ffffff',
+  card_light: '#f2f2f7',
+  button: '#007AFF',
+  white: '#FFFFFF',
+  black: '#1c1c1e',
+  border: 'rgba(60,60,67,0.12)',
+  separator: 'rgba(60,60,67,0.08)',
+  shadow_sm: '0 1px 6px rgba(0,0,0,0.07)',
+  shadow_md: '0 4px 24px rgba(0,0,0,0.10)',
 };
+
+// ─── Page Shell ────────────────────────────────────────────────────────────────
 
 const PageWrapper = styled.div`
   margin: -8px -8px 0 -8px;
@@ -41,69 +56,67 @@ const PageWrapper = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
 `;
 
+// ─── Header ────────────────────────────────────────────────────────────────────
+
 const HeaderWrapper = styled.header`
   position: sticky;
   top: 0;
   z-index: 100;
+  height: 56px;
   background: rgba(242, 242, 247, 0.88);
   backdrop-filter: blur(20px) saturate(1.8);
   -webkit-backdrop-filter: blur(20px) saturate(1.8);
   border-bottom: 0.5px solid rgba(60, 60, 67, 0.15);
   box-shadow: none;
+  display: flex;
+  align-items: center;
 `;
 
 const HeaderContainer = styled.div`
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
-  padding: 1rem 2rem;
+  padding: 0 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   @media (max-width: 768px) {
-    padding: 1rem;
+    padding: 0 1rem;
   }
 `;
 
 const HeaderLogo = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.625rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: opacity 0.2s ease;
 
   &:hover {
-    transform: scale(1.05);
+    opacity: 0.75;
   }
 `;
 
 const HeaderLogoImage = styled.img`
-  height: 60px;
+  height: 32px;
   width: auto;
-
-  @media (max-width: 768px) {
-    height: 50px;
-  }
 `;
 
 const HeaderLogoText = styled.span`
-  font-size: 1.5rem;
+  font-size: 15px;
   font-weight: 800;
   color: #1c1c1e;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
-  letter-spacing: -0.4px;
-
-  @media (max-width: 768px) {
-    font-size: 1.25rem;
-  }
+  letter-spacing: -0.5px;
 `;
 
 const HeaderNav = styled.nav`
   display: flex;
-  gap: 2rem;
+  gap: 1.75rem;
   align-items: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     gap: 1rem;
   }
 `;
@@ -111,548 +124,712 @@ const HeaderNav = styled.nav`
 const NavLink = styled.button`
   background: none;
   border: none;
-  color: ${({ $active }) => $active ? '#007AFF' : '#8e8e93'};
-  font-size: 1rem;
-  font-weight: ${({ $active }) => $active ? '600' : '400'};
+  color: ${({ $active }) => ($active ? '#007AFF' : '#8e8e93')};
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  padding: 0.5rem 0;
+  padding: 0;
   transition: color 0.2s ease;
-  position: relative;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  line-height: 1;
 
   &:hover {
     color: #007AFF;
   }
-
-  @media (max-width: 768px) {
-    font-size: 0.875rem;
-  }
 `;
 
-const HeaderCTA = styled(Button)`
-  background: #007AFF !important;
-  border-radius: 12px !important;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif !important;
-  font-weight: 600 !important;
-  border: none !important;
-
-  @media (max-width: 768px) {
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-  }
-`;
-
-const LandingContainer = styled.div`
-  min-height: 100vh;
-  padding: 0 0 4rem 0;
-  background: transparent;
-`;
-
-const Hero = styled.div`
-  text-align: center;
-  margin: 0;
-  padding: 2.5rem 2rem 6rem 2rem;
-  background: transparent;
-
-  @media (max-width: 768px) {
-    padding: 3rem 1.5rem 4rem 1.5rem;
-  }
-`;
-
-const LogoSection = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 1.5rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 1rem;
-  }
-`;
-
-const LogoImage = styled.img`
-  width: 180px;
-  height: 180px;
-
-  @media (max-width: 768px) {
-    width: 120px;
-    height: 120px;
-  }
-`;
-
-const Logo = styled.div`
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: #1c1c1e;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  letter-spacing: -0.6px;
-
-  @media (max-width: 768px) {
-    font-size: 2.25rem;
-  }
-`;
-
-const Title = styled.h1`
-  font-size: 3rem;
-  font-weight: 800;
-  color: #1c1c1e;
-  margin-bottom: 1.25rem;
-  line-height: 1.15;
-  letter-spacing: -0.6px;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-
-  @media (max-width: 768px) {
-    font-size: 2rem;
-  }
-`;
-
-const Tagline = styled.p`
-  font-size: 1.25rem;
-  color: #3a3a3c;
-  margin-bottom: 2.5rem;
-  max-width: 680px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.7;
-  font-weight: 400;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-
-  @media (max-width: 768px) {
-    font-size: 1.0625rem;
-  }
-`;
-
-const CTASection = styled.div`
-  text-align: center;
-  margin: 2rem 0;
-`;
-
-const Section = styled.div`
-  margin-bottom: 2rem;
-  padding: 28px 32px;
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
-
-  @media (max-width: 768px) {
-    margin-bottom: 1.5rem;
-    padding: 20px 20px;
-    border-radius: 16px;
-  }
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 22px;
-  font-weight: 800;
-  color: #1c1c1e;
-  margin-bottom: 1rem;
-  text-align: center;
-  letter-spacing: -0.4px;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
-`;
-
-const SectionDescription = styled.p`
-  font-size: 1.0625rem;
-  color: #3a3a3c;
-  text-align: center;
-  max-width: 620px;
-  margin: 0 auto 2.5rem;
-  line-height: 1.7;
-  font-weight: 400;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-
-  @media (max-width: 768px) {
-    font-size: 1rem;
-    margin-bottom: 2rem;
-  }
-`;
-
-const SpectrumCard = styled(Card)`
-  padding: 2rem;
-  text-align: center;
-  height: 100%;
+const HeaderCTA = styled.button`
+  background: #007AFF;
+  color: #ffffff;
   border: none;
-  border-radius: 16px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
-  transition: all 0.3s ease;
-  background: #ffffff;
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  transition: background 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
 
   &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+    background: #0066d6;
+    transform: translateY(-1px);
   }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+// ─── Hero ──────────────────────────────────────────────────────────────────────
+
+const HeroSection = styled.section`
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem 5rem;
+  background: #f2f2f7;
+  overflow: hidden;
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
+    min-height: 70vh;
+    padding: 3rem 1.5rem 4rem;
   }
 `;
 
-const SpectrumName = styled.h3`
-  font-size: 1.1875rem;
-  font-weight: 800;
-  color: ${({ $color }) => $color || '#007AFF'};
-  margin-bottom: 1.25rem;
-  letter-spacing: -0.3px;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+const HeroGlow = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 122, 255, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 `;
 
-const SpectrumPoles = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin: 1.75rem 0;
-  gap: 1.5rem;
+const HeroContent = styled.div`
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  width: 100%;
 `;
 
-const Pole = styled.div`
-  flex: 1;
-`;
-
-const PoleCode = styled.div`
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: ${({ $color }) => $color || '#007AFF'};
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.3px;
-`;
-
-const PoleName = styled.div`
-  font-size: 0.9375rem;
+const HeroLabel = styled.p`
+  font-size: 11px;
   font-weight: 600;
-  color: #1c1c1e;
-  letter-spacing: -0.2px;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-`;
-
-const Divider = styled.div`
-  font-size: 1.375rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   color: #8e8e93;
-  font-weight: 300;
+  margin: 0 0 1.5rem;
+  animation: fadeInUp 0.5s ease both;
+  animation-delay: 0.05s;
 `;
 
-const SpectrumDescription = styled.p`
-  font-size: 0.9375rem;
-  color: #3a3a3c;
-  line-height: 1.7;
-  margin-top: 1.25rem;
+const HeroTitle = styled.h1`
+  font-size: clamp(48px, 7vw, 68px);
+  font-weight: 900;
+  letter-spacing: -2.5px;
+  line-height: 1.0;
+  color: #1c1c1e;
+  margin: 0 0 0.15em;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  animation: fadeInUp 0.5s ease both;
+  animation-delay: 0.12s;
+`;
+
+const HeroTitleAccent = styled.h1`
+  font-size: clamp(48px, 7vw, 68px);
+  font-weight: 900;
+  letter-spacing: -2.5px;
+  line-height: 1.0;
+  margin: 0 0 1.25rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  animation: fadeInUp 0.5s ease both;
+  animation-delay: 0.2s;
+
+  span.blue {
+    color: #007AFF;
+  }
+  span.dark {
+    color: #1c1c1e;
+  }
+`;
+
+const HeroSubtitle = styled.p`
+  font-size: 18px;
   font-weight: 400;
+  color: #3a3a3c;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto 2.25rem;
+  animation: fadeInUp 0.5s ease both;
+  animation-delay: 0.28s;
+`;
+
+const HeroCTARow = styled.div`
+  display: flex;
+  gap: 0.875rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.5s ease both;
+  animation-delay: 0.36s;
+`;
+
+const CTAPrimary = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 56px;
+  padding: 0 32px;
+  background: #007AFF;
+  color: #ffffff;
+  border: none;
+  border-radius: 980px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
+  white-space: nowrap;
+
+  &:hover {
+    background: #0066d6;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 122, 255, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+const CTAGhost = styled.button`
+  display: inline-flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 32px;
+  background: transparent;
+  color: #007AFF;
+  border: 1.5px solid #007AFF;
+  border-radius: 980px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  transition: background 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(0, 122, 255, 0.06);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+const HeroTrustLine = styled.p`
+  font-size: 13px;
+  color: #8e8e93;
+  margin: 1.25rem 0 0;
+  animation: fadeInUp 0.5s ease both;
+  animation-delay: 0.44s;
+`;
+
+const ResumeCard = styled.div`
+  margin: 1.5rem auto 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 0.875rem 1.5rem;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  border: 0.5px solid rgba(60, 60, 67, 0.1);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+  animation: fadeInUp 0.5s ease both;
+  animation-delay: 0.5s;
+
+  &:hover {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+`;
+
+const ResumeCardText = styled.span`
+  font-size: 15px;
+  font-weight: 600;
+  color: #007AFF;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
-const StatsSection = styled.div`
+const ResumeCardSub = styled.span`
+  font-size: 13px;
+  color: #8e8e93;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+`;
+
+// ─── Content Wrapper ───────────────────────────────────────────────────────────
+
+const ContentWrapper = styled.div`
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem 5rem;
+
+  @media (max-width: 768px) {
+    padding: 0 1rem 4rem;
+  }
+`;
+
+// ─── Section Label + Title Pattern ────────────────────────────────────────────
+
+const SectionLabel = styled.p`
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #8e8e93;
+  text-align: center;
+  margin: 0 0 0.625rem;
+`;
+
+const SectionHeading = styled.h2`
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 800;
+  color: #1c1c1e;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  text-align: center;
+  margin: 0 0 0.75rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+`;
+
+const SectionSubheading = styled.p`
+  font-size: 17px;
+  color: #3a3a3c;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 560px;
+  margin: 0 auto 2.5rem;
+  font-weight: 400;
+`;
+
+const SectionBlock = styled.div`
+  margin-bottom: 4rem;
+`;
+
+// ─── Stats Section ─────────────────────────────────────────────────────────────
+
+const StatsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  margin: 1.5rem 0;
-  padding: 0;
+  margin-bottom: 4rem;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 0.75rem;
-    margin: 1rem 0;
   }
 `;
 
-const StatCard = styled(Card)`
-  text-align: center;
-  padding: 2.25rem 1.75rem;
+const StatCard = styled.div`
   background: #ffffff;
-  border: none;
-  border-radius: 16px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
-  transition: all 0.3s ease;
+  border-radius: 20px;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  border: 0.5px solid rgba(60, 60, 67, 0.1);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
 
   &:hover {
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12);
     transform: translateY(-3px);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
   }
+`;
+
+const StatIconCircle = styled.div`
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 122, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: #007AFF;
 `;
 
 const StatNumber = styled.div`
-  font-size: 3rem;
+  font-size: 48px;
   font-weight: 800;
   color: #007AFF;
-  margin-bottom: 0.5rem;
+  letter-spacing: -1.5px;
+  line-height: 1;
+  margin-bottom: 0.375rem;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  letter-spacing: -0.5px;
-
-  @media (max-width: 768px) {
-    font-size: 2.5rem;
-  }
 `;
 
-const StatLabel = styled.div`
+const StatName = styled.div`
+  font-size: 15px;
+  font-weight: 600;
+  color: #1c1c1e;
+  margin-bottom: 0.25rem;
+`;
+
+const StatDesc = styled.div`
   font-size: 13px;
   color: #8e8e93;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  line-height: 1.4;
 `;
 
-const FeaturesList = styled.div`
-  max-width: 750px;
-  margin: 0 auto;
-  padding: 0 1rem;
-`;
+// ─── Features Section ──────────────────────────────────────────────────────────
 
-const FeatureItem = styled.div`
-  display: flex;
-  align-items: start;
-  gap: 1.25rem;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  background: #ffffff;
-  border-radius: 16px;
-  border: none;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
-  transition: all 0.3s ease;
+const FeaturesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
   }
 `;
 
-const FeatureIcon = styled.div`
-  font-size: 2.25rem;
-  min-width: 48px;
-  height: 48px;
+const FeatureCard = styled.div`
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  border: 0.5px solid rgba(60, 60, 67, 0.1);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+
+  &:hover {
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+`;
+
+const FeatureIconCircle = styled.div`
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  background: rgba(0, 122, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #007AFF;
 `;
 
-const FeatureContent = styled.div`
-  flex: 1;
-`;
-
 const FeatureTitle = styled.h4`
-  font-size: 1.0625rem;
+  font-size: 17px;
   font-weight: 700;
   color: #1c1c1e;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.3px;
+  margin: 0 0 0.375rem;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
 `;
 
 const FeatureDescription = styled.p`
-  font-size: 0.9375rem;
+  font-size: 15px;
   color: #3a3a3c;
-  line-height: 1.7;
+  line-height: 1.55;
   margin: 0;
-  font-weight: 400;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
-const ExampleTypes = styled.div`
+// ─── Spectrums Section ─────────────────────────────────────────────────────────
+
+const SpectrumGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const SpectrumCard = styled.div`
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  border: 0.5px solid rgba(60, 60, 67, 0.1);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+
+  &:hover {
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+  }
+`;
+
+const SpectrumName = styled.h3`
+  font-size: 18px;
+  font-weight: 700;
+  color: #1c1c1e;
+  margin: 0 0 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+`;
+
+const SpectrumPolesRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+`;
+
+const SpectrumPole = styled.div`
+  flex: 1;
+  text-align: ${({ $right }) => ($right ? 'right' : 'left')};
+`;
+
+const PoleCode = styled.div`
+  font-size: 22px;
+  font-weight: 800;
+  color: ${({ $color }) => $color || '#007AFF'};
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.2rem;
+`;
+
+const PoleName = styled.div`
+  font-size: 13px;
+  font-weight: 600;
+  color: #3a3a3c;
+`;
+
+const SpectrumSeparator = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+`;
+
+const SpectrumLine = styled.div`
+  width: 1px;
+  height: 18px;
+  background: rgba(60, 60, 67, 0.15);
+`;
+
+const SpectrumVs = styled.span`
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #8e8e93;
+  text-transform: uppercase;
+`;
+
+const SpectrumDesc = styled.p`
+  font-size: 14px;
+  color: #3a3a3c;
+  line-height: 1.55;
+  margin: 0;
+  padding-top: 0.875rem;
+  border-top: 0.5px solid rgba(60, 60, 67, 0.12);
+`;
+
+// Focus modifier card (single, centered)
+const FocusCardWrapper = styled.div`
+  max-width: 520px;
+  margin: 0 auto;
+`;
+
+// ─── Example Types ─────────────────────────────────────────────────────────────
+
+const TypesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  margin-top: 2rem;
+  margin-bottom: 1.5rem;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     grid-template-columns: 1fr;
   }
 `;
 
-const TypeCard = styled(Card)`
-  padding: 1.75rem 1.5rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
+const TypeCard = styled.div`
   background: #ffffff;
-  border: none;
-  border-radius: 14px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  border-radius: 16px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  border: 0.5px solid rgba(60, 60, 67, 0.1);
+  cursor: pointer;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
 
   &:hover {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.13);
     transform: translateY(-4px);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
   }
 `;
 
-const TypeCode = styled.div`
-  font-size: 1.375rem;
+const TypeCodeWrapper = styled.div`
+  font-size: 24px;
   font-weight: 800;
-  color: ${({ $color }) => $color ? $color.primary : '#007AFF'};
+  margin-bottom: 0.5rem;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  margin-bottom: 0.625rem;
-  letter-spacing: -0.3px;
 `;
 
-const TypeName = styled.div`
-  font-size: 0.9375rem;
+const TypeNameLabel = styled.div`
+  font-size: 15px;
   font-weight: 600;
   color: #1c1c1e;
-  letter-spacing: -0.2px;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  margin-bottom: 0.25rem;
 `;
 
-const Footer = styled.div`
-  margin-top: 2rem;
+const TypeDescLabel = styled.div`
+  font-size: 13px;
+  color: #8e8e93;
+`;
+
+const ViewAllLink = styled.button`
+  background: none;
+  border: none;
+  color: #007AFF;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  transition: opacity 0.2s ease;
+  display: block;
+  text-align: center;
+  width: 100%;
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+// ─── CTA Bottom Section ────────────────────────────────────────────────────────
+
+const CTABlock = styled.div`
+  background: #ffffff;
+  border-radius: 24px;
   padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  border: 0.5px solid rgba(60, 60, 67, 0.1);
+  background-image: radial-gradient(circle at 50% 0%, rgba(0, 122, 255, 0.04) 0%, transparent 60%);
+  margin-bottom: 4rem;
+`;
+
+const CTATitle = styled.h2`
+  font-size: 32px;
+  font-weight: 800;
+  color: #1c1c1e;
+  letter-spacing: -0.75px;
+  margin: 0 0 0.75rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+`;
+
+const CTASubtitle = styled.p`
+  font-size: 17px;
+  color: #3a3a3c;
+  line-height: 1.6;
+  margin: 0 auto 2rem;
+  max-width: 480px;
+`;
+
+// ─── Footer ────────────────────────────────────────────────────────────────────
+
+const FooterWrapper = styled.footer`
   background: #f2f2f7;
   border-top: 0.5px solid rgba(60, 60, 67, 0.15);
-  border-radius: 20px 20px 0 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  padding: 2.5rem 2rem;
 `;
 
-const FooterContent = styled.div`
-  max-width: 1000px;
+const FooterInner = styled.div`
+  max-width: 1100px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
 `;
 
-const FooterMain = styled.div`
-  text-align: center;
-  color: #3a3a3c;
-  font-size: 0.9375rem;
-  line-height: 1.8;
-`;
-
-const FooterTitle = styled.h3`
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #1c1c1e;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.3px;
-`;
-
-const FooterDescription = styled.p`
-  margin: 0.5rem 0;
-  color: #8e8e93;
-`;
-
-const BuiltBySection = styled.a`
-  display: flex;
+const BuiltByPill = styled.a`
+  display: inline-flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.75rem;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
   background: #ffffff;
   border-radius: 980px;
-  border: none;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
-  transition: all 0.3s ease;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.08);
+  border: 0.5px solid rgba(60, 60, 67, 0.1);
   text-decoration: none;
   cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
 
   &:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
   }
 `;
 
 const CreatorImage = styled.img`
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
   object-position: center 30%;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.10);
-  border: 2px solid rgba(60, 60, 67, 0.08);
+  border: 1.5px solid rgba(60, 60, 67, 0.1);
 `;
 
 const CreatorInfo = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 0.25rem;
 `;
 
 const BuiltByLabel = styled.span`
-  font-size: 11px;
-  color: #8e8e93;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 10px;
   font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #8e8e93;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const CreatorName = styled.span`
-  font-size: 1rem;
-  color: #1c1c1e;
+  font-size: 15px;
   font-weight: 700;
+  color: #1c1c1e;
   letter-spacing: -0.2px;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-`;
-
-const FooterNote = styled.small`
-  display: block;
-  margin-top: 1rem;
-  color: #8e8e93;
-  font-size: 0.8125rem;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 `;
 
 const FooterLinks = styled.div`
   display: flex;
-  gap: 2rem;
-  justify-content: center;
-  margin-top: 1.5rem;
-  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
 `;
 
 const FooterLink = styled.button`
   background: none;
   border: none;
-  color: #007AFF;
-  font-size: 0.875rem;
+  color: #8e8e93;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  text-decoration: none;
-  padding: 0.25rem 0.5rem;
-  transition: color 0.2s ease;
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  transition: color 0.2s ease;
 
   &:hover {
-    color: #0056CC;
+    color: #007AFF;
   }
 `;
 
-const DisclaimerSection = styled.div`
-  background: rgba(255, 59, 48, 0.06);
-  border: 0.5px solid rgba(255, 59, 48, 0.25);
-  border-radius: 16px;
-  padding: 1.5rem 2rem;
-  margin: 2rem 0;
+const FooterDot = styled.span`
+  color: rgba(60, 60, 67, 0.3);
+  font-size: 12px;
+`;
+
+const FooterDisclaimer = styled.p`
+  font-size: 12px;
+  color: #8e8e93;
   text-align: center;
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 0;
 `;
 
-const DisclaimerTitle = styled.h3`
-  font-size: 1rem;
-  font-weight: 700;
-  color: #ff3b30;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.2px;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-`;
-
-const DisclaimerText = styled.p`
-  font-size: 0.9375rem;
-  color: #3a3a3c;
-  line-height: 1.7;
-  margin: 0.4rem 0;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-`;
+// ─── Component ─────────────────────────────────────────────────────────────────
 
 const Tech16 = () => {
   const [view, setView] = useState('landing'); // 'landing', 'quiz', 'results', 'types', 'type-detail', 'all-roles', 'privacy', 'terms'
@@ -768,7 +945,7 @@ const Tech16 = () => {
           <NavLink onClick={() => view === 'quiz' ? null : handleStartQuiz()} $active={view === 'quiz'}>
             Quiz
           </NavLink>
-          <HeaderCTA onClick={handleStartQuiz} size="small">
+          <HeaderCTA onClick={handleStartQuiz}>
             Take Quiz
           </HeaderCTA>
         </HeaderNav>
@@ -780,6 +957,7 @@ const Tech16 = () => {
     return (
       <ThemeProvider theme={tech16Theme}>
         <PageWrapper>
+          <GlobalAnimations />
           <Header />
           <GradientBackground>
             <Quiz onComplete={handleQuizComplete} />
@@ -793,6 +971,7 @@ const Tech16 = () => {
     return (
       <ThemeProvider theme={tech16Theme}>
         <PageWrapper>
+          <GlobalAnimations />
           <Header />
           <Results
             responses={quizData.responses}
@@ -809,6 +988,7 @@ const Tech16 = () => {
     return (
       <ThemeProvider theme={tech16Theme}>
         <PageWrapper>
+          <GlobalAnimations />
           <Header />
           <AllRolesRanked
             personalityCode={personalityCode}
@@ -824,6 +1004,7 @@ const Tech16 = () => {
     return (
       <ThemeProvider theme={tech16Theme}>
         <PageWrapper>
+          <GlobalAnimations />
           <Header />
           <PersonalityTypesGallery
             onNavigateToType={handleViewTypeDetail}
@@ -838,6 +1019,7 @@ const Tech16 = () => {
     return (
       <ThemeProvider theme={tech16Theme}>
         <PageWrapper>
+          <GlobalAnimations />
           <Header />
           <PersonalityTypeDetail
             typeCode={selectedTypeCode}
@@ -854,6 +1036,7 @@ const Tech16 = () => {
     return (
       <ThemeProvider theme={tech16Theme}>
         <PageWrapper>
+          <GlobalAnimations />
           <Header />
           <GradientBackground>
             <PrivacyPolicy onBack={handleBackToLanding} />
@@ -867,6 +1050,7 @@ const Tech16 = () => {
     return (
       <ThemeProvider theme={tech16Theme}>
         <PageWrapper>
+          <GlobalAnimations />
           <Header />
           <GradientBackground>
             <TermsOfService onBack={handleBackToLanding} />
@@ -876,34 +1060,27 @@ const Tech16 = () => {
     );
   }
 
+  // ─── Landing page data ──────────────────────────────────────────────────────
 
-  // Landing page
-  // Show all 5 personality dimensions
   // Code format: [Interface]-[Change]-[Decision]-[Execution]-[Focus]
-  // Focus (position 5) is shown separately as a suffix modifier
-  // The 4 core dimensions (positions 1-4) are: Interface, Change, Decision, Execution
+  // The 4 core dimensions (positions 1-4): Interface, Change, Decision, Execution
   const coreSpectrumKeys = ['interface', 'changeStyle', 'decisionDriver', 'execution'];
 
-  // Color mapping for each of the 10 letter codes - highly distinct colors
+  // Color mapping for each of the 10 letter codes
   const letterColors = {
-    // Focus dimension
-    B: '#00bcd4', // Bright Cyan - Builder
-    A: '#7b1fa2', // Deep Purple - Analyzer (Focus)
-    // Interface dimension
-    U: '#2196f3', // Bright Blue - User-Facing
-    S: '#37474f', // Dark Slate Gray - Systems-Facing
-    // Change/Scope dimension
-    E: '#4caf50', // Bright Green - Exploratory
-    O: '#795548', // Brown - Operational (very different from green)
-    // Decision dimension
-    V: '#e91e63', // Hot Pink/Magenta - Vision-Led (very different from red)
-    L: '#c62828', // Deep Red - Logic-Led
-    // Execution dimension
+    B: '#00bcd4',    // Bright Cyan - Builder
+    A: '#7b1fa2',    // Deep Purple - Analyzer (Focus)
+    U: '#2196f3',    // Bright Blue - User-Facing
+    S: '#37474f',    // Dark Slate Gray - Systems-Facing
+    E: '#4caf50',    // Bright Green - Exploratory
+    O: '#795548',    // Brown - Operational
+    V: '#e91e63',    // Hot Pink/Magenta - Vision-Led
+    L: '#c62828',    // Deep Red - Logic-Led
     A_EXEC: '#ff9800', // Bright Orange - Adaptive (Execution)
-    T: '#5d4037', // Dark Brown - Structured
+    T: '#5d4037',    // Dark Brown - Structured
   };
 
-  // Add color information to each spectrum based on letter codes
+  // Add color information to each spectrum
   const spectrumArray = coreSpectrumKeys.map((key) => ({
     key,
     ...spectrums[key],
@@ -911,255 +1088,252 @@ const Tech16 = () => {
     rightColor: letterColors[spectrums[key].poles.rightCode],
   }));
 
-  // Example types - one from each category to showcase all 4 colors
-  // Format: Interface-Change-Decision-Execution (4 core dimensions, Focus is the 5th modifier)
+  // Example types
   const exampleTypes = [
-    { code: 'U-E-V-A', name: 'The Innovator', fullCode: 'U-E-V-A' }, // Innovators (purple)
-    { code: 'S-O-L-T', name: 'The Site Reliability Engineer', fullCode: 'S-O-L-T' }, // Engineers (orange)
-    { code: 'U-O-V-A', name: 'The Product Designer', fullCode: 'U-O-V-A' }, // Crafters (green)
-    { code: 'S-E-V-A', name: 'The Infrastructure Pioneer', fullCode: 'S-E-V-A' }, // Architects (blue)
+    { code: 'U-E-V-A', name: 'The Innovator',              desc: 'Exploratory · User-Facing', fullCode: 'U-E-V-A' },
+    { code: 'S-O-L-T', name: 'The Site Reliability Eng.',  desc: 'Operational · Systems',     fullCode: 'S-O-L-T' },
+    { code: 'U-O-V-A', name: 'The Product Designer',       desc: 'Crafted · User-Facing',     fullCode: 'U-O-V-A' },
+    { code: 'S-E-V-A', name: 'The Infra Pioneer',          desc: 'Exploratory · Systems',     fullCode: 'S-E-V-A' },
   ];
 
   const features = [
     {
-      icon: <BarChart3 className="w-6 h-6" />,
+      icon: <BarChart3 size={20} />,
       title: '40 Thoughtful Questions',
       description: 'Scenario-based questions that reveal your natural working style and preferences.',
     },
     {
-      icon: <Target className="w-6 h-6" />,
+      icon: <Target size={20} />,
       title: '5 Personality Dimensions',
-      description:
-        'Measure your position on 4 core dimensions (Interface, Change Style, Decision Driver, Execution) plus a Focus tendency suffix modifier.',
+      description: 'Measure your position on 4 core dimensions plus a Focus tendency suffix modifier.',
     },
     {
-      icon: <Briefcase className="w-6 h-6" />,
+      icon: <Briefcase size={20} />,
       title: 'Engineering Role Recommendations',
-      description:
-        `Discover your best-fit engineering roles from ${roleCount || '42'}+ hands-on positions across frontend, backend, mobile, data, ML, security, and more.`,
+      description: `Discover best-fit roles from ${roleCount || '42'}+ hands-on positions across frontend, backend, ML, security, and more.`,
     },
     {
-      icon: <Map className="w-6 h-6" />,
+      icon: <Map size={20} />,
       title: 'Personalized Learning Paths',
-      description:
-        'Comprehensive skill roadmaps with resources, courses, and recommended learning sequences.',
+      description: 'Comprehensive skill roadmaps with resources, courses, and recommended learning sequences.',
     },
   ];
 
+  const hasSavedProgress = !!localStorage.getItem('tech16_quiz_responses');
+
+  // ─── Landing JSX ───────────────────────────────────────────────────────────
+
   return (
     <ThemeProvider theme={tech16Theme}>
+      <GlobalAnimations />
       <PageWrapper>
         <Header />
-        <GradientBackground>
-          <LandingContainer>
-            <Container maxWidth="1200px">
-            <Hero>
-              <LogoSection>
-                <LogoImage src="/tech16-logo.png" alt="Tech 16 Personalities" />
-                <Logo>TECH 16</Logo>
-              </LogoSection>
-              <Title>Discover Your Tech Personality</Title>
-            <Tagline>
-              Take the quiz to find your developer personality type and get personalized engineering role recommendations
-            </Tagline>
 
-            <DisclaimerSection>
-              <DisclaimerTitle><AlertTriangle className="w-5 h-5 inline" /> Important Disclaimer</DisclaimerTitle>
-              <DisclaimerText>
-                <strong>For entertainment and educational purposes only.</strong> This is a student portfolio project and is NOT a scientifically validated psychometric instrument.
-              </DisclaimerText>
-              <DisclaimerText>
-                This tool is not a substitute for professional career counseling and should not be used for hiring decisions.
-              </DisclaimerText>
-            </DisclaimerSection>
-
-            <CTASection>
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                <Button onClick={handleStartQuiz} size="large">
-                  Take the Quiz
-                </Button>
-                <Button onClick={handleViewAllTypes} variant="outline" size="large">
-                  Browse All 16 Types
-                </Button>
+        {/* ── Hero ── */}
+        <HeroSection>
+          <HeroGlow />
+          <HeroContent>
+            <HeroLabel>Personality Assessment for Tech Careers</HeroLabel>
+            <HeroTitle>Discover Your</HeroTitle>
+            <HeroTitleAccent>
+              <span className="blue">Tech</span> <span className="dark">Personality</span>
+            </HeroTitleAccent>
+            <HeroSubtitle>
+              40 questions. 16 personality types. Find your perfect tech role.
+            </HeroSubtitle>
+            <HeroCTARow>
+              <CTAPrimary onClick={handleStartQuiz}>Take the Quiz &rarr;</CTAPrimary>
+              <CTAGhost onClick={handleViewAllTypes}>Explore Types</CTAGhost>
+            </HeroCTARow>
+            <HeroTrustLine>
+              16 types &nbsp;&middot;&nbsp; {roleCount || 42} tech roles &nbsp;&middot;&nbsp; 40 questions &nbsp;&middot;&nbsp; Free forever
+            </HeroTrustLine>
+            {hasSavedProgress && (
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <ResumeCard onClick={handleResumeQuiz}>
+                  <div>
+                    <ResumeCardText>Continue Quiz &rarr;</ResumeCardText>
+                    <br />
+                    <ResumeCardSub>You have saved progress</ResumeCardSub>
+                  </div>
+                </ResumeCard>
               </div>
-              {localStorage.getItem('tech16_quiz_responses') && (
-                <div style={{ marginTop: '1rem' }}>
-                  <Button onClick={handleResumeQuiz} variant="secondary" size="large">
-                    Resume Saved Progress
-                  </Button>
-                </div>
-              )}
-            </CTASection>
-          </Hero>
+            )}
+          </HeroContent>
+        </HeroSection>
 
-          <StatsSection>
-            <StatCard $color="#9b59b6">
-              <StatNumber $color="#9b59b6">{getAllPersonalityCodes().length}</StatNumber>
-              <StatLabel>Personality Types</StatLabel>
-            </StatCard>
-            <StatCard $color="#007AFF">
-              <StatNumber $color="#007AFF">{coreSpectrumKeys.length}</StatNumber>
-              <StatLabel>Core Dimensions</StatLabel>
-            </StatCard>
-            <StatCard $color="#007AFF">
-              <StatNumber $color="#007AFF">{roleCount ? `${roleCount}+` : '42+'}</StatNumber>
-              <StatLabel>Tech Roles</StatLabel>
-            </StatCard>
-          </StatsSection>
+        <ContentWrapper>
 
-          <Section>
-            <SectionTitle>How It Works</SectionTitle>
-            <FeaturesList>
+          {/* ── Stats ── */}
+          <StatsGrid>
+            <StatCard>
+              <StatIconCircle>
+                <BarChart3 size={20} />
+              </StatIconCircle>
+              <StatNumber>{getAllPersonalityCodes().length}</StatNumber>
+              <StatName>Personality Types</StatName>
+              <StatDesc>Unique tech personality profiles mapped to real engineering roles</StatDesc>
+            </StatCard>
+            <StatCard>
+              <StatIconCircle>
+                <Target size={20} />
+              </StatIconCircle>
+              <StatNumber>{coreSpectrumKeys.length}</StatNumber>
+              <StatName>Core Dimensions</StatName>
+              <StatDesc>Behavioral axes that define your working style and preferences</StatDesc>
+            </StatCard>
+            <StatCard>
+              <StatIconCircle>
+                <Briefcase size={20} />
+              </StatIconCircle>
+              <StatNumber>{roleCount ? `${roleCount}+` : '42+'}</StatNumber>
+              <StatName>Tech Roles</StatName>
+              <StatDesc>Hands-on positions ranked and matched to your personality</StatDesc>
+            </StatCard>
+          </StatsGrid>
+
+          {/* ── How It Works ── */}
+          <SectionBlock>
+            <SectionLabel>How It Works</SectionLabel>
+            <SectionHeading>The 5 Dimensions That Define You</SectionHeading>
+            <SectionSubheading>
+              Each question reveals a layer of how you think, build, and collaborate in tech environments.
+            </SectionSubheading>
+            <FeaturesGrid>
               {features.map((feature, idx) => (
-                <FeatureItem key={idx}>
-                  <FeatureIcon>{feature.icon}</FeatureIcon>
-                  <FeatureContent>
+                <FeatureCard key={idx}>
+                  <FeatureIconCircle>{feature.icon}</FeatureIconCircle>
+                  <div>
                     <FeatureTitle>{feature.title}</FeatureTitle>
                     <FeatureDescription>{feature.description}</FeatureDescription>
-                  </FeatureContent>
-                </FeatureItem>
+                  </div>
+                </FeatureCard>
               ))}
-            </FeaturesList>
-          </Section>
+            </FeaturesGrid>
+          </SectionBlock>
 
-          <Section>
-            <SectionTitle>The 4 Core Dimensions</SectionTitle>
-            <SectionDescription>
-              Your tech personality is defined by 4 core dimensions that shape your unique type code. These represent your fundamental working style, preferences, and approach to engineering.
-            </SectionDescription>
-            <Grid columns={1}>
+          {/* ── 4 Core Dimensions ── */}
+          <SectionBlock>
+            <SectionLabel>The 4 Core Dimensions</SectionLabel>
+            <SectionHeading>What Shapes Your Type Code</SectionHeading>
+            <SectionSubheading>
+              Your personality is defined by 4 dimensions that reveal your fundamental working style, preferences, and approach to engineering.
+            </SectionSubheading>
+            <SpectrumGrid>
               {spectrumArray.map((spectrum) => (
-                <SpectrumCard
-                  key={spectrum.key}
-                  $leftColor={spectrum.leftColor}
-                  $rightColor={spectrum.rightColor}
-                >
-                  <SpectrumName $color={spectrum.leftColor}>{spectrum.name}</SpectrumName>
-                  <SpectrumPoles>
-                    <Pole>
+                <SpectrumCard key={spectrum.key}>
+                  <SpectrumName>{spectrum.name}</SpectrumName>
+                  <SpectrumPolesRow>
+                    <SpectrumPole>
                       <PoleCode $color={spectrum.leftColor}>{spectrum.poles.leftCode}</PoleCode>
                       <PoleName>{spectrum.poles.left}</PoleName>
-                    </Pole>
-                    <Divider>↔</Divider>
-                    <Pole>
+                    </SpectrumPole>
+                    <SpectrumSeparator>
+                      <SpectrumLine />
+                      <SpectrumVs>vs</SpectrumVs>
+                      <SpectrumLine />
+                    </SpectrumSeparator>
+                    <SpectrumPole $right>
                       <PoleCode $color={spectrum.rightColor}>{spectrum.poles.rightCode}</PoleCode>
                       <PoleName>{spectrum.poles.right}</PoleName>
-                    </Pole>
-                  </SpectrumPoles>
-                  <SpectrumDescription>{spectrum.description}</SpectrumDescription>
+                    </SpectrumPole>
+                  </SpectrumPolesRow>
+                  <SpectrumDesc>{spectrum.description}</SpectrumDesc>
                 </SpectrumCard>
               ))}
-            </Grid>
-          </Section>
+            </SpectrumGrid>
+          </SectionBlock>
 
-          <Section>
-            <SectionTitle>The Focus Modifier: Builder vs Analyzer</SectionTitle>
-            <SectionDescription>
-              In addition to your 4-letter core type, you'll receive a Focus modifier (Builder or Analyzer) shown as the 5th letter (suffix). This modifier reveals your fundamental approach to problem-solving - whether you prefer rapid prototyping and iteration (Builder) or thorough analysis and systematic design (Analyzer).
-            </SectionDescription>
-            <Grid columns={1} style={{ maxWidth: '600px', margin: '0 auto' }}>
-              <SpectrumCard
-                $leftColor={letterColors.B}
-                $rightColor={letterColors.A}
-                style={{ transform: 'scale(0.95)' }}
-              >
-                <SpectrumName $color={letterColors.B}>{spectrums.focus.name}</SpectrumName>
-                <SpectrumPoles>
-                  <Pole>
+          {/* ── Focus Modifier ── */}
+          <SectionBlock>
+            <SectionLabel>The Focus Modifier</SectionLabel>
+            <SectionHeading>Builder vs Analyzer</SectionHeading>
+            <SectionSubheading>
+              In addition to your 4-letter core type, you'll receive a Focus modifier as the 5th letter — revealing your fundamental approach to problem-solving.
+            </SectionSubheading>
+            <FocusCardWrapper>
+              <SpectrumCard>
+                <SpectrumName>{spectrums.focus.name}</SpectrumName>
+                <SpectrumPolesRow>
+                  <SpectrumPole>
                     <PoleCode $color={letterColors.B}>{spectrums.focus.poles.leftCode}</PoleCode>
                     <PoleName>{spectrums.focus.poles.left}</PoleName>
-                  </Pole>
-                  <Divider>↔</Divider>
-                  <Pole>
+                  </SpectrumPole>
+                  <SpectrumSeparator>
+                    <SpectrumLine />
+                    <SpectrumVs>vs</SpectrumVs>
+                    <SpectrumLine />
+                  </SpectrumSeparator>
+                  <SpectrumPole $right>
                     <PoleCode $color={letterColors.A}>{spectrums.focus.poles.rightCode}</PoleCode>
                     <PoleName>{spectrums.focus.poles.right}</PoleName>
-                  </Pole>
-                </SpectrumPoles>
-                <SpectrumDescription>{spectrums.focus.description}</SpectrumDescription>
+                  </SpectrumPole>
+                </SpectrumPolesRow>
+                <SpectrumDesc>{spectrums.focus.description}</SpectrumDesc>
               </SpectrumCard>
-            </Grid>
-          </Section>
+            </FocusCardWrapper>
+          </SectionBlock>
 
-          <Section>
-            <SectionTitle>Example Personality Types</SectionTitle>
-            <SectionDescription>
-              Explore a few examples from our 16 unique tech personalities. Click any type to learn more about their strengths and ideal engineering roles.
-            </SectionDescription>
-            <ExampleTypes>
+          {/* ── Example Types ── */}
+          <SectionBlock>
+            <SectionLabel>Example Types</SectionLabel>
+            <SectionHeading>See Who You Might Be</SectionHeading>
+            <SectionSubheading>
+              A glimpse at four of the 16 unique tech personalities. Click any to explore strengths and ideal roles.
+            </SectionSubheading>
+            <TypesGrid>
               {exampleTypes.map((type) => {
-                const typeColor = getPersonalityColor(type.fullCode);
                 return (
                   <TypeCard
                     key={type.code}
-                    clickable
-                    $color={typeColor}
                     onClick={() => handleViewTypeDetail(type.fullCode)}
                   >
-                    <TypeCode as="div">
-                      <ColoredPersonalityCode code={type.code} fontSize="1.375rem" />
-                    </TypeCode>
-                    <TypeName>{type.name}</TypeName>
+                    <TypeCodeWrapper>
+                      <ColoredPersonalityCode code={type.code} fontSize="24px" />
+                    </TypeCodeWrapper>
+                    <TypeNameLabel>{type.name}</TypeNameLabel>
+                    <TypeDescLabel>{type.desc}</TypeDescLabel>
                   </TypeCard>
                 );
               })}
-            </ExampleTypes>
-            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-              <Button onClick={handleViewAllTypes} variant="outline" size="large">
-                View All 16 Personality Types
-              </Button>
-            </div>
-          </Section>
+            </TypesGrid>
+            <ViewAllLink onClick={handleViewAllTypes}>
+              View All 16 Types &rarr;
+            </ViewAllLink>
+          </SectionBlock>
 
-          <CTASection style={{ marginTop: '4rem' }}>
-            <Card padding="3rem">
-              <SectionTitle>Ready to Discover Your Type?</SectionTitle>
-              <SectionDescription>
-                Take the 40-question quiz to get your personalized results, engineering role recommendations, and learning
-                roadmap for hands-on technical positions.
-              </SectionDescription>
-              <Button onClick={handleStartQuiz} size="large">
-                Take the Quiz Now
-              </Button>
-            </Card>
-          </CTASection>
+          {/* ── Bottom CTA ── */}
+          <CTABlock>
+            <CTATitle>Ready to find your type?</CTATitle>
+            <CTASubtitle>
+              Take the 40-question quiz and get your personalized results, role recommendations, and learning roadmap.
+            </CTASubtitle>
+            <CTAPrimary onClick={handleStartQuiz}>Take the Quiz &rarr;</CTAPrimary>
+          </CTABlock>
 
-          <Footer>
-            <FooterContent>
-              <BuiltBySection href="https://calebnewton.me" target="_blank" rel="noopener noreferrer">
-                <CreatorImage
-                  src="/caleb-usc.jpg"
-                  alt="Caleb Newton at USC"
-                />
-                <CreatorInfo>
-                  <BuiltByLabel>Built by</BuiltByLabel>
-                  <CreatorName>Caleb Newton</CreatorName>
-                </CreatorInfo>
-              </BuiltBySection>
+        </ContentWrapper>
 
-              <FooterMain>
-                <FooterTitle>Tech 16 Personalities</FooterTitle>
-                <FooterDescription>
-                  Discover your developer personality type and ideal engineering role
-                </FooterDescription>
-                <FooterDescription>
-                  Focused on hands-on technical roles across {roleCount || '42'}+ engineering positions
-                </FooterDescription>
-                <FooterDescription style={{ fontSize: '0.8125rem', marginTop: '1rem', fontStyle: 'italic' }}>
-                  <strong>Disclaimer:</strong> For entertainment and educational purposes only. Not a validated psychometric instrument.
-                </FooterDescription>
-                <FooterLinks>
-                  <FooterLink onClick={handleViewPrivacy}>Privacy Policy</FooterLink>
-                  <FooterLink onClick={handleViewTerms}>Terms of Service</FooterLink>
-                </FooterLinks>
-                <FooterNote>
-                  Built with React, styled-components, and Recharts
-                </FooterNote>
-              </FooterMain>
-            </FooterContent>
-          </Footer>
-        </Container>
-      </LandingContainer>
-    </GradientBackground>
+        {/* ── Footer ── */}
+        <FooterWrapper>
+          <FooterInner>
+            <BuiltByPill href="https://calebnewton.me" target="_blank" rel="noopener noreferrer">
+              <CreatorImage src="/caleb-usc.jpg" alt="Caleb Newton at USC" />
+              <CreatorInfo>
+                <BuiltByLabel>Built by</BuiltByLabel>
+                <CreatorName>Caleb Newton</CreatorName>
+              </CreatorInfo>
+            </BuiltByPill>
+            <FooterLinks>
+              <FooterLink onClick={handleViewPrivacy}>Privacy</FooterLink>
+              <FooterDot>&middot;</FooterDot>
+              <FooterLink onClick={handleViewTerms}>Terms</FooterLink>
+            </FooterLinks>
+            <FooterDisclaimer>
+              For entertainment and educational purposes only. Not a scientifically validated psychometric instrument. Not a substitute for professional career counseling and should not be used for hiring decisions.
+            </FooterDisclaimer>
+          </FooterInner>
+        </FooterWrapper>
+
       </PageWrapper>
     </ThemeProvider>
   );
