@@ -1,4 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" fill="#3498db"/>
-  <text x="50" y="70" font-family="Arial, sans-serif" font-size="50" font-weight="bold" fill="white" text-anchor="middle">16</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="7" fill="#AF52DE"/>
+  <!-- Brain/psychology icon -->
+  <g transform="translate(4,4)" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9.5 2A2.5 2.5 0 0 0 7 4.5v.5a2.5 2.5 0 0 0-2.5 2.5 2.5 2.5 0 0 0 2.5 2.5v1a2.5 2.5 0 0 0 2.5 2.5h5a2.5 2.5 0 0 0 2.5-2.5v-1a2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-2.5-2.5v-.5A2.5 2.5 0 0 0 14.5 2Z"/>
+    <path d="M12 6v4M10 8h4"/>
+    <path d="M9 13v9M15 13v9"/>
+    <path d="M9 18h6"/>
+  </g>
 </svg>
