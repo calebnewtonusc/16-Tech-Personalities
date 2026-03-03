@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import Tech16App from './Tech16';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 // Tech16-specific blue theme
 const tech16Theme = {
@@ -24,6 +26,10 @@ const tech16Theme = {
 };
 
 function App() {
+  useEffect(() => {
+    AOS.init({ duration: 600, once: true });
+  }, []);
+
   return (
     <ThemeProvider theme={tech16Theme}>
       <Router>

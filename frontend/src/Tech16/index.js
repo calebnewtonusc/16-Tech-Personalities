@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
+import Typed from 'typed.js';
 import { BarChart3, Target, Briefcase, Map } from 'lucide-react';
 import Quiz from './Quiz';
 import Results from './Results';
@@ -829,6 +830,35 @@ const FooterDisclaimer = styled.p`
   margin: 0;
 `;
 
+// ─── Typed Subtitle ────────────────────────────────────────────────────────────
+
+const TypedSubtitle = () => {
+  const elRef = useRef(null);
+  const typedRef = useRef(null);
+
+  useEffect(() => {
+    typedRef.current = new Typed(elRef.current, {
+      strings: [
+        'Find your tech personality.',
+        'Discover your ideal career path.',
+        '40 questions. 16 types. Your future.',
+      ],
+      typeSpeed: 50,
+      backSpeed: 30,
+      backDelay: 2000,
+      loop: true,
+      showCursor: true,
+      cursorChar: '|',
+    });
+
+    return () => {
+      typedRef.current.destroy();
+    };
+  }, []);
+
+  return <span ref={elRef} />;
+};
+
 // ─── Component ─────────────────────────────────────────────────────────────────
 
 const Tech16 = () => {
@@ -1139,7 +1169,7 @@ const Tech16 = () => {
               <span className="blue">Tech</span> <span className="dark">Personality</span>
             </HeroTitleAccent>
             <HeroSubtitle>
-              40 questions. 16 personality types. Find your perfect tech role.
+              <TypedSubtitle />
             </HeroSubtitle>
             <HeroCTARow>
               <CTAPrimary onClick={handleStartQuiz}>Take the Quiz &rarr;</CTAPrimary>
@@ -1165,7 +1195,7 @@ const Tech16 = () => {
         <ContentWrapper>
 
           {/* ── Stats ── */}
-          <StatsGrid>
+          <StatsGrid data-aos="fade-up">
             <StatCard>
               <StatIconCircle>
                 <BarChart3 size={20} />
@@ -1193,7 +1223,7 @@ const Tech16 = () => {
           </StatsGrid>
 
           {/* ── How It Works ── */}
-          <SectionBlock>
+          <SectionBlock data-aos="fade-up">
             <SectionLabel>How It Works</SectionLabel>
             <SectionHeading>The 5 Dimensions That Define You</SectionHeading>
             <SectionSubheading>
@@ -1213,7 +1243,7 @@ const Tech16 = () => {
           </SectionBlock>
 
           {/* ── 4 Core Dimensions ── */}
-          <SectionBlock>
+          <SectionBlock data-aos="fade-up">
             <SectionLabel>The 4 Core Dimensions</SectionLabel>
             <SectionHeading>What Shapes Your Type Code</SectionHeading>
             <SectionSubheading>
@@ -1245,7 +1275,7 @@ const Tech16 = () => {
           </SectionBlock>
 
           {/* ── Focus Modifier ── */}
-          <SectionBlock>
+          <SectionBlock data-aos="fade-up">
             <SectionLabel>The Focus Modifier</SectionLabel>
             <SectionHeading>Builder vs Analyzer</SectionHeading>
             <SectionSubheading>
@@ -1275,7 +1305,7 @@ const Tech16 = () => {
           </SectionBlock>
 
           {/* ── Example Types ── */}
-          <SectionBlock>
+          <SectionBlock data-aos="fade-up">
             <SectionLabel>Example Types</SectionLabel>
             <SectionHeading>See Who You Might Be</SectionHeading>
             <SectionSubheading>
@@ -1303,7 +1333,7 @@ const Tech16 = () => {
           </SectionBlock>
 
           {/* ── Bottom CTA ── */}
-          <CTABlock>
+          <CTABlock data-aos="fade-up">
             <CTATitle>Ready to find your type?</CTATitle>
             <CTASubtitle>
               Take the 40-question quiz and get your personalized results, role recommendations, and learning roadmap.

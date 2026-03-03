@@ -23,6 +23,7 @@ import {
 const ResultsContainer = styled.div`
   min-height: 100vh;
   padding: 1rem 0 2rem 0;
+  background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.08) 0%, transparent 60%);
 `;
 
 const Header = styled.div`
@@ -994,7 +995,7 @@ ${(personality.work_preferences || personality.workPreferences || []).map((w) =>
             <Subtitle>Discover your developer type and ideal career path</Subtitle>
           </Header>
 
-          <PersonalityCard $color={personalityColor}>
+          <PersonalityCard $color={personalityColor} data-aos="fade-up">
             <div style={{ position: 'relative', zIndex: 1 }}>
               <ColoredPersonalityCode code={getDisplayTypeCode(personalityCode)} fontSize="3.5rem" />
             </div>
@@ -1009,7 +1010,7 @@ ${(personality.work_preferences || personality.workPreferences || []).map((w) =>
             <PersonalityDescription>{personality.description}</PersonalityDescription>
           </PersonalityCard>
 
-          <ModifierExplanation>
+          <ModifierExplanation data-aos="fade-up">
             <SectionTitle style={{ fontSize: '1.5rem', marginBottom: '1rem', textAlign: 'center' }}>
               Understanding Your Full Personality Code
             </SectionTitle>
@@ -1040,7 +1041,7 @@ ${(personality.work_preferences || personality.workPreferences || []).map((w) =>
             </ModifierGrid>
           </ModifierExplanation>
 
-          <Section>
+          <Section data-aos="fade-up">
             <SectionTitle>Your Personality Dimensions</SectionTitle>
             <SectionDescription style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 2rem' }}>
               Your personality is measured across 5 independent dimensions. The first 4 dimensions (Interface, Change, Decision, Execution) form your core type code. Focus acts as a 5th modifier dimension that influences how you express your core traits.
@@ -1061,14 +1062,14 @@ ${(personality.work_preferences || personality.workPreferences || []).map((w) =>
             </SpectrumSection>
           </Section>
 
-          <Section>
+          <Section data-aos="fade-up">
             <SectionTitle>Personality Radar</SectionTitle>
             <ChartSection>
               <RadarChartComponent data={radarData} height="500px" />
             </ChartSection>
           </Section>
 
-          <Section>
+          <Section data-aos="fade-up">
             <Grid columns={2}>
               <Card padding="2rem">
                 <SectionTitle style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Strengths</SectionTitle>
@@ -1092,7 +1093,7 @@ ${(personality.work_preferences || personality.workPreferences || []).map((w) =>
             </Grid>
           </Section>
 
-          <Section>
+          <Section data-aos="fade-up">
             <Card padding="2rem">
               <SectionTitle style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
                 Work Preferences
@@ -1105,13 +1106,13 @@ ${(personality.work_preferences || personality.workPreferences || []).map((w) =>
             </Card>
           </Section>
 
-          <Section>
+          <Section data-aos="fade-up">
             <SectionTitle>Top Role Recommendations</SectionTitle>
             <Grid columns={1}>
               {topRoles.map((role, idx) => {
                 const roleColor = getRoleColor(role.name);
                 return (
-                  <RoleCard key={role.id} $roleColor={roleColor}>
+                  <RoleCard key={role.id} $roleColor={roleColor} data-aos="fade-up" data-aos-delay={idx * 80}>
                     <RoleHeader>
                       <RoleTitle>
                         #{idx + 1} {role.name}
