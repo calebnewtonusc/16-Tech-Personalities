@@ -61,3 +61,5 @@ The `megaAlgorithm.js` entry point routes between these two systems.
 ---
 
 **Author:** Caleb Newton. [calebnewton.me](https://calebnewton.me)
+
+All glory to God! ✝️❤️
